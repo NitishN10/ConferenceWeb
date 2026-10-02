@@ -1,73 +1,75 @@
 /**
- * ICBDTT-2026 / Project Expo: Multi-Step Registration Controller
- * Implements 5-step registration workflow:
+ * ICBDTT-2026: Project Team Entry Portal Controller
+ * Sapthagiri NPS University (SNPSU), Bengaluru
+ *
+ * Implements the 5-step registration workflow:
  * Step 1: Team Leader Info
- * Step 2: Team Members (2-5 students)
- * Step 3: Project Innovation & Abstract
- * Step 4: Review & Academic Declaration
- * Step 5: Fee Summary & Gateway Simulation
+ * Step 2: Team Members (2-5 Students)
+ * Step 3: Project Details & Abstract
+ * Step 4: Review & Verification
+ * Step 5: Payment (₹500 Fee)
  */
 
 (function () {
   'use strict';
 
-  const DRAFT_DATA_KEY = 'snpsu_expo_reg_draft_data_v2';
-  const DRAFT_STEP_KEY = 'snpsu_expo_reg_draft_step_v2';
+  const DRAFT_KEY = 'snpsu_team_portal_draft_v2';
+  const STEP_KEY = 'snpsu_team_portal_step_v2';
 
-  // Default state matching the specification
-  const DEFAULT_FORM_DATA = {
+  let currentStep = 1;
+  let maxVisitedStep = 1;
+  let dynamicMemberIndex = 3; // Starts at 3 since Leader is 1, Member 2 is static
+
+  // State object
+  let teamData = {
     leader: {
       name: '',
       srn: '',
       email: '',
       phone: '',
       department: 'Computer Science & Engineering',
-      semester: '6th'
+      semester: '6th Semester'
     },
-    members: [
-      {
-        id: 'member-1',
-        name: '',
-        srn: '',
-        email: '',
-        department: 'Computer Science & Engineering',
-        semester: '6th'
-      }
-    ],
+    members: [], // Array of { id, name, srn, email, phone, department, semester }
     project: {
       title: '',
-      category: 'Artificial Intelligence & Machine Learning',
-      abstract: '',
+      track: 'Track 1: Big Data Analytics & Distributed Systems',
       technologies: '',
-      mentorName: ''
+      abstract: '',
+      mentor: '',
+      link: ''
     },
-    confirmedAccuracy: false
+    payment: {
+      mode: 'UPI / QR Code',
+      ref: '',
+      date: new Date().toISOString().split('T')[0]
+    }
   };
 
-  let currentStep = 1;
-  let maxVisitedStep = 1;
-  let formData = JSON.parse(JSON.stringify(DEFAULT_FORM_DATA));
-
-  // Initialize on DOM Ready
   document.addEventListener('DOMContentLoaded', function () {
-    const regForm = document.getElementById('multi-step-reg-form');
-    if (!regForm) return;
+    const form = document.getElementById('project-team-reg-form');
+    if (!form) return;
+
+    // Set default payment date to today
+    const dateInput = document.getElementById('payment_date');
+    if (dateInput && !dateInput.value) {
+      dateInput.value = new Date().toISOString().split('T')[0];
+    }
 
     loadDraft();
     bindEvents();
-    renderMembers();
     renderStep(currentStep);
-    updateAbstractCounter();
+    updateAbstractWordCount();
   });
 
-  /* ---------------------------------------------------------
-   * Draft Storage (LocalStorage Persistence)
-   * --------------------------------------------------------- */
+  /* -------------------------------------------------------------------------
+   * LocalStorage Draft Saving & Loading
+   * ------------------------------------------------------------------------- */
   function saveDraft() {
     try {
       syncDomToState();
-      localStorage.setItem(DRAFT_DATA_KEY, JSON.stringify(formData));
-      localStorage.setItem(DRAFT_STEP_KEY, currentStep.toString());
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(teamData));
+      localStorage.setItem(STEP_KEY, currentStep.toString());
     } catch (e) {
       console.warn('LocalStorage save error:', e);
     }
@@ -75,812 +77,805 @@
 
   function loadDraft() {
     try {
-      const savedData = localStorage.getItem(DRAFT_DATA_KEY);
-      const savedStep = localStorage.getItem(DRAFT_STEP_KEY);
-      if (savedData) {
-        const parsed = JSON.parse(savedData);
-        formData = Object.assign({}, DEFAULT_FORM_DATA, parsed);
-        // Ensure at least 1 member exists
-        if (!formData.members || formData.members.length === 0) {
-          formData.members = [JSON.parse(JSON.stringify(DEFAULT_FORM_DATA.members[0]))];
-        }
+      const saved = localStorage.getItem(DRAFT_KEY);
+      const savedStep = localStorage.getItem(STEP_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.leader) teamData.leader = Object.assign(teamData.leader, parsed.leader);
+        if (Array.isArray(parsed.members)) teamData.members = parsed.members;
+        if (parsed.project) teamData.project = Object.assign(teamData.project, parsed.project);
+        if (parsed.payment) teamData.payment = Object.assign(teamData.payment, parsed.payment);
       }
       if (savedStep) {
-        const stepNum = parseInt(savedStep, 10);
-        if (stepNum >= 1 && stepNum <= 5) {
-          currentStep = stepNum;
-          maxVisitedStep = Math.max(maxVisitedStep, stepNum);
+        const s = parseInt(savedStep, 10);
+        if (s >= 1 && s <= 5) {
+          currentStep = s;
+          maxVisitedStep = Math.max(maxVisitedStep, s);
         }
       }
     } catch (e) {
       console.warn('LocalStorage load error:', e);
-      formData = JSON.parse(JSON.stringify(DEFAULT_FORM_DATA));
     }
     populateDomFromState();
   }
 
   function clearDraft() {
     try {
-      localStorage.removeItem(DRAFT_DATA_KEY);
-      localStorage.removeItem(DRAFT_STEP_KEY);
+      localStorage.removeItem(DRAFT_KEY);
+      localStorage.removeItem(STEP_KEY);
     } catch (e) {}
   }
 
-  /* ---------------------------------------------------------
-   * State <-> DOM Synchronization
-   * --------------------------------------------------------- */
   function syncDomToState() {
-    // Step 1: Leader
-    const nameEl = document.getElementById('leader_name');
-    const srnEl = document.getElementById('leader_srn');
-    const emailEl = document.getElementById('leader_email');
-    const phoneEl = document.getElementById('leader_phone');
-    const deptEl = document.getElementById('leader_department');
-    const semEl = document.getElementById('leader_semester');
+    // Leader
+    teamData.leader.name = (document.getElementById('leader_name')?.value || '').trim();
+    teamData.leader.srn = (document.getElementById('leader_srn')?.value || '').trim().toUpperCase();
+    teamData.leader.email = (document.getElementById('leader_email')?.value || '').trim().toLowerCase();
+    teamData.leader.phone = (document.getElementById('leader_phone')?.value || '').trim();
+    teamData.leader.department = document.getElementById('leader_department')?.value || 'Computer Science & Engineering';
+    teamData.leader.semester = document.getElementById('leader_semester')?.value || '6th Semester';
 
-    if (nameEl) formData.leader.name = nameEl.value.trim();
-    if (srnEl) formData.leader.srn = srnEl.value.trim().toUpperCase();
-    if (emailEl) formData.leader.email = emailEl.value.trim().toLowerCase();
-    if (phoneEl) formData.leader.phone = phoneEl.value.trim();
-    if (deptEl) formData.leader.department = deptEl.value;
-    if (semEl) formData.leader.semester = semEl.value;
+    // Member 2
+    const m2Card = document.querySelector('.team-member-card[data-member-index="2"]');
+    const member2 = {
+      id: 2,
+      name: (m2Card?.querySelector('.member-name')?.value || '').trim(),
+      srn: (m2Card?.querySelector('.member-srn')?.value || '').trim().toUpperCase(),
+      email: (m2Card?.querySelector('.member-email')?.value || '').trim().toLowerCase(),
+      department: m2Card?.querySelector('.member-dept')?.value || teamData.leader.department,
+      semester: m2Card?.querySelector('.member-sem')?.value || teamData.leader.semester
+    };
 
-    // Step 2: Members
-    const memberRows = document.querySelectorAll('.member-entry-card');
-    formData.members = [];
-    memberRows.forEach(function (row, idx) {
-      const mName = row.querySelector('.member-name-input');
-      const mSrn = row.querySelector('.member-srn-input');
-      const mEmail = row.querySelector('.member-email-input');
-      const mDept = row.querySelector('.member-dept-input');
-      const mSem = row.querySelector('.member-sem-input');
-
-      formData.members.push({
-        id: 'member-' + (idx + 1),
-        name: mName ? mName.value.trim() : '',
-        srn: mSrn ? mSrn.value.trim().toUpperCase() : '',
-        email: mEmail ? mEmail.value.trim().toLowerCase() : '',
-        department: mDept ? mDept.value : formData.leader.department,
-        semester: mSem ? mSem.value : formData.leader.semester
+    // Dynamic members (3, 4, 5)
+    const extraMembers = [];
+    document.querySelectorAll('.dynamic-member-card').forEach(function (card) {
+      const idx = parseInt(card.getAttribute('data-member-index'), 10);
+      extraMembers.push({
+        id: idx,
+        name: (card.querySelector('.member-name')?.value || '').trim(),
+        srn: (card.querySelector('.member-srn')?.value || '').trim().toUpperCase(),
+        email: (card.querySelector('.member-email')?.value || '').trim().toLowerCase(),
+        department: card.querySelector('.member-dept')?.value || teamData.leader.department,
+        semester: card.querySelector('.member-sem')?.value || teamData.leader.semester
       });
     });
 
-    // Step 3: Project
-    const titleEl = document.getElementById('project_title');
-    const catEl = document.getElementById('project_category');
-    const abstractEl = document.getElementById('project_abstract');
-    const techEl = document.getElementById('project_tech');
-    const mentorEl = document.getElementById('project_mentor');
+    teamData.members = [member2, ...extraMembers];
 
-    if (titleEl) formData.project.title = titleEl.value.trim();
-    if (catEl) formData.project.category = catEl.value;
-    if (abstractEl) formData.project.abstract = abstractEl.value.trim();
-    if (techEl) formData.project.technologies = techEl.value.trim();
-    if (mentorEl) formData.project.mentorName = mentorEl.value.trim();
+    // Project
+    teamData.project.title = (document.getElementById('project_title')?.value || '').trim();
+    teamData.project.track = document.getElementById('project_category')?.value || '';
+    teamData.project.technologies = (document.getElementById('technologies')?.value || '').trim();
+    teamData.project.abstract = (document.getElementById('project_abstract')?.value || '').trim();
+    teamData.project.mentor = (document.getElementById('mentor_name')?.value || '').trim();
+    teamData.project.link = (document.getElementById('project_link')?.value || '').trim();
 
-    // Step 4: Accuracy Confirmation
-    const checkEl = document.getElementById('review-accuracy-checkbox');
-    if (checkEl) formData.confirmedAccuracy = checkEl.checked;
+    // Payment
+    const activePayMode = document.querySelector('input[name="payment_mode"]:checked')?.value || 'UPI / QR Code';
+    teamData.payment.mode = activePayMode;
+    teamData.payment.ref = (document.getElementById('transaction_ref')?.value || '').trim();
+    teamData.payment.date = document.getElementById('payment_date')?.value || '';
   }
 
   function populateDomFromState() {
     // Leader
-    setValue('leader_name', formData.leader.name);
-    setValue('leader_srn', formData.leader.srn);
-    setValue('leader_email', formData.leader.email);
-    setValue('leader_phone', formData.leader.phone);
-    setValue('leader_department', formData.leader.department || 'Computer Science & Engineering');
-    setValue('leader_semester', formData.leader.semester || '6th');
-
-    // Project
-    setValue('project_title', formData.project.title);
-    setValue('project_category', formData.project.category || 'Artificial Intelligence & Machine Learning');
-    setValue('project_abstract', formData.project.abstract);
-    setValue('project_tech', formData.project.technologies);
-    setValue('project_mentor', formData.project.mentorName);
-
-    // Accuracy
-    const checkEl = document.getElementById('review-accuracy-checkbox');
-    if (checkEl) {
-      checkEl.checked = Boolean(formData.confirmedAccuracy);
-      const btn4 = document.getElementById('btn-next-step-4');
-      if (btn4) btn4.disabled = !formData.confirmedAccuracy;
+    if (document.getElementById('leader_name')) document.getElementById('leader_name').value = teamData.leader.name;
+    if (document.getElementById('leader_srn')) document.getElementById('leader_srn').value = teamData.leader.srn;
+    if (document.getElementById('leader_email')) document.getElementById('leader_email').value = teamData.leader.email;
+    if (document.getElementById('leader_phone')) document.getElementById('leader_phone').value = teamData.leader.phone;
+    if (document.getElementById('leader_department') && teamData.leader.department) {
+      document.getElementById('leader_department').value = teamData.leader.department;
     }
-  }
-
-  function setValue(id, val) {
-    const el = document.getElementById(id);
-    if (el && val !== undefined && val !== null) {
-      el.value = val;
+    if (document.getElementById('leader_semester') && teamData.leader.semester) {
+      document.getElementById('leader_semester').value = teamData.leader.semester;
     }
-  }
 
-  /* ---------------------------------------------------------
-   * Step Navigation & Rendering
-   * --------------------------------------------------------- */
-  function renderStep(step) {
-    currentStep = step;
-    maxVisitedStep = Math.max(maxVisitedStep, step);
+    // Member 2
+    if (teamData.members.length > 0) {
+      const m2 = teamData.members[0];
+      const m2Card = document.querySelector('.team-member-card[data-member-index="2"]');
+      if (m2Card && m2) {
+        const nameEl = m2Card.querySelector('.member-name');
+        const srnEl = m2Card.querySelector('.member-srn');
+        const emailEl = m2Card.querySelector('.member-email');
+        const deptEl = m2Card.querySelector('.member-dept');
+        const semEl = m2Card.querySelector('.member-sem');
 
-    // Hide all step panels
-    for (let s = 1; s <= 5; s++) {
-      const panel = document.getElementById('step-panel-' + s);
-      if (panel) {
-        panel.style.display = (s === step) ? 'block' : 'none';
+        if (nameEl) nameEl.value = m2.name || '';
+        if (srnEl) srnEl.value = m2.srn || '';
+        if (emailEl) emailEl.value = m2.email || '';
+        if (deptEl && m2.department) deptEl.value = m2.department;
+        if (semEl && m2.semester) semEl.value = m2.semester;
       }
     }
 
-    // Update stepper list items
-    const stepperItems = document.querySelectorAll('.reg-step-item');
-    stepperItems.forEach(function (item) {
-      const itemStep = parseInt(item.getAttribute('data-step'), 10);
+    // Dynamic members
+    const dynamicContainer = document.getElementById('dynamic-members-list');
+    if (dynamicContainer) {
+      dynamicContainer.innerHTML = '';
+      if (teamData.members.length > 1) {
+        for (let i = 1; i < teamData.members.length; i++) {
+          const m = teamData.members[i];
+          createDynamicMemberCard(m.id || (i + 2), m);
+        }
+      }
+    }
+    updateTeamCountUI();
+
+    // Project
+    if (document.getElementById('project_title')) document.getElementById('project_title').value = teamData.project.title;
+    if (document.getElementById('project_category') && teamData.project.track) {
+      document.getElementById('project_category').value = teamData.project.track;
+    }
+    if (document.getElementById('technologies')) document.getElementById('technologies').value = teamData.project.technologies;
+    if (document.getElementById('project_abstract')) document.getElementById('project_abstract').value = teamData.project.abstract;
+    if (document.getElementById('mentor_name')) document.getElementById('mentor_name').value = teamData.project.mentor;
+    if (document.getElementById('project_link')) document.getElementById('project_link').value = teamData.project.link;
+
+    // Payment
+    if (document.getElementById('transaction_ref')) document.getElementById('transaction_ref').value = teamData.payment.ref;
+    if (document.getElementById('payment_date') && teamData.payment.date) {
+      document.getElementById('payment_date').value = teamData.payment.date;
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+   * Event Handlers & Bindings
+   * ------------------------------------------------------------------------- */
+  function bindEvents() {
+    // Stepper item clicks
+    document.querySelectorAll('.reg-step-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const targetStep = parseInt(this.getAttribute('data-step-target'), 10);
+        if (targetStep <= maxVisitedStep) {
+          goToStep(targetStep);
+        }
+      });
+    });
+
+    // Attach email validation listeners for real-time format feedback
+    attachEmailFieldValidator(document.getElementById('leader_email'));
+    const m2EmailField = document.querySelector('.team-member-card[data-member-index="2"] .member-email');
+    if (m2EmailField) {
+      attachEmailFieldValidator(m2EmailField);
+    }
+
+    // Reset Form button
+    const resetBtn = document.getElementById('btn-reset-form');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function () {
+        if (confirm('Are you sure you want to reset the form? All entered information will be cleared.')) {
+          clearDraft();
+          window.location.reload();
+        }
+      });
+    }
+
+    // Step 1 Next
+    const next1 = document.getElementById('btn-next-step-1');
+    if (next1) {
+      next1.addEventListener('click', function () {
+        if (validateStep1()) {
+          goToStep(2);
+        }
+      });
+    }
+
+    // Step 2 Prev & Next
+    const prev2 = document.getElementById('btn-prev-step-2');
+    if (prev2) prev2.addEventListener('click', () => goToStep(1));
+
+    const next2 = document.getElementById('btn-next-step-2');
+    if (next2) {
+      next2.addEventListener('click', function () {
+        if (validateStep2()) {
+          goToStep(3);
+        }
+      });
+    }
+
+    // Step 2 Add Member
+    const addMemberBtn = document.getElementById('btn-add-member');
+    if (addMemberBtn) {
+      addMemberBtn.addEventListener('click', function () {
+        const currentTotal = 1 + 1 + document.querySelectorAll('.dynamic-member-card').length;
+        if (currentTotal >= 5) {
+          alert('Maximum team size reached (5 students).');
+          return;
+        }
+        const nextId = currentTotal + 1;
+        createDynamicMemberCard(nextId);
+        updateTeamCountUI();
+        saveDraft();
+      });
+    }
+
+    // Step 3 Prev & Next
+    const prev3 = document.getElementById('btn-prev-step-3');
+    if (prev3) prev3.addEventListener('click', () => goToStep(2));
+
+    const next3 = document.getElementById('btn-next-step-3');
+    if (next3) {
+      next3.addEventListener('click', function () {
+        if (validateStep3()) {
+          populateReview();
+          goToStep(4);
+        }
+      });
+    }
+
+    // Abstract character/word counter
+    const abstractEl = document.getElementById('project_abstract');
+    if (abstractEl) {
+      abstractEl.addEventListener('input', function () {
+        updateAbstractWordCount();
+        saveDraft();
+      });
+    }
+
+    // Step 4 Prev & Next
+    const prev4 = document.getElementById('btn-prev-step-4');
+    if (prev4) prev4.addEventListener('click', () => goToStep(3));
+
+    const next4 = document.getElementById('btn-next-step-4');
+    if (next4) {
+      next4.addEventListener('click', function () {
+        const chk = document.getElementById('review-accuracy-checkbox');
+        if (!chk || !chk.checked) {
+          showError('Please check the declaration box to confirm your team information.');
+          return;
+        }
+        goToStep(5);
+      });
+    }
+
+    const accuracyChk = document.getElementById('review-accuracy-checkbox');
+    if (accuracyChk && next4) {
+      accuracyChk.addEventListener('change', function () {
+        next4.disabled = !this.checked;
+        if (this.checked) clearError();
+      });
+    }
+
+    // Step 5 Prev
+    const prev5 = document.getElementById('btn-prev-step-5');
+    if (prev5) prev5.addEventListener('click', () => goToStep(4));
+
+    // Payment Mode Radio Toggle
+    const payUpiCard = document.getElementById('pay-card-upi');
+    const payBankCard = document.getElementById('pay-card-bank');
+    const upiDetails = document.getElementById('upi-channel-details');
+    const bankDetails = document.getElementById('bank-channel-details');
+
+    if (payUpiCard && payBankCard) {
+      payUpiCard.addEventListener('click', function () {
+        payUpiCard.classList.add('active');
+        payBankCard.classList.remove('active');
+        const r1 = payUpiCard.querySelector('input');
+        if (r1) r1.checked = true;
+        if (upiDetails) upiDetails.style.display = 'block';
+        if (bankDetails) bankDetails.style.display = 'none';
+        saveDraft();
+      });
+
+      payBankCard.addEventListener('click', function () {
+        payBankCard.classList.add('active');
+        payUpiCard.classList.remove('active');
+        const r2 = payBankCard.querySelector('input');
+        if (r2) r2.checked = true;
+        if (upiDetails) upiDetails.style.display = 'none';
+        if (bankDetails) bankDetails.style.display = 'block';
+        saveDraft();
+      });
+    }
+
+    // Copy UPI ID button
+    const copyUpiBtn = document.getElementById('btn-copy-upi');
+    if (copyUpiBtn) {
+      copyUpiBtn.addEventListener('click', function () {
+        const vpa = document.getElementById('upi-vpa-text')?.innerText || 'snpsu.datazen@upi';
+        navigator.clipboard.writeText(vpa).then(function () {
+          copyUpiBtn.innerHTML = '<i class="bi bi-check2"></i> <span>Copied!</span>';
+          copyUpiBtn.style.color = '#059669';
+          setTimeout(function () {
+            copyUpiBtn.innerHTML = '<i class="bi bi-clipboard"></i> <span>Copy</span>';
+            copyUpiBtn.style.color = '';
+          }, 2000);
+        });
+      });
+    }
+
+    // Fill Demo Transaction ID button
+    const demoRefBtn = document.getElementById('btn-fill-demo-ref');
+    if (demoRefBtn) {
+      demoRefBtn.addEventListener('click', function () {
+        const mockRef = 'UPI' + Math.floor(100000000000 + Math.random() * 900000000000);
+        const refInput = document.getElementById('transaction_ref');
+        if (refInput) {
+          refInput.value = mockRef;
+          saveDraft();
+        }
+      });
+    }
+
+    // Form Submit
+    const form = document.getElementById('project-team-reg-form');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        if (!validateStep5()) {
+          e.preventDefault();
+          return false;
+        }
+
+        // Package all member details into payload
+        syncDomToState();
+        const payloadInput = document.getElementById('team_members_payload');
+        if (payloadInput) {
+          payloadInput.value = JSON.stringify(teamData.members);
+        }
+
+        // Set submit button state
+        const submitBtn = document.getElementById('btn-submit-registration');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Generating Pass...';
+        }
+
+        // Form proceeds with natural POST to /registration
+        clearDraft();
+      });
+    }
+
+    // Auto-save on input
+    form.addEventListener('input', function (e) {
+      saveDraft();
+    });
+    form.addEventListener('change', function (e) {
+      saveDraft();
+    });
+  }
+
+  /* -------------------------------------------------------------------------
+   * Step Navigation & Renderer
+   * ------------------------------------------------------------------------- */
+  function goToStep(step) {
+    clearError();
+    currentStep = step;
+    maxVisitedStep = Math.max(maxVisitedStep, step);
+    renderStep(step);
+    saveDraft();
+
+    // Scroll smoothly to top of portal
+    const header = document.querySelector('.reg-portal-header') || document.querySelector('.reg-stepper-card');
+    if (header) {
+      header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function renderStep(step) {
+    // Toggle Panels
+    for (let i = 1; i <= 5; i++) {
+      const panel = document.getElementById(`step-panel-${i}`);
+      if (panel) {
+        panel.style.display = (i === step) ? 'block' : 'none';
+      }
+    }
+
+    // Update Stepper
+    document.querySelectorAll('.reg-step-item').forEach(function (item) {
+      const s = parseInt(item.getAttribute('data-step'), 10);
       const btn = item.querySelector('.reg-step-btn');
-      const circle = item.querySelector('.reg-step-circle');
 
       item.classList.remove('active', 'completed');
 
-      if (itemStep < step) {
-        item.classList.add('completed');
-        if (circle) circle.innerHTML = '<i class="bi bi-check-lg" style="font-weight:900;"></i>';
-        if (btn) btn.removeAttribute('disabled');
-      } else if (itemStep === step) {
+      if (s === step) {
         item.classList.add('active');
-        if (circle) circle.textContent = itemStep;
-        if (btn) btn.removeAttribute('disabled');
+        if (btn) btn.disabled = false;
+      } else if (s < step) {
+        item.classList.add('completed');
+        if (btn) btn.disabled = false;
       } else {
-        if (circle) circle.textContent = itemStep;
-        if (btn) {
-          if (itemStep <= maxVisitedStep) {
-            btn.removeAttribute('disabled');
-          } else {
-            btn.setAttribute('disabled', 'disabled');
-          }
-        }
+        if (btn) btn.disabled = (s > maxVisitedStep);
       }
     });
 
-    hideError();
-
-    // Contextual renders
-    if (step === 2) {
-      updateLeaderSummaryBanner();
-    } else if (step === 4) {
-      renderReviewStep();
-    } else if (step === 5) {
-      renderPaymentStep();
+    // Update Connectors
+    for (let c = 1; c <= 4; c++) {
+      const conn = document.getElementById(`connector-${c}`);
+      if (conn) {
+        if (c < step) {
+          conn.classList.add('completed');
+        } else {
+          conn.classList.remove('completed');
+        }
+      }
     }
 
-    saveDraft();
-    window.scrollTo({ top: 120, behavior: 'smooth' });
+    // Special logic for step 2 recap
+    if (step === 2) {
+      const recapEl = document.getElementById('recap-leader-info');
+      const name = (document.getElementById('leader_name')?.value || '').trim() || 'Team Leader';
+      const srn = (document.getElementById('leader_srn')?.value || '').trim().toUpperCase() || 'SRN Pending';
+      const dept = document.getElementById('leader_department')?.value || 'CSE';
+      const sem = document.getElementById('leader_semester')?.value || '6th Semester';
+      if (recapEl) {
+        recapEl.textContent = `${name} (${srn}) — ${dept} • ${sem}`;
+      }
+      updateTeamCountUI();
+    }
+
+    // Special logic for step 4 review
+    if (step === 4) {
+      populateReview();
+    }
   }
 
+  /* -------------------------------------------------------------------------
+   * Validation Functions
+   * ------------------------------------------------------------------------- */
   function showError(msg) {
     const alertBox = document.getElementById('step-error-alert');
-    const alertText = document.getElementById('step-error-text');
-    if (alertBox && alertText) {
-      alertText.textContent = msg;
+    const textEl = document.getElementById('step-error-text');
+    if (alertBox && textEl) {
+      textEl.innerHTML = msg;
       alertBox.style.display = 'block';
-      alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
-  function hideError() {
+  function clearError() {
     const alertBox = document.getElementById('step-error-alert');
     if (alertBox) alertBox.style.display = 'none';
   }
 
-  /* ---------------------------------------------------------
-   * Validation Rules
-   * --------------------------------------------------------- */
+  function isValidEmail(email) {
+    if (!email || typeof email !== 'string') return false;
+    // Strict format matching user specifications like name12@gmail.com
+    const emailRegex = /^[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email.trim());
+  }
+
+  function attachEmailFieldValidator(inputEl) {
+    if (!inputEl) return;
+    function checkEmail() {
+      const val = inputEl.value.trim();
+      if (!val) {
+        inputEl.style.borderColor = '';
+        inputEl.style.boxShadow = '';
+        return;
+      }
+      if (!isValidEmail(val)) {
+        inputEl.style.borderColor = '#ef4444';
+        inputEl.style.boxShadow = '0 0 0 2px rgba(239, 68, 68, 0.15)';
+      } else {
+        inputEl.style.borderColor = '#10b981';
+        inputEl.style.boxShadow = '0 0 0 2px rgba(16, 185, 129, 0.15)';
+      }
+    }
+    inputEl.addEventListener('blur', checkEmail);
+    inputEl.addEventListener('input', function () {
+      if (inputEl.value.includes('@')) {
+        checkEmail();
+      } else {
+        inputEl.style.borderColor = '';
+        inputEl.style.boxShadow = '';
+      }
+    });
+  }
+
   function validateStep1() {
-    syncDomToState();
-    const l = formData.leader;
-    if (!l.name || l.name.length < 2) {
-      showError('Please enter the Team Leader full name.');
-      return false;
-    }
-    if (!l.srn || l.srn.length < 3) {
-      showError('Please enter a valid SRN / USN / Student ID for the Team Leader.');
-      return false;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!l.email || !emailRegex.test(l.email)) {
-      showError('Please enter a valid college / institutional email address.');
-      return false;
-    }
-    if (!l.phone || l.phone.replace(/[^0-9]/g, '').length < 10) {
-      showError('Please enter a valid 10-digit phone number.');
-      return false;
-    }
-    if (!l.department) {
-      showError('Please select your academic department.');
+    clearError();
+    const name = (document.getElementById('leader_name')?.value || '').trim();
+    const srn = (document.getElementById('leader_srn')?.value || '').trim();
+    const email = (document.getElementById('leader_email')?.value || '').trim();
+    const phone = (document.getElementById('leader_phone')?.value || '').trim();
+    const dept = document.getElementById('leader_department')?.value;
+    const sem = document.getElementById('leader_semester')?.value;
+
+    const errors = [];
+    if (!name || name.length < 2) errors.push('Please enter your full official name (as on college ID).');
+    if (!srn || srn.length < 3) errors.push('Please enter your Student Registration Number (SRN / USN).');
+    if (!email || !isValidEmail(email)) errors.push('Please enter a valid email address for Team Leader in the format name12@gmail.com.');
+    if (!phone || phone.replace(/\D/g, '').length < 10) errors.push('Please enter a valid 10-digit mobile phone number for Team Leader.');
+    if (!dept) errors.push('Please select your academic department.');
+    if (!sem) errors.push('Please select your current semester.');
+
+    if (errors.length > 0) {
+      showError(errors.join('<br>'));
       return false;
     }
     return true;
   }
 
   function validateStep2() {
-    syncDomToState();
-    const totalSize = 1 + formData.members.length;
-    if (totalSize < 2) {
-      showError('A minimum of 2 students (1 Leader + at least 1 Member) is required to register.');
-      return false;
-    }
-    if (totalSize > 5) {
-      showError('A maximum of 5 students (1 Leader + up to 4 Members) is allowed per team.');
-      return false;
-    }
+    clearError();
+    const m2Card = document.querySelector('.team-member-card[data-member-index="2"]');
+    const m2Name = (m2Card?.querySelector('.member-name')?.value || '').trim();
+    const m2Srn = (m2Card?.querySelector('.member-srn')?.value || '').trim();
+    const m2Email = (m2Card?.querySelector('.member-email')?.value || '').trim();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    for (let i = 0; i < formData.members.length; i++) {
-      const m = formData.members[i];
-      const memberNum = i + 2;
-      if (!m.name || m.name.length < 2) {
-        showError('Please enter the full name for Team Member #' + memberNum + '.');
-        return false;
+    const errors = [];
+    if (!m2Name || m2Name.length < 2) errors.push('Please enter Team Member 2 full name.');
+    if (!m2Srn || m2Srn.length < 3) errors.push('Please enter Team Member 2 SRN / registration number.');
+    if (!m2Email || !isValidEmail(m2Email)) errors.push('Please enter a valid email address for Team Member 2 in the format name12@gmail.com.');
+
+    // Check dynamic members if added
+    const dynamicCards = document.querySelectorAll('.dynamic-member-card');
+    dynamicCards.forEach(function (card) {
+      const idx = card.getAttribute('data-member-index');
+      const name = (card.querySelector('.member-name')?.value || '').trim();
+      const srn = (card.querySelector('.member-srn')?.value || '').trim();
+      const email = (card.querySelector('.member-email')?.value || '').trim();
+
+      if (!name || name.length < 2) errors.push(`Please enter Team Member ${idx} full name.`);
+      if (!srn || srn.length < 3) errors.push(`Please enter Team Member ${idx} SRN.`);
+      if (!email || !isValidEmail(email)) {
+        errors.push(`Please enter a valid email address for Team Member ${idx} in the format name12@gmail.com.`);
       }
-      if (!m.srn || m.srn.length < 3) {
-        showError('Please enter a valid SRN / USN for Team Member #' + memberNum + ' (' + m.name + ').');
-        return false;
-      }
-      if (!m.email || !emailRegex.test(m.email)) {
-        showError('Please enter a valid email for Team Member #' + memberNum + ' (' + m.name + ').');
-        return false;
-      }
+    });
+
+    if (errors.length > 0) {
+      showError(errors.join('<br>'));
+      return false;
     }
     return true;
   }
 
   function validateStep3() {
-    syncDomToState();
-    const p = formData.project;
-    if (!p.title || p.title.length < 5) {
-      showError('Please enter a descriptive Project Title (minimum 5 characters).');
-      return false;
+    clearError();
+    const title = (document.getElementById('project_title')?.value || '').trim();
+    const track = document.getElementById('project_category')?.value;
+    const tech = (document.getElementById('technologies')?.value || '').trim();
+    const abstract = (document.getElementById('project_abstract')?.value || '').trim();
+
+    const errors = [];
+    if (!title || title.length < 5) errors.push('Please enter a descriptive project title (minimum 5 characters).');
+    if (!track) errors.push('Please select a conference domain track.');
+    if (!tech || tech.length < 2) errors.push('Please list key technologies and tools used.');
+    
+    // Check abstract word count
+    const words = abstract.split(/\s+/).filter(Boolean).length;
+    if (!abstract || words < 20) {
+      errors.push(`Please provide a descriptive project abstract (minimum 20 words, current: ${words} words).`);
     }
-    if (!p.category) {
-      showError('Please select a project category / track.');
-      return false;
-    }
-    if (!p.abstract || p.abstract.length < 40) {
-      showError('Please provide a descriptive abstract (minimum 40 characters). Current length: ' + (p.abstract ? p.abstract.length : 0) + ' characters.');
-      return false;
-    }
-    if (p.abstract.length > 2000) {
-      showError('Abstract exceeds maximum 2000 character limit. Current length: ' + p.abstract.length + ' characters.');
+
+    if (errors.length > 0) {
+      showError(errors.join('<br>'));
       return false;
     }
     return true;
   }
 
-  function validateStep4() {
-    syncDomToState();
-    if (!formData.confirmedAccuracy) {
-      showError('Please check the confirmation box to declare academic integrity before proceeding to payment.');
+  function validateStep5() {
+    clearError();
+    const ref = (document.getElementById('transaction_ref')?.value || '').trim();
+    const date = document.getElementById('payment_date')?.value;
+
+    const errors = [];
+    if (!ref || ref.length < 4) errors.push('Please enter the UTR or Transaction Reference number.');
+    if (!date) errors.push('Please select the payment transaction date.');
+
+    if (errors.length > 0) {
+      showError(errors.join('<br>'));
       return false;
     }
     return true;
   }
 
-  /* ---------------------------------------------------------
-   * Dynamic Members UI (2-5 Students)
-   * --------------------------------------------------------- */
-  function renderMembers() {
-    const container = document.getElementById('members-container');
+  /* -------------------------------------------------------------------------
+   * Dynamic Members Generator (Slots 3, 4, 5)
+   * ------------------------------------------------------------------------- */
+  function createDynamicMemberCard(memberNumber, initialData) {
+    const container = document.getElementById('dynamic-members-list');
     if (!container) return;
 
-    container.innerHTML = '';
+    const defaultDept = teamData.leader.department || 'Computer Science & Engineering';
+    const defaultSem = teamData.leader.semester || '6th Semester';
 
-    formData.members.forEach(function (member, index) {
-      const memberIndex = index + 2; // Member 2, 3, 4, 5
-      const card = document.createElement('div');
-      card.className = 'member-entry-card';
-      card.style.cssText = 'background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:18px 20px; box-shadow:0 1px 3px rgba(0,0,0,0.04);';
+    const card = document.createElement('div');
+    card.className = 'team-member-card dynamic-member-card';
+    card.setAttribute('data-member-index', memberNumber.toString());
+    card.style.cssText = 'background:#ffffff; border:1.5px solid #cbd5e1; border-radius:10px; padding:20px; position:relative; animation:fadeIn 0.2s ease-out;';
 
-      card.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="width:24px; height:24px; border-radius:50%; background:#f1f5f9; color:#475569; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; border:1px solid #cbd5e1;">
-              ${memberIndex}
-            </span>
-            <strong style="color:var(--primary-navy); font-size:0.92rem;">Team Member #${memberIndex}</strong>
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">
+        <h3 style="font-size:1.05rem; font-weight:700; color:#0b1f51; margin:0; display:flex; align-items:center; gap:8px;">
+          <i class="bi bi-person-fill" style="color:#14378f;"></i> Team Member ${memberNumber}
+        </h3>
+        <button type="button" class="btn btn-remove-member" style="background:#fee2e2; border:1px solid #fecaca; color:#b91c1c; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+          <i class="bi bi-trash3-fill"></i> <span>Remove</span>
+        </button>
+      </div>
+
+      <div class="reg-form-grid">
+        <div class="reg-form-field">
+          <label class="reg-field-label">FULL NAME <span class="req">*</span></label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-person"></i>
+            <input type="text" class="form-input member-name" placeholder="e.g. Co-presenter name" value="${initialData?.name || ''}" required>
           </div>
-          ${formData.members.length > 1 ? `
-            <button type="button" class="btn btn-sm btn-remove-member" data-index="${index}" style="background:#fee2e2; color:#dc2626; border:none; padding:4px 10px; font-size:0.75rem; border-radius:4px; font-weight:600; cursor:pointer;" title="Remove this member">
-              <i class="bi bi-trash"></i> Remove
-            </button>
-          ` : '<span style="font-size:0.75rem; color:#94a3b8;">Required (Min 2 students)</span>'}
+          <span class="form-helper-text">Official name for certificate.</span>
         </div>
 
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Full Name <span class="req">*</span></label>
-            <input type="text" class="form-input member-name-input" placeholder="e.g. Priya Sharma" value="${escapeHtml(member.name)}" required>
+        <div class="reg-form-field">
+          <label class="reg-field-label">SRN (STUDENT REGISTRATION NUMBER) <span class="req">*</span></label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-hash"></i>
+            <input type="text" class="form-input member-srn" placeholder="e.g. 1RV23CS078" value="${initialData?.srn || ''}" style="text-transform:uppercase;" required>
           </div>
-
-          <div class="form-group">
-            <label class="form-label">SRN / USN <span class="req">*</span></label>
-            <input type="text" class="form-input member-srn-input" placeholder="e.g. 1MS21CS085" value="${escapeHtml(member.srn)}" style="font-family:monospace; text-transform:uppercase;" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">College Email <span class="req">*</span></label>
-            <input type="email" class="form-input member-email-input" placeholder="e.g. priya.sharma@snpsu.edu.in" value="${escapeHtml(member.email)}" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Department <span class="req">*</span></label>
-            <select class="form-select member-dept-input">
-              <option value="Computer Science & Engineering" ${member.department === 'Computer Science & Engineering' ? 'selected' : ''}>Computer Science & Engineering</option>
-              <option value="Information Science & Engineering" ${member.department === 'Information Science & Engineering' ? 'selected' : ''}>Information Science & Engineering</option>
-              <option value="Artificial Intelligence & Data Science" ${member.department === 'Artificial Intelligence & Data Science' ? 'selected' : ''}>Artificial Intelligence & Data Science</option>
-              <option value="Electronics & Communication Engineering" ${member.department === 'Electronics & Communication Engineering' ? 'selected' : ''}>Electronics & Communication Engineering</option>
-              <option value="Electrical & Electronics Engineering" ${member.department === 'Electrical & Electronics Engineering' ? 'selected' : ''}>Electrical & Electronics Engineering</option>
-              <option value="Mechanical Engineering" ${member.department === 'Mechanical Engineering' ? 'selected' : ''}>Mechanical Engineering</option>
-              <option value="Civil Engineering" ${member.department === 'Civil Engineering' ? 'selected' : ''}>Civil Engineering</option>
-              <option value="Biotechnology / Biomedical" ${member.department === 'Biotechnology / Biomedical' ? 'selected' : ''}>Biotechnology / Biomedical</option>
-              <option value="Other Department" ${member.department === 'Other Department' ? 'selected' : ''}>Other Department</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Semester <span class="req">*</span></label>
-            <select class="form-select member-sem-input">
-              <option value="1st" ${member.semester === '1st' ? 'selected' : ''}>1st Semester</option>
-              <option value="2nd" ${member.semester === '2nd' ? 'selected' : ''}>2nd Semester</option>
-              <option value="3rd" ${member.semester === '3rd' ? 'selected' : ''}>3rd Semester</option>
-              <option value="4th" ${member.semester === '4th' ? 'selected' : ''}>4th Semester</option>
-              <option value="5th" ${member.semester === '5th' ? 'selected' : ''}>5th Semester</option>
-              <option value="6th" ${member.semester === '6th' ? 'selected' : ''}>6th Semester</option>
-              <option value="7th" ${member.semester === '7th' ? 'selected' : ''}>7th Semester</option>
-              <option value="8th" ${member.semester === '8th' ? 'selected' : ''}>8th Semester</option>
-              <option value="PG / Post Graduate" ${member.semester === 'PG / Post Graduate' ? 'selected' : ''}>PG / Post Graduate</option>
-            </select>
-          </div>
+          <span class="form-helper-text">Format: 1XX23CS001</span>
         </div>
-      `;
 
-      container.appendChild(card);
-    });
+        <div class="reg-form-field" style="grid-column: 1 / -1;">
+          <label class="reg-field-label">COLLEGE EMAIL ADDRESS <span class="req">*</span></label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-envelope"></i>
+            <input type="email" class="form-input member-email" placeholder="e.g. name12@gmail.com" value="${initialData?.email || ''}" required pattern="[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}" title="Format: name12@gmail.com">
+          </div>
+          <span class="form-helper-text">Format: name12@gmail.com &bull; Confirmation pass and materials sent here.</span>
+        </div>
 
-    updateTeamCounterBadge();
-    bindMemberInputListeners();
-  }
+        <div class="reg-form-field">
+          <label class="reg-field-label">DEPARTMENT</label>
+          <select class="form-input form-select-custom member-dept">
+            <option value="Computer Science &amp; Engineering" ${(initialData?.department || defaultDept) === 'Computer Science & Engineering' ? 'selected' : ''}>Computer Science &amp; Engineering</option>
+            <option value="Information Science &amp; Engineering" ${(initialData?.department) === 'Information Science & Engineering' ? 'selected' : ''}>Information Science &amp; Engineering</option>
+            <option value="Artificial Intelligence &amp; Machine Learning" ${(initialData?.department) === 'Artificial Intelligence & Machine Learning' ? 'selected' : ''}>Artificial Intelligence &amp; Machine Learning</option>
+            <option value="Data Science &amp; Analytics" ${(initialData?.department) === 'Data Science & Analytics' ? 'selected' : ''}>Data Science &amp; Analytics</option>
+            <option value="Electronics &amp; Communication Engineering" ${(initialData?.department) === 'Electronics & Communication Engineering' ? 'selected' : ''}>Electronics &amp; Communication Engineering</option>
+            <option value="Electrical &amp; Electronics Engineering" ${(initialData?.department) === 'Electrical & Electronics Engineering' ? 'selected' : ''}>Electrical &amp; Electronics Engineering</option>
+            <option value="Mechanical Engineering" ${(initialData?.department) === 'Mechanical Engineering' ? 'selected' : ''}>Mechanical Engineering</option>
+            <option value="Biotechnology" ${(initialData?.department) === 'Biotechnology' ? 'selected' : ''}>Biotechnology</option>
+            <option value="Civil Engineering" ${(initialData?.department) === 'Civil Engineering' ? 'selected' : ''}>Civil Engineering</option>
+            <option value="Master of Computer Applications (MCA)" ${(initialData?.department) === 'Master of Computer Applications (MCA)' ? 'selected' : ''}>Master of Computer Applications (MCA)</option>
+            <option value="Other Department" ${(initialData?.department) === 'Other Department' ? 'selected' : ''}>Other Department</option>
+          </select>
+        </div>
 
-  function updateLeaderSummaryBanner() {
-    syncDomToState();
-    const nameEl = document.getElementById('summary-leader-name');
-    const srnEl = document.getElementById('summary-leader-srn');
-    if (nameEl) nameEl.textContent = formData.leader.name || 'Team Leader';
-    if (srnEl) srnEl.textContent = formData.leader.srn ? `(${formData.leader.srn})` : '';
-  }
+        <div class="reg-form-field">
+          <label class="reg-field-label">CURRENT SEMESTER</label>
+          <select class="form-input form-select-custom member-sem">
+            <option value="1st Semester" ${(initialData?.semester) === '1st Semester' ? 'selected' : ''}>1st Semester</option>
+            <option value="2nd Semester" ${(initialData?.semester) === '2nd Semester' ? 'selected' : ''}>2nd Semester</option>
+            <option value="3rd Semester" ${(initialData?.semester) === '3rd Semester' ? 'selected' : ''}>3rd Semester</option>
+            <option value="4th Semester" ${(initialData?.semester) === '4th Semester' ? 'selected' : ''}>4th Semester</option>
+            <option value="5th Semester" ${(initialData?.semester) === '5th Semester' ? 'selected' : ''}>5th Semester</option>
+            <option value="6th Semester" ${(initialData?.semester || defaultSem) === '6th Semester' ? 'selected' : ''}>6th Semester</option>
+            <option value="7th Semester" ${(initialData?.semester) === '7th Semester' ? 'selected' : ''}>7th Semester</option>
+            <option value="8th Semester" ${(initialData?.semester) === '8th Semester' ? 'selected' : ''}>8th Semester</option>
+          </select>
+        </div>
+      </div>
+    `;
 
-  function updateTeamCounterBadge() {
-    const totalCount = 1 + formData.members.length;
-    const badge = document.getElementById('team-size-counter-badge');
-    const addBtn = document.getElementById('btn-add-member');
-
-    if (badge) {
-      badge.textContent = `Total Team Size: ${totalCount} Students (${totalCount === 5 ? 'Max' : '2-5 allowed'})`;
-    }
-
-    if (addBtn) {
-      if (totalCount >= 5) {
-        addBtn.setAttribute('disabled', 'disabled');
-        addBtn.style.opacity = '0.5';
-        addBtn.style.cursor = 'not-allowed';
-      } else {
-        addBtn.removeAttribute('disabled');
-        addBtn.style.opacity = '1';
-        addBtn.style.cursor = 'pointer';
-      }
-    }
-  }
-
-  function bindMemberInputListeners() {
-    const inputs = document.querySelectorAll('.member-entry-card input, .member-entry-card select');
-    inputs.forEach(function (inp) {
-      inp.addEventListener('input', function () {
-        syncDomToState();
-        saveDraft();
-      });
-      inp.addEventListener('change', function () {
-        syncDomToState();
-        saveDraft();
-      });
-    });
-
-    const removeBtns = document.querySelectorAll('.btn-remove-member');
-    removeBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        syncDomToState();
-        const idx = parseInt(btn.getAttribute('data-index'), 10);
-        if (formData.members.length > 1) {
-          formData.members.splice(idx, 1);
-          renderMembers();
-          saveDraft();
-        }
-      });
-    });
-  }
-
-  function addMember() {
-    syncDomToState();
-    if (formData.members.length < 4) { // Max 4 additional members + 1 leader = 5
-      formData.members.push({
-        id: 'member-' + (formData.members.length + 1),
-        name: '',
-        srn: '',
-        email: '',
-        department: formData.leader.department || 'Computer Science & Engineering',
-        semester: formData.leader.semester || '6th'
-      });
-      renderMembers();
+    // Bind remove button
+    card.querySelector('.btn-remove-member').addEventListener('click', function () {
+      card.remove();
+      renumberDynamicMembers();
+      updateTeamCountUI();
       saveDraft();
+    });
+
+    // Attach real-time email validator
+    const dynEmailInput = card.querySelector('.member-email');
+    if (dynEmailInput) {
+      attachEmailFieldValidator(dynEmailInput);
+    }
+
+    container.appendChild(card);
+  }
+
+  function renumberDynamicMembers() {
+    const dynamicCards = document.querySelectorAll('.dynamic-member-card');
+    dynamicCards.forEach(function (card, index) {
+      const num = index + 3;
+      card.setAttribute('data-member-index', num.toString());
+      const title = card.querySelector('h3');
+      if (title) {
+        title.innerHTML = `<i class="bi bi-person-fill" style="color:#14378f;"></i> Team Member ${num}`;
+      }
+    });
+  }
+
+  function updateTeamCountUI() {
+    const extraCount = document.querySelectorAll('.dynamic-member-card').length;
+    const totalCount = 1 + 1 + extraCount; // Leader + Member 2 + extras
+
+    const badge = document.getElementById('team-count-badge');
+    if (badge) badge.textContent = `${totalCount} Students`;
+
+    const addBtn = document.getElementById('btn-add-member');
+    const addText = document.getElementById('add-member-text');
+
+    if (totalCount >= 5) {
+      if (addBtn) addBtn.style.display = 'none';
+    } else {
+      if (addBtn) addBtn.style.display = 'inline-flex';
+      if (addText) addText.textContent = `+ Add Another Team Member (Slot ${totalCount + 1} of 5)`;
     }
   }
 
-  /* ---------------------------------------------------------
-   * Review Step Renderer
-   * --------------------------------------------------------- */
-  function renderReviewStep() {
+  function updateAbstractWordCount() {
+    const abstractEl = document.getElementById('project_abstract');
+    const counterEl = document.getElementById('abstract-word-count');
+    if (!abstractEl || !counterEl) return;
+
+    const text = abstractEl.value.trim();
+    const count = text ? text.split(/\s+/).filter(Boolean).length : 0;
+    counterEl.textContent = `${count} word${count === 1 ? '' : 's'}`;
+
+    if (count < 20) {
+      counterEl.style.color = '#ef4444';
+    } else {
+      counterEl.style.color = '#059669';
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+   * Review Data Population (Step 4)
+   * ------------------------------------------------------------------------- */
+  function populateReview() {
     syncDomToState();
 
     // Leader
-    setText('rev-leader-name', formData.leader.name || '—');
-    setText('rev-leader-srn', formData.leader.srn || '—');
-    setText('rev-leader-email', formData.leader.email || '—');
-    setText('rev-leader-dept', `${formData.leader.department} (${formData.leader.semester} Sem)`);
+    const revLName = document.getElementById('rev-leader-name');
+    const revLSrn = document.getElementById('rev-leader-srn');
+    const revLEmail = document.getElementById('rev-leader-email');
+    const revLDept = document.getElementById('rev-leader-dept');
 
-    // Members Table
-    const tbody = document.getElementById('rev-members-table-body');
-    const badge = document.getElementById('rev-member-count-badge');
-    const totalCount = 1 + formData.members.length;
+    if (revLName) revLName.textContent = teamData.leader.name || '-';
+    if (revLSrn) revLSrn.textContent = teamData.leader.srn || '-';
+    if (revLEmail) revLEmail.textContent = teamData.leader.email || '-';
+    if (revLDept) revLDept.textContent = `${teamData.leader.phone || '-'} • ${teamData.leader.department} (${teamData.leader.semester})`;
 
-    if (badge) badge.textContent = `${totalCount} Registered Students`;
-
-    if (tbody) {
-      let rowsHtml = '';
-      // Row 1: Leader
-      rowsHtml += `
-        <tr style="border-bottom:1px solid #f1f5f9; background:#f8fafc;">
-          <td style="padding:10px 14px; font-weight:700; color:var(--primary-navy);">1</td>
-          <td style="padding:10px 14px; font-weight:700; color:#0f172a;">${escapeHtml(formData.leader.name)}</td>
-          <td style="padding:10px 14px; font-family:monospace; color:#001040; font-weight:600;">${escapeHtml(formData.leader.srn)}</td>
-          <td style="padding:10px 14px; color:#475569;">${escapeHtml(formData.leader.email)}</td>
-          <td style="padding:10px 14px; color:#475569;">${escapeHtml(formData.leader.department)}</td>
-          <td style="padding:10px 14px;"><span class="badge badge-navy" style="font-size:0.7rem;">Team Leader</span></td>
-        </tr>
-      `;
-
-      // Rows 2..N: Additional Members
-      formData.members.forEach(function (m, idx) {
-        rowsHtml += `
-          <tr style="border-bottom:1px solid #f1f5f9;">
-            <td style="padding:10px 14px; color:#64748b;">${idx + 2}</td>
-            <td style="padding:10px 14px; font-weight:600; color:#0f172a;">${escapeHtml(m.name || '—')}</td>
-            <td style="padding:10px 14px; font-family:monospace; color:#334155;">${escapeHtml(m.srn || '—')}</td>
-            <td style="padding:10px 14px; color:#475569;">${escapeHtml(m.email || '—')}</td>
-            <td style="padding:10px 14px; color:#475569;">${escapeHtml(m.department || formData.leader.department)}</td>
-            <td style="padding:10px 14px;"><span class="badge" style="background:#e2e8f0; color:#475569; font-size:0.7rem;">Member</span></td>
-          </tr>
+    // Members list
+    const membersListEl = document.getElementById('rev-members-list');
+    if (membersListEl) {
+      membersListEl.innerHTML = '';
+      teamData.members.forEach(function (m, idx) {
+        const item = document.createElement('div');
+        item.style.cssText = 'background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:0.86rem;';
+        item.innerHTML = `
+          <div>
+            <strong style="color:#0f172a;">Member ${idx + 2}: ${m.name || 'Name Pending'}</strong>
+            <span style="font-family:monospace; color:#0b1f51; font-weight:700; margin-left:8px;">[${m.srn || 'SRN'}]</span>
+            <div style="font-size:0.78rem; color:#64748b; margin-top:2px;">
+              ${m.email || 'Email'} &bull; ${m.department || ''} (${m.semester || ''})
+            </div>
+          </div>
+          <span class="badge" style="background:#f1f5f9; color:#475569; font-size:0.72rem; padding:3px 8px; border-radius:4px;">Team Co-Presenter</span>
         `;
+        membersListEl.appendChild(item);
       });
-
-      tbody.innerHTML = rowsHtml;
     }
 
     // Project
-    setText('rev-project-title', formData.project.title || '—');
-    setText('rev-project-category', formData.project.category || 'General Innovation');
-    setText('rev-project-abstract', formData.project.abstract || 'No abstract summary provided.');
-    setText('rev-project-tech', formData.project.technologies || 'None specified');
-    setText('rev-project-mentor', formData.project.mentorName || 'Self-guided / To be assigned');
+    const revPTitle = document.getElementById('rev-project-title');
+    const revPTrack = document.getElementById('rev-project-track');
+    const revPTech = document.getElementById('rev-project-tech');
+    const revPMentor = document.getElementById('rev-project-mentor');
+    const revPAbstract = document.getElementById('rev-project-abstract');
 
-    // Accuracy checkbox state
-    const checkEl = document.getElementById('review-accuracy-checkbox');
-    const nextBtn = document.getElementById('btn-next-step-4');
-    if (checkEl && nextBtn) {
-      checkEl.checked = Boolean(formData.confirmedAccuracy);
-      nextBtn.disabled = !formData.confirmedAccuracy;
+    if (revPTitle) revPTitle.textContent = teamData.project.title || '-';
+    if (revPTrack) revPTrack.textContent = teamData.project.track || '-';
+    if (revPTech) revPTech.textContent = teamData.project.technologies || '-';
+    if (revPMentor) revPMentor.textContent = teamData.project.mentor || 'None specified';
+    if (revPAbstract) revPAbstract.textContent = teamData.project.abstract || '-';
+
+    // Step 5 titles preview
+    const payTitle = document.getElementById('pay-team-title');
+    if (payTitle) {
+      payTitle.textContent = teamData.project.title || 'Project Team Entry';
     }
   }
 
-  function renderPaymentStep() {
-    syncDomToState();
-    const titleEl = document.getElementById('pay-project-title-preview');
-    const teamEl = document.getElementById('pay-team-size-preview');
-    const totalSize = 1 + formData.members.length;
-
-    if (titleEl) titleEl.textContent = formData.project.title || 'Project Innovation Entry';
-    if (teamEl) teamEl.textContent = `${totalSize} Registered Members`;
-  }
-
-  function updateAbstractCounter() {
-    const el = document.getElementById('project_abstract');
-    const counter = document.getElementById('abstract-char-counter');
-    if (!el || !counter) return;
-
-    const len = el.value.length;
-    counter.textContent = `${len} / 2000 characters`;
-    if (len > 2000) {
-      counter.style.color = '#dc2626';
-      counter.style.fontWeight = '700';
-    } else if (len >= 40) {
-      counter.style.color = '#059669';
-      counter.style.fontWeight = '600';
-    } else {
-      counter.style.color = '#64748b';
-      counter.style.fontWeight = 'normal';
+  // Expose stepper helper to global scope for [Edit] links
+  window.projectRegStepper = {
+    goToStep: goToStep,
+    getState: function () {
+      syncDomToState();
+      return teamData;
     }
-  }
-
-  /* ---------------------------------------------------------
-   * Event Listeners Binding
-   * --------------------------------------------------------- */
-  function bindEvents() {
-    // Stepper navigation clicks
-    const stepBtns = document.querySelectorAll('.reg-step-btn');
-    stepBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        const target = parseInt(btn.getAttribute('data-step-target'), 10);
-        if (target <= maxVisitedStep) {
-          syncDomToState();
-          renderStep(target);
-        }
-      });
-    });
-
-    // Back buttons
-    const backBtns = document.querySelectorAll('[data-back-to]');
-    backBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        const target = parseInt(btn.getAttribute('data-back-to'), 10);
-        syncDomToState();
-        renderStep(target);
-      });
-    });
-
-    // Jump step buttons from review screen
-    const jumpBtns = document.querySelectorAll('[data-jump-step]');
-    jumpBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        const target = parseInt(btn.getAttribute('data-jump-step'), 10);
-        syncDomToState();
-        renderStep(target);
-      });
-    });
-
-    // Step 1 Next
-    const btn1 = document.getElementById('btn-next-step-1');
-    if (btn1) {
-      btn1.addEventListener('click', function () {
-        if (validateStep1()) {
-          renderStep(2);
-        }
-      });
-    }
-
-    // Step 2 Next
-    const btn2 = document.getElementById('btn-next-step-2');
-    if (btn2) {
-      btn2.addEventListener('click', function () {
-        if (validateStep2()) {
-          renderStep(3);
-        }
-      });
-    }
-
-    // Step 3 Next
-    const btn3 = document.getElementById('btn-next-step-3');
-    if (btn3) {
-      btn3.addEventListener('click', function () {
-        if (validateStep3()) {
-          renderStep(4);
-        }
-      });
-    }
-
-    // Step 4 Next
-    const btn4 = document.getElementById('btn-next-step-4');
-    if (btn4) {
-      btn4.addEventListener('click', function () {
-        if (validateStep4()) {
-          renderStep(5);
-        }
-      });
-    }
-
-    // Declaration checkbox change
-    const checkEl = document.getElementById('review-accuracy-checkbox');
-    if (checkEl) {
-      checkEl.addEventListener('change', function () {
-        formData.confirmedAccuracy = checkEl.checked;
-        if (btn4) btn4.disabled = !checkEl.checked;
-        if (checkEl.checked) hideError();
-        saveDraft();
-      });
-    }
-
-    // Add Member Button
-    const addBtn = document.getElementById('btn-add-member');
-    if (addBtn) {
-      addBtn.addEventListener('click', addMember);
-    }
-
-    // Abstract character counter
-    const abstractEl = document.getElementById('project_abstract');
-    if (abstractEl) {
-      abstractEl.addEventListener('input', function () {
-        updateAbstractCounter();
-        saveDraft();
-      });
-    }
-
-    // Real-time input persistence
-    const allInputs = document.querySelectorAll('#multi-step-reg-form input, #multi-step-reg-form select, #multi-step-reg-form textarea');
-    allInputs.forEach(function (inp) {
-      inp.addEventListener('change', function () {
-        syncDomToState();
-        saveDraft();
-      });
-    });
-
-    // Reset Form Modal trigger
-    const resetTrigger = document.getElementById('btn-reset-form-trigger');
-    const resetModal = document.getElementById('modal-reset-confirm');
-    const cancelReset = document.getElementById('btn-cancel-reset');
-    const confirmReset = document.getElementById('btn-confirm-reset');
-
-    if (resetTrigger && resetModal) {
-      resetTrigger.addEventListener('click', function () {
-        resetModal.style.display = 'flex';
-      });
-    }
-    if (cancelReset && resetModal) {
-      cancelReset.addEventListener('click', function () {
-        resetModal.style.display = 'none';
-      });
-    }
-    if (confirmReset && resetModal) {
-      confirmReset.addEventListener('click', function () {
-        clearDraft();
-        formData = JSON.parse(JSON.stringify(DEFAULT_FORM_DATA));
-        currentStep = 1;
-        maxVisitedStep = 1;
-        populateDomFromState();
-        renderMembers();
-        renderStep(1);
-        resetModal.style.display = 'none';
-      });
-    }
-
-    // Payment Gateway Modal
-    const openGatewayBtn = document.getElementById('btn-open-payment-gateway');
-    const gatewayModal = document.getElementById('modal-payment-gateway');
-    const closeGatewayBtn = document.getElementById('btn-close-gateway');
-    const simulateSuccessBtn = document.getElementById('btn-simulate-pay-success');
-    const simulateDeclineBtn = document.getElementById('btn-simulate-pay-decline');
-
-    if (openGatewayBtn && gatewayModal) {
-      openGatewayBtn.addEventListener('click', function () {
-        const orderIdEl = document.getElementById('gateway-order-id');
-        if (orderIdEl) {
-          orderIdEl.textContent = 'ord_exp_2026_' + Math.floor(100000 + Math.random() * 900000);
-        }
-        gatewayModal.style.display = 'flex';
-      });
-    }
-
-    if (closeGatewayBtn && gatewayModal) {
-      closeGatewayBtn.addEventListener('click', function () {
-        gatewayModal.style.display = 'none';
-      });
-    }
-
-    if (simulateDeclineBtn && gatewayModal) {
-      simulateDeclineBtn.addEventListener('click', function () {
-        gatewayModal.style.display = 'none';
-        showError('Transaction failed or was canceled by user at the payment gateway. No funds were debited. Your registration details remain saved. Please retry.');
-      });
-    }
-
-    if (simulateSuccessBtn && gatewayModal) {
-      simulateSuccessBtn.addEventListener('click', function () {
-        submitRegistrationWithPayment(simulateSuccessBtn, gatewayModal);
-      });
-    }
-  }
-
-  /* ---------------------------------------------------------
-   * Final Form Submission with Simulated Payment
-   * --------------------------------------------------------- */
-  function submitRegistrationWithPayment(btn, modal) {
-    syncDomToState();
-
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting registration...';
-
-    const txnId = 'TXN_EXPO_' + Math.floor(1000000000 + Math.random() * 9000000000);
-
-    const payload = {
-      leader_name: formData.leader.name,
-      leader_srn: formData.leader.srn,
-      leader_email: formData.leader.email,
-      leader_phone: formData.leader.phone,
-      leader_department: formData.leader.department,
-      leader_semester: formData.leader.semester,
-      institution: 'Sapthagiri NPS University (SNPSU)',
-      participant_type: 'Student Project Team',
-      country: 'India',
-      project_title: formData.project.title,
-      project_category: formData.project.category,
-      project_abstract: formData.project.abstract,
-      technologies: formData.project.technologies,
-      mentor_name: formData.project.mentorName,
-      team_members: JSON.stringify(formData.members),
-      payment_mode: 'Razorpay UPI / NetBanking',
-      payment_status: 'Paid',
-      amount_paid: '₹500',
-      transaction_ref: txnId
-    };
-
-    fetch('/registration', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: JSON.stringify(payload)
-    })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (res) {
-        if (res.success && res.redirect_url) {
-          clearDraft();
-          window.location.href = res.redirect_url;
-        } else {
-          modal.style.display = 'none';
-          btn.disabled = false;
-          btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Simulate Successful Payment (₹500 Paid)';
-          showError((res.errors && res.errors.join(' ')) || 'Registration submission failed. Please try again.');
-        }
-      })
-      .catch(function (err) {
-        console.error('Submission error:', err);
-        // Fallback: populate hidden form fields and submit traditional form
-        const form = document.getElementById('multi-step-reg-form');
-        if (form) {
-          document.getElementById('hidden_team_members').value = JSON.stringify(formData.members);
-          document.getElementById('hidden_transaction_ref').value = txnId;
-          clearDraft();
-          form.submit();
-        } else {
-          modal.style.display = 'none';
-          btn.disabled = false;
-          btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Simulate Successful Payment (₹500 Paid)';
-          showError('Something went wrong while connecting to the server. Your information has not been lost. Please retry.');
-        }
-      });
-  }
-
-  /* ---------------------------------------------------------
-   * Utilities
-   * --------------------------------------------------------- */
-  function setText(id, text) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = text;
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
+  };
 
 })();

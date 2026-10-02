@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Call for Papers | International Conference on Big Data Tools and Techniques{% endblock %}
+{% block title %}Call for Papers | {{ CONF_BRAND }} | Sapthagiri NPS University{% endblock %}
 
 {% block content %}
 
@@ -10,7 +10,7 @@
     <span class="badge badge-gold" style="margin-bottom: 12px;">Call for Papers</span>
     <h1 style="color:#ffffff; font-size:2.5rem; margin-bottom:8px;">Call for Papers &amp; Submission Guidelines</h1>
     <p style="color:#cbd5e1; font-size:1.05rem; max-width:760px;">
-      International Conference on Big Data Tools and Techniques &bull; Sapthagiri NPS University, Bengaluru
+      {{ CONF_NAME }} ({{ CONF_BRAND }}) &bull; Sapthagiri NPS University, Bangalore
     </p>
   </div>
 </section>
@@ -84,7 +84,7 @@
           <i class="bi bi-file-earmark-text-fill" style="font-size:2.5rem; color:var(--accent-gold); margin-bottom:10px; display:inline-block;"></i>
           <h3 style="color:#ffffff; font-size:1.25rem; margin-bottom:8px;">Download Paper Template</h3>
           <p style="color:#cbd5e1; font-size:0.88rem; line-height:1.6; margin-bottom:18px;">
-            Download the official Word manuscript template formatted for ICBDTT-2026.
+            Download the official Word manuscript template formatted for {{ CONF_BRAND }}.
           </p>
           <a href="{{ url_for('main.download_template') }}" class="btn btn-primary" style="width:100%;">
             <i class="bi bi-download"></i> Download Template (.docx)

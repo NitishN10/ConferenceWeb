@@ -31,6 +31,7 @@ def create_app(config_class=Config):
         return {
             'CONF_NAME': app.config['CONFERENCE_NAME'],
             'CONF_ACRONYM': app.config['CONFERENCE_ACRONYM'],
+            'CONF_BRAND': app.config.get('CONFERENCE_BRAND_NAME', 'Saptha DataZen 2.6'),
             'CONF_THEME': app.config['CONFERENCE_THEME'],
             'CONF_HOST': app.config['HOST_INSTITUTION'],
             'CONF_LOCATION': app.config['HOST_LOCATION'],
@@ -64,4 +65,7 @@ if __name__ == '__main__':
     # Ensure database is created and seeded
     with app.app_context():
         db.create_all()
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5001))
+    conf_brand = app.config.get('CONFERENCE_BRAND_NAME', 'Saptha DataZen 2.6')
+    print(f"Starting {conf_brand} Conference Portal on http://127.0.0.1:{port}")
+    app.run(host='127.0.0.1', port=port, debug=True)

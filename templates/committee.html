@@ -1,139 +1,212 @@
 {% extends "base.html" %}
 
-{% block title %}Organizing Committee | International Conference on Big Data Tools and Techniques{% endblock %}
+{% block title %}Organizing Committee & Leadership | {{ CONF_BRAND }} Sapthagiri NPS University{% endblock %}
 
 {% block content %}
 
 <!-- Header Banner -->
 <section style="background: linear-gradient(135deg, #001040 0%, #000c30 100%); color: #ffffff; padding: 50px 0; border-bottom: 3px solid var(--accent-gold);">
   <div class="container">
-    <span class="badge badge-gold" style="margin-bottom: 12px;">Committee</span>
-    <h1 style="color:#ffffff; font-size:2.5rem; margin-bottom:8px;">Organizing Committee</h1>
-    <p style="color:#cbd5e1; font-size:1.05rem; max-width:760px;">
-      Sapthagiri NPS University (SNPSU), Bengaluru
+    <span class="badge badge-gold" style="margin-bottom: 12px;">Official Conference Leadership</span>
+    <h1 style="color:#ffffff; font-size:2.5rem; margin-bottom:8px; font-family:'Outfit', sans-serif;">Conference Committee &amp; Patrons</h1>
+    <p style="color:#cbd5e1; font-size:1.05rem; max-width:780px;">
+      {{ CONF_NAME }} &bull; Sapthagiri NPS University, Bangalore
     </p>
   </div>
 </section>
 
 <!-- Committee Section -->
-<section class="section">
+<section class="section" style="background:#f8fafc;">
   <div class="container">
 
-    <!-- Chief Patron & Patron -->
+    <!-- Inauguration Info Pill -->
+    <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:18px 24px; margin-bottom:40px; box-shadow:0 1px 3px rgba(0,16,64,0.04); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; border-left:4px solid var(--accent-gold);">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:42px; height:42px; border-radius:8px; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
+          <i class="bi bi-geo-alt-fill"></i>
+        </div>
+        <div>
+          <span style="font-size:0.75rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; display:block;">Official Inauguration Venue</span>
+          <strong style="color:#0b1f51; font-size:0.98rem;">C Block, 1st Floor, Auditorium, Sapthagiri NPS University, Bangalore</strong>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:0.88rem; color:#14378f; font-weight:700;">
+        <i class="bi bi-calendar-check-fill" style="color:var(--accent-gold);"></i>
+        <span>{{ CONF_DATE }}</span>
+      </div>
+    </div>
+
+    <!-- 1. Chief Patrons -->
     <div style="margin-bottom:50px;">
-      <div class="section-header" style="margin-bottom:32px;">
-        <span class="section-subtitle">Patrons</span>
-        <h2 class="section-title">Chief Patron &amp; Patron</h2>
+      <div class="section-header" style="margin-bottom:28px;">
+        <span class="badge badge-gold" style="margin-bottom:8px;">Chief Patrons</span>
+        <h2 class="section-title" style="font-family:'Outfit', sans-serif;">Chief Patrons</h2>
       </div>
 
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px;">
         
-        <div style="background:#ffffff; border:1px solid var(--border-light); border-radius:var(--radius-lg); padding:28px; text-align:center; box-shadow:var(--shadow-sm); border-top:4px solid var(--accent-gold);">
+        <!-- Shri. G Dayananda -->
+        <div class="committee-card-patron" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:32px 24px; text-align:center; box-shadow:0 2px 8px rgba(0,16,64,0.04); border-top:4px solid var(--accent-gold); transition:all 0.25s ease;">
+          <div style="width:76px; height:76px; border-radius:50%; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:2.2rem; margin:0 auto 16px;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <span class="badge badge-gold" style="margin-bottom:10px;">Chief Patron</span>
+          <h3 style="font-size:1.35rem; color:var(--primary-navy); margin-bottom:6px; font-family:'Outfit',sans-serif;">Shri. G Dayananda</h3>
+          <div style="font-weight:700; color:var(--accent-gold); font-size:0.95rem;">Hon'ble Chancellor</div>
+          <div style="font-size:0.86rem; color:#64748b; margin-top:4px;">Sapthagiri NPS University, Bangalore.</div>
+        </div>
+
+        <!-- Shri. G D Manoj -->
+        <div class="committee-card-patron" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:32px 24px; text-align:center; box-shadow:0 2px 8px rgba(0,16,64,0.04); border-top:4px solid var(--accent-gold); transition:all 0.25s ease;">
+          <div style="width:76px; height:76px; border-radius:50%; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:2.2rem; margin:0 auto 16px;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <span class="badge badge-gold" style="margin-bottom:10px;">Chief Patron</span>
+          <h3 style="font-size:1.35rem; color:var(--primary-navy); margin-bottom:6px; font-family:'Outfit',sans-serif;">Shri. G D Manoj</h3>
+          <div style="font-weight:700; color:var(--accent-gold); font-size:0.95rem;">Hon'ble Pro - Chancellor</div>
+          <div style="font-size:0.86rem; color:#64748b; margin-top:4px;">Sapthagiri NPS University, Bangalore.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. Patrons -->
+    <div style="margin-bottom:50px;">
+      <div class="section-header" style="margin-bottom:28px;">
+        <span class="badge badge-navy" style="margin-bottom:8px;">Patrons</span>
+        <h2 class="section-title" style="font-family:'Outfit', sans-serif;">Patrons</h2>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+        
+        <!-- Dr. Jayanthi V -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:26px 20px; text-align:center; box-shadow:0 2px 6px rgba(0,16,64,0.03); border-top:3px solid #0b1f51;">
+          <div style="width:60px; height:60px; border-radius:50%; background:rgba(11,31,81,0.08); color:#0b1f51; display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin:0 auto 12px;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <span class="badge badge-navy" style="font-size:0.72rem; margin-bottom:6px;">Patron</span>
+          <h4 style="font-size:1.15rem; color:#0b1f51; margin-bottom:4px; font-family:'Outfit',sans-serif;">Dr. Jayanthi V</h4>
+          <div style="font-weight:700; color:var(--accent-gold); font-size:0.88rem;">Vice-Chancellor</div>
+          <div style="font-size:0.82rem; color:#64748b; margin-top:3px;">Sapthagiri NPS University, Bangalore.</div>
+        </div>
+
+        <!-- Dr. H Ramakrishna -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:26px 20px; text-align:center; box-shadow:0 2px 6px rgba(0,16,64,0.03); border-top:3px solid #0b1f51;">
+          <div style="width:60px; height:60px; border-radius:50%; background:rgba(11,31,81,0.08); color:#0b1f51; display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin:0 auto 12px;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <span class="badge badge-navy" style="font-size:0.72rem; margin-bottom:6px;">Patron</span>
+          <h4 style="font-size:1.15rem; color:#0b1f51; margin-bottom:4px; font-family:'Outfit',sans-serif;">Dr. H Ramakrishna</h4>
+          <div style="font-weight:700; color:var(--accent-gold); font-size:0.88rem;">Registrar</div>
+          <div style="font-size:0.82rem; color:#64748b; margin-top:3px;">Sapthagiri NPS University, Bangalore.</div>
+        </div>
+
+        <!-- Dr. Gurucharan Singh -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:26px 20px; text-align:center; box-shadow:0 2px 6px rgba(0,16,64,0.03); border-top:3px solid #0b1f51;">
+          <div style="width:60px; height:60px; border-radius:50%; background:rgba(11,31,81,0.08); color:#0b1f51; display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin:0 auto 12px;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <span class="badge badge-navy" style="font-size:0.72rem; margin-bottom:6px;">Patron</span>
+          <h4 style="font-size:1.15rem; color:#0b1f51; margin-bottom:4px; font-family:'Outfit',sans-serif;">Dr. Gurucharan Singh</h4>
+          <div style="font-weight:700; color:var(--accent-gold); font-size:0.88rem;">Group CHRO, HRD</div>
+          <div style="font-size:0.82rem; color:#64748b; margin-top:3px;">Sapthagiri NPS University, Bangalore.</div>
+        </div>
+
+        <!-- Dr. A M Nagaraju -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:26px 20px; text-align:center; box-shadow:0 2px 6px rgba(0,16,64,0.03); border-top:3px solid #0b1f51;">
+          <div style="width:60px; height:60px; border-radius:50%; background:rgba(11,31,81,0.08); color:#0b1f51; display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin:0 auto 12px;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <span class="badge badge-navy" style="font-size:0.72rem; margin-bottom:6px;">Patron</span>
+          <h4 style="font-size:1.15rem; color:#0b1f51; margin-bottom:4px; font-family:'Outfit',sans-serif;">Dr. A M Nagaraju</h4>
+          <div style="font-weight:700; color:var(--accent-gold); font-size:0.88rem;">Registrar (Evaluation)</div>
+          <div style="font-size:0.82rem; color:#64748b; margin-top:3px;">Sapthagiri NPS University, Bangalore.</div>
+        </div>
+
+        <!-- Dr. N C Mahendra Babu -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:26px 20px; text-align:center; box-shadow:0 2px 6px rgba(0,16,64,0.03); border-top:3px solid #0b1f51;">
+          <div style="width:60px; height:60px; border-radius:50%; background:rgba(11,31,81,0.08); color:#0b1f51; display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin:0 auto 12px;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <span class="badge badge-navy" style="font-size:0.72rem; margin-bottom:6px;">Patron</span>
+          <h4 style="font-size:1.15rem; color:#0b1f51; margin-bottom:4px; font-family:'Outfit',sans-serif;">Dr. N C Mahendra Babu</h4>
+          <div style="font-weight:700; color:var(--accent-gold); font-size:0.88rem;">Dean, SOET</div>
+          <div style="font-size:0.82rem; color:#64748b; margin-top:3px;">Sapthagiri NPS University, Bangalore.</div>
+        </div>
+
+        <!-- Dr. Shantharam Nayak -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:26px 20px; text-align:center; box-shadow:0 2px 6px rgba(0,16,64,0.03); border-top:3px solid #0b1f51;">
+          <div style="width:60px; height:60px; border-radius:50%; background:rgba(11,31,81,0.08); color:#0b1f51; display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin:0 auto 12px;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <span class="badge badge-navy" style="font-size:0.72rem; margin-bottom:6px;">Patron</span>
+          <h4 style="font-size:1.15rem; color:#0b1f51; margin-bottom:4px; font-family:'Outfit',sans-serif;">Dr. Shantharam Nayak</h4>
+          <div style="font-weight:700; color:var(--accent-gold); font-size:0.88rem;">Associate Dean, SOET</div>
+          <div style="font-size:0.82rem; color:#64748b; margin-top:3px;">Sapthagiri NPS University, Bangalore.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. General Chair -->
+    <div style="margin-bottom:50px;">
+      <div class="section-header" style="margin-bottom:28px;">
+        <span class="badge badge-gold" style="margin-bottom:8px;">General Chair</span>
+        <h2 class="section-title" style="font-family:'Outfit', sans-serif;">General Chair</h2>
+      </div>
+
+      <div style="max-width:540px; margin:0 auto;">
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:32px 24px; text-align:center; box-shadow:0 4px 12px rgba(0,16,64,0.04); border-top:4px solid var(--accent-gold);">
           <div style="width:72px; height:72px; border-radius:50%; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 16px;">
             <i class="bi bi-person-fill"></i>
           </div>
-          <span class="badge badge-gold" style="margin-bottom:8px;">Chief Patron</span>
-          <h3 style="font-size:1.25rem; color:var(--primary-navy); margin-bottom:4px;">[CHIEF PATRON NAME]</h3>
-          <div style="font-weight:600; color:var(--accent-gold); font-size:0.9rem;">[DESIGNATION]</div>
-          <div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Sapthagiri NPS University, Bengaluru</div>
-        </div>
-
-        <div style="background:#ffffff; border:1px solid var(--border-light); border-radius:var(--radius-lg); padding:28px; text-align:center; box-shadow:var(--shadow-sm); border-top:4px solid var(--primary-navy);">
-          <div style="width:72px; height:72px; border-radius:50%; background:rgba(0,16,64,0.08); color:var(--primary-navy); display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 16px;">
-            <i class="bi bi-person-fill"></i>
-          </div>
-          <span class="badge badge-navy" style="margin-bottom:8px;">Patron</span>
-          <h3 style="font-size:1.25rem; color:var(--primary-navy); margin-bottom:4px;">[PATRON NAME]</h3>
-          <div style="font-weight:600; color:var(--accent-gold); font-size:0.9rem;">[DESIGNATION]</div>
-          <div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Sapthagiri NPS University, Bengaluru</div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- General Chair & Conference Chair -->
-    <div style="margin-bottom:50px;">
-      <div class="section-header" style="margin-bottom:32px;">
-        <span class="section-subtitle">Chairs</span>
-        <h2 class="section-title">General Chair &amp; Conference Chair</h2>
-      </div>
-
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
-        
-        <div style="background:#ffffff; border:1px solid var(--border-light); border-radius:var(--radius-lg); padding:28px; text-align:center; box-shadow:var(--shadow-sm); border-left:4px solid var(--accent-gold);">
-          <div style="width:64px; height:64px; border-radius:50%; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:1.8rem; margin:0 auto 14px;">
-            <i class="bi bi-person-fill"></i>
-          </div>
           <span class="badge badge-gold" style="margin-bottom:8px;">General Chair</span>
-          <h3 style="font-size:1.25rem; color:var(--primary-navy); margin-bottom:4px;">[GENERAL CHAIR NAME]</h3>
-          <div style="font-weight:600; color:var(--accent-gold); font-size:0.9rem;">[DESIGNATION]</div>
-          <div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Sapthagiri NPS University, Bengaluru</div>
+          <h3 style="font-size:1.35rem; color:var(--primary-navy); margin-bottom:6px; font-family:'Outfit',sans-serif;">Dr. Jagannatha S</h3>
+          <div style="font-weight:700; color:var(--accent-gold); font-size:0.95rem;">Director, SOAS</div>
+          <div style="font-size:0.88rem; color:#64748b; margin-top:4px;">Sapthagiri NPS University, Bangalore.</div>
         </div>
-
-        <div style="background:#ffffff; border:1px solid var(--border-light); border-radius:var(--radius-lg); padding:28px; text-align:center; box-shadow:var(--shadow-sm); border-left:4px solid var(--accent-gold);">
-          <div style="width:64px; height:64px; border-radius:50%; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:1.8rem; margin:0 auto 14px;">
-            <i class="bi bi-person-fill"></i>
-          </div>
-          <span class="badge badge-gold" style="margin-bottom:8px;">Conference Chair</span>
-          <h3 style="font-size:1.25rem; color:var(--primary-navy); margin-bottom:4px;">[CONFERENCE CHAIR NAME]</h3>
-          <div style="font-weight:600; color:var(--accent-gold); font-size:0.9rem;">[DESIGNATION]</div>
-          <div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Sapthagiri NPS University, Bengaluru</div>
-        </div>
-
       </div>
     </div>
 
-    <!-- Organizing Committee -->
-    <div style="margin-bottom:50px;">
-      <h3 style="font-size:1.4rem; color:var(--primary-navy); margin-bottom:20px; border-bottom:2px solid var(--accent-gold); padding-bottom:8px;">
-        Organizing Committee
-      </h3>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px;">
-        {% for i in range(1, 5) %}
-        <div style="background:var(--bg-subtle); padding:20px; border-radius:var(--radius-sm); border:1px solid var(--border-light); text-align:center;">
-          <div style="width:48px; height:48px; border-radius:50%; background:#ffffff; color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin:0 auto 10px; border:1px solid var(--border-light);">
-            <i class="bi bi-person"></i>
-          </div>
-          <strong style="color:var(--primary-navy); font-size:0.95rem;">[ORGANIZING COMMITTEE MEMBER {{ i }}]</strong>
-          <div style="font-size:0.82rem; color:var(--accent-gold); font-weight:600;">[DESIGNATION]</div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Sapthagiri NPS University</div>
-        </div>
-        {% endfor %}
+    <!-- 4. Conference Conveners -->
+    <div style="margin-bottom:40px;">
+      <div class="section-header" style="margin-bottom:28px;">
+        <span class="badge badge-navy" style="margin-bottom:8px;">Conveners</span>
+        <h2 class="section-title" style="font-family:'Outfit', sans-serif;">Conference Conveners</h2>
       </div>
-    </div>
 
-    <!-- Technical Committee -->
-    <div style="margin-bottom:50px;">
-      <h3 style="font-size:1.4rem; color:var(--primary-navy); margin-bottom:20px; border-bottom:2px solid var(--accent-gold); padding-bottom:8px;">
-        Technical Committee
-      </h3>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px;">
-        {% for i in range(1, 5) %}
-        <div style="background:var(--bg-subtle); padding:20px; border-radius:var(--radius-sm); border:1px solid var(--border-light); text-align:center;">
-          <div style="width:48px; height:48px; border-radius:50%; background:#ffffff; color:var(--primary-navy); display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin:0 auto 10px; border:1px solid var(--border-light);">
-            <i class="bi bi-person"></i>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+        
+        <!-- Dr. Joshi Vinayk Balachandra -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:28px 20px; text-align:center; box-shadow:0 2px 6px rgba(0,16,64,0.03); border-top:3px solid #14378f;">
+          <div style="width:56px; height:56px; border-radius:50%; background:rgba(20,55,143,0.08); color:#14378f; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin:0 auto 12px;">
+            <i class="bi bi-person-badge"></i>
           </div>
-          <strong style="color:var(--primary-navy); font-size:0.95rem;">[TECHNICAL COMMITTEE MEMBER {{ i }}]</strong>
-          <div style="font-size:0.82rem; color:var(--accent-gold); font-weight:600;">[DESIGNATION]</div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">[INSTITUTION]</div>
+          <span class="badge" style="background:#e0e7ff; color:#3730a3; font-size:0.75rem; margin-bottom:8px; font-weight:700;">Conference Convener</span>
+          <h4 style="font-size:1.15rem; color:#0b1f51; margin-bottom:4px; font-family:'Outfit',sans-serif;">Dr. Joshi Vinayk Balachandra</h4>
+          <div style="font-size:0.85rem; color:#64748b; margin-top:4px;">Sapthagiri NPS University, Bangalore.</div>
         </div>
-        {% endfor %}
-      </div>
-    </div>
 
-    <!-- Student Coordinators -->
-    <div>
-      <h3 style="font-size:1.4rem; color:var(--primary-navy); margin-bottom:20px; border-bottom:2px solid var(--accent-gold); padding-bottom:8px;">
-        Student Coordinators
-      </h3>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:18px;">
-        {% for i in range(1, 5) %}
-        <div style="background:#ffffff; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:20px; text-align:center;">
-          <strong style="color:var(--primary-navy); font-size:0.95rem;">[STUDENT COORDINATOR {{ i }}]</strong>
-          <div style="font-size:0.82rem; color:var(--accent-gold); font-weight:600;">Student Coordinator</div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Sapthagiri NPS University</div>
+        <!-- Dr. Sridhar D -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:28px 20px; text-align:center; box-shadow:0 2px 6px rgba(0,16,64,0.03); border-top:3px solid #14378f;">
+          <div style="width:56px; height:56px; border-radius:50%; background:rgba(20,55,143,0.08); color:#14378f; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin:0 auto 12px;">
+            <i class="bi bi-person-badge"></i>
+          </div>
+          <span class="badge" style="background:#e0e7ff; color:#3730a3; font-size:0.75rem; margin-bottom:8px; font-weight:700;">Conference Convener</span>
+          <h4 style="font-size:1.15rem; color:#0b1f51; margin-bottom:4px; font-family:'Outfit',sans-serif;">Dr. Sridhar D</h4>
+          <div style="font-size:0.85rem; color:#64748b; margin-top:4px;">Sapthagiri NPS University, Bangalore.</div>
         </div>
-        {% endfor %}
+
+        <!-- Dr. Chethan H -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:28px 20px; text-align:center; box-shadow:0 2px 6px rgba(0,16,64,0.03); border-top:3px solid #14378f;">
+          <div style="width:56px; height:56px; border-radius:50%; background:rgba(20,55,143,0.08); color:#14378f; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin:0 auto 12px;">
+            <i class="bi bi-person-badge"></i>
+          </div>
+          <span class="badge" style="background:#e0e7ff; color:#3730a3; font-size:0.75rem; margin-bottom:8px; font-weight:700;">Conference Convener</span>
+          <h4 style="font-size:1.15rem; color:#0b1f51; margin-bottom:4px; font-family:'Outfit',sans-serif;">Dr. Chethan H</h4>
+          <div style="font-size:0.85rem; color:#64748b; margin-top:4px;">Sapthagiri NPS University, Bangalore.</div>
+        </div>
+
       </div>
     </div>
 

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Internal Server Error (500) | ICBDTT-2026{% endblock %}
+{% block title %}Internal Server Error (500) | {{ CONF_BRAND }}{% endblock %}
 
 {% block content %}
 <section class="section" style="min-height:60vh; display:flex; align-items:center;">
@@ -8,7 +8,7 @@
     <div style="font-family:'Outfit', sans-serif; font-size:5rem; font-weight:800; color:#dc2626; line-height:1; margin-bottom:12px;">500</div>
     <h2 style="font-size:2rem; margin-bottom:16px;">Internal Server Error</h2>
     <p style="color:var(--text-secondary); max-width:540px; margin:0 auto 28px; font-size:1.05rem;">
-      An unexpected internal server error occurred while processing your request. Please try again in a few moments, or reach our technical desk directly at <code>icbdtt@snpsu.edu.in</code>.
+      An unexpected internal server error occurred while processing your request. Please try again in a few moments, or reach our technical desk directly at <code>{{ CONF_EMAIL }}</code>.
     </p>
     <div style="display:flex; justify-content:center; gap:14px;">
       <a href="{{ url_for('main.index') }}" class="btn btn-primary">

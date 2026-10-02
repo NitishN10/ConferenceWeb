@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Page Not Found (404) | ICBDTT-2026 Sapthagiri NPS University{% endblock %}
+{% block title %}Page Not Found (404) | {{ CONF_BRAND }} | Sapthagiri NPS University{% endblock %}
 
 {% block content %}
 <section class="section" style="min-height:60vh; display:flex; align-items:center;">
@@ -8,7 +8,7 @@
     <div style="font-family:'Outfit', sans-serif; font-size:6rem; font-weight:800; color:var(--primary-navy); line-height:1; margin-bottom:12px;">404</div>
     <h2 style="font-size:2rem; margin-bottom:16px;">Page Not Found</h2>
     <p style="color:var(--text-secondary); max-width:540px; margin:0 auto 28px; font-size:1.05rem;">
-      The page you requested could not be located on the ICBDTT-2026 conference portal. It may have been moved or updated.
+      The page you requested could not be located on the {{ CONF_BRAND }} conference portal. It may have been moved or updated.
     </p>
     <div style="display:flex; justify-content:center; gap:14px;">
       <a href="{{ url_for('main.index') }}" class="btn btn-primary">

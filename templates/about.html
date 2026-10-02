@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}About the Conference | International Conference on Big Data Tools and Techniques{% endblock %}
+{% block title %}About the Conference | {{ CONF_BRAND }} | Sapthagiri NPS University{% endblock %}
 
 {% block content %}
 
 <!-- Header Banner -->
 <section style="background: linear-gradient(135deg, #001040 0%, #000c30 100%); color: #ffffff; padding: 50px 0; border-bottom: 3px solid var(--accent-gold);">
   <div class="container">
-    <span class="badge badge-gold" style="margin-bottom: 12px;">About ICBDTT-2026</span>
-    <h1 style="color:#ffffff; font-size:2.5rem; margin-bottom:8px;">About the Conference</h1>
+    <span class="badge badge-gold" style="margin-bottom: 12px;">About {{ CONF_BRAND }}</span>
+    <h1 style="color:#ffffff; font-size:2.4rem; margin-bottom:8px; font-family:'Outfit',sans-serif;">{{ CONF_NAME }}</h1>
     <p style="color:#cbd5e1; font-size:1.05rem; max-width:760px;">
-      Sapthagiri NPS University (SNPSU), Bengaluru &bull; {{ CONF_DATE }}
+      Sapthagiri NPS University, Bangalore &bull; {{ CONF_DATE }}
     </p>
   </div>
 </section>
@@ -21,17 +21,17 @@
     <div class="about-grid">
       <div>
         <span class="section-subtitle">Introduction</span>
-        <h2 class="section-title">International Conference on Big Data Tools and Techniques</h2>
+        <h2 class="section-title">Saptha DataZen 2.6</h2>
         <p>
-          The <strong>International Conference on Big Data Tools and Techniques (ICBDTT-2026)</strong> is an academic and research conference organized by <strong>Sapthagiri NPS University (SNPSU), Bengaluru</strong>.
+          The <strong>National Conference in Emerging Trends of Big Data Engineering 2.6 (Saptha DataZen 2.6)</strong> is an academic and research conference organized and hosted by <strong>Sapthagiri NPS University, Bangalore</strong>.
         </p>
         <p>
-          The conference is focused on recent developments, tools, frameworks, and methodologies across Big Data Analytics, Artificial Intelligence &amp; Machine Learning, Cloud and Distributed Technologies, Data Science, IoT &amp; Edge Computing, and Cybersecurity &amp; Privacy.
+          The conference is focused on recent developments, tools, frameworks, and methodologies across Artificial Intelligence &amp; Machine Learning, Data Science &amp; Big Data, Computer Vision, Generative AI, Cloud and Distributed Technologies, IoT &amp; Edge Computing, and Cybersecurity.
         </p>
 
         <h3 style="font-size:1.4rem; color:var(--primary-navy); margin:28px 0 12px;">Purpose of the Conference</h3>
         <p>
-          The primary purpose of the conference is to bring together researchers, academicians, students, data scientists, software engineers, and industry professionals from around the world to present and deliberate on original research contributions, state-of-the-art architectures, and innovative data-driven solutions.
+          The primary purpose of the conference is to bring together researchers, academicians, students, data scientists, software engineers, and industry professionals from around the country to present and deliberate on original research contributions, state-of-the-art architectures, and innovative data-driven solutions.
         </p>
       </div>
 
@@ -68,6 +68,208 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Proposed Conference Topics Section -->
+<section class="section" id="conference-topics" style="background: #f8fafc; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+  <div class="container">
+    <div class="section-header" style="text-align: center; max-width: 840px; margin: 0 auto 48px;">
+      <span class="badge badge-gold" style="font-size: 0.8rem; margin-bottom: 12px; letter-spacing: 0.06em; text-transform: uppercase;">
+        Research Scope &amp; Thematic Tracks
+      </span>
+      <h2 class="section-title" style="font-family: 'Outfit', sans-serif; font-size: 2.3rem; font-weight: 800; color: var(--primary-navy); margin-bottom: 14px;">
+        Proposed Conference Topics
+      </h2>
+      <p class="section-description" style="color: #64748b; font-size: 1.05rem; line-height: 1.6;">
+        The {{ CONF_NAME }} ({{ CONF_BRAND }}) welcomes original research papers, architectural prototypes, empirical studies, and innovative student team project submissions across the following 13 multidisciplinary research domains:
+      </p>
+    </div>
+
+    <!-- 13 Topics Responsive Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+      
+      <!-- Topic 01 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(20, 55, 143, 0.08); color: #14378f;">
+            <i class="bi bi-cpu"></i>
+          </div>
+          <span class="topic-badge">Topic 01</span>
+        </div>
+        <h3 class="topic-scope-title">Artificial Intelligence and Machine Learning</h3>
+        <p class="topic-scope-desc">Deep learning architectures, neural networks, reinforcement learning, predictive algorithms, explainable AI, and autonomous decision systems.</p>
+      </div>
+
+      <!-- Topic 02 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(198, 158, 102, 0.15); color: #b48539;">
+            <i class="bi bi-bar-chart-steps"></i>
+          </div>
+          <span class="topic-badge">Topic 02</span>
+        </div>
+        <h3 class="topic-scope-title">Data Science, Big Data and Data Analytics</h3>
+        <p class="topic-scope-desc">Large-scale data pipelines, statistical modeling, data lakes, business intelligence, streaming analytics, and knowledge graph engineering.</p>
+      </div>
+
+      <!-- Topic 03 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(5, 150, 105, 0.1); color: #059669;">
+            <i class="bi bi-camera"></i>
+          </div>
+          <span class="topic-badge">Topic 03</span>
+        </div>
+        <h3 class="topic-scope-title">Computer Vision and Image Processing</h3>
+        <p class="topic-scope-desc">Object detection, medical imaging analytics, pattern recognition, image segmentation, video surveillance, and biometric visual processing.</p>
+      </div>
+
+      <!-- Topic 04 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed;">
+            <i class="bi bi-chat-square-quote"></i>
+          </div>
+          <span class="topic-badge">Topic 04</span>
+        </div>
+        <h3 class="topic-scope-title">Natural Language Processing and Generative AI</h3>
+        <p class="topic-scope-desc">Large Language Models (LLMs), semantic analysis, machine translation, generative multi-modal agents, sentiment analysis, and speech processing.</p>
+      </div>
+
+      <!-- Topic 05 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(220, 38, 38, 0.1); color: #dc2626;">
+            <i class="bi bi-shield-lock"></i>
+          </div>
+          <span class="topic-badge">Topic 05</span>
+        </div>
+        <h3 class="topic-scope-title">Cybersecurity, Privacy and Digital Forensics</h3>
+        <p class="topic-scope-desc">Threat modeling, intrusion detection systems, differential privacy, forensic data recovery, cryptography, and secure software architectures.</p>
+      </div>
+
+      <!-- Topic 06 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(2, 132, 199, 0.1); color: #0284c7;">
+            <i class="bi bi-router"></i>
+          </div>
+          <span class="topic-badge">Topic 06</span>
+        </div>
+        <h3 class="topic-scope-title">Internet of Things and Edge Computing</h3>
+        <p class="topic-scope-desc">Smart sensory networks, edge intelligence, fog computing topologies, stream processing at scale, and low-latency cyber-physical systems.</p>
+      </div>
+
+      <!-- Topic 07 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(11, 31, 81, 0.08); color: #0b1f51;">
+            <i class="bi bi-cloud-arrow-up"></i>
+          </div>
+          <span class="topic-badge">Topic 07</span>
+        </div>
+        <h3 class="topic-scope-title">Cloud Computing and Distributed Systems</h3>
+        <p class="topic-scope-desc">Serverless computing, multi-cloud orchestration, microservices, containerization, distributed consensus, and fault-tolerant cloud clusters.</p>
+      </div>
+
+      <!-- Topic 08 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(217, 119, 6, 0.12); color: #d97706;">
+            <i class="bi bi-boxes"></i>
+          </div>
+          <span class="topic-badge">Topic 08</span>
+        </div>
+        <h3 class="topic-scope-title">Blockchain and Emerging Computing Technologies</h3>
+        <p class="topic-scope-desc">Distributed ledgers, smart contracts, decentralized applications (dApps), quantum computing paradigms, and decentralized identity governance.</p>
+      </div>
+
+      <!-- Topic 09 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(13, 148, 136, 0.1); color: #0d9488;">
+            <i class="bi bi-diagram-3"></i>
+          </div>
+          <span class="topic-badge">Topic 09</span>
+        </div>
+        <h3 class="topic-scope-title">Computer Networks and Communication Systems</h3>
+        <p class="topic-scope-desc">5G/6G wireless networks, software-defined networking (SDN), network telemetry, latency optimization, and next-generation protocols.</p>
+      </div>
+
+      <!-- Topic 10 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(79, 70, 229, 0.1); color: #4f46e5;">
+            <i class="bi bi-code-slash"></i>
+          </div>
+          <span class="topic-badge">Topic 10</span>
+        </div>
+        <h3 class="topic-scope-title">Software Engineering, Testing and Agile Development</h3>
+        <p class="topic-scope-desc">DevOps/MLOps automation, automated regression verification, software architecture metrics, code smells detection, and continuous delivery.</p>
+      </div>
+
+      <!-- Topic 11 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(234, 88, 12, 0.1); color: #ea580c;">
+            <i class="bi bi-person-bounding-box"></i>
+          </div>
+          <span class="topic-badge">Topic 11</span>
+        </div>
+        <h3 class="topic-scope-title">Human–Computer Interaction and User Experience</h3>
+        <p class="topic-scope-desc">Accessibility engineering, multimodal interaction design, cognitive load modeling, user telemetry, and intuitive assistive user interfaces.</p>
+      </div>
+
+      <!-- Topic 12 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(147, 51, 234, 0.1); color: #9333ea;">
+            <i class="bi bi-headset-vr"></i>
+          </div>
+          <span class="topic-badge">Topic 12</span>
+        </div>
+        <h3 class="topic-scope-title">Extended Reality, Virtual Reality and Spatial Computing</h3>
+        <p class="topic-scope-desc">Immersive 3D environments, spatial mapping, augmented reality applications, digital twins, haptic feedback systems, and holographic visualization.</p>
+      </div>
+
+      <!-- Topic 13 -->
+      <div class="topic-scope-card">
+        <div class="topic-scope-header">
+          <div class="topic-icon-wrap" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+            <i class="bi bi-robot"></i>
+          </div>
+          <span class="topic-badge">Topic 13</span>
+        </div>
+        <h3 class="topic-scope-title">Robotics, Automation and Intelligent Systems</h3>
+        <p class="topic-scope-desc">Autonomous mobile robots, industrial automation, sensory perception, drone navigation algorithms, swarm intelligence, and robotic process automation.</p>
+      </div>
+
+    </div>
+
+    <!-- Call to action banner -->
+    <div style="margin-top: 44px; background: linear-gradient(135deg, #001040 0%, #0b1f51 100%); border-radius: 12px; padding: 28px 36px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 3px solid var(--accent-gold); box-shadow: 0 4px 16px rgba(0,16,64,0.12);">
+      <div>
+        <span style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-gold); font-weight: 700; display: block;">
+          Call for Papers &amp; Student Project Teams
+        </span>
+        <h3 style="color: #ffffff; font-size: 1.35rem; margin: 4px 0 0; font-family: 'Outfit', sans-serif;">
+          Have research or a project prototype in any of these 13 topics?
+        </h3>
+        <p style="color: #cbd5e1; font-size: 0.92rem; margin: 4px 0 0;">
+          Submit your manuscript for peer review or register your student project team for the expo at Sapthagiri NPS University.
+        </p>
+      </div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="{{ url_for('registration.register') }}" class="btn" style="background: var(--accent-gold); color: #001040; border-color: var(--accent-gold); font-weight: 700;">
+          <i class="bi bi-people-fill"></i> Register Project Team
+        </a>
+        <a href="{{ url_for('submission.submit_paper') }}" class="btn btn-outline-gold" style="color: #ffffff; border-color: #ffffff;">
+          <i class="bi bi-cloud-arrow-up"></i> Submit Research Paper
+        </a>
+      </div>
+    </div>
+
   </div>
 </section>
 

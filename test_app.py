@@ -77,6 +77,61 @@ class ConferenceAppTestCase(unittest.TestCase):
         self.assertTrue(reg.registration_id.startswith('SNPSU-BDTT-REG-'))
         print(f"Verified /registration flow -> Generated {reg.registration_id}")
 
+    def test_04b_project_team_registration_flow(self):
+        import json
+        team_members = [
+            {'id': 2, 'name': 'Ananya Rao', 'srn': '1RV23CS045', 'email': 'ananya12@gmail.com', 'department': 'Computer Science & Engineering', 'semester': '6th Semester'},
+            {'id': 3, 'name': 'Karthik S', 'srn': '1RV23CS088', 'email': 'karthik34@gmail.com', 'department': 'Computer Science & Engineering', 'semester': '6th Semester'}
+        ]
+        response = self.client.post('/registration', data={
+            'name': 'Nitish N',
+            'srn': '1RV23CS001',
+            'email': 'nitish12@gmail.com',
+            'phone': '9845012345',
+            'department': 'Computer Science & Engineering',
+            'semester': '6th Semester',
+            'participant_type': 'Project Team Entry (2-5 Students)',
+            'project_title': 'Real-Time Distributed Traffic Flow Optimization using Big Data & AI',
+            'project_category': 'Track 1: Big Data Analytics & Distributed Systems',
+            'technologies': 'Apache Spark, Python, PyTorch, React, Docker',
+            'project_abstract': 'This project formulates an intelligent distributed traffic management system leveraging real-time stream analytics and deep reinforcement learning on distributed edge nodes.',
+            'mentor_name': 'Dr. Ramesh Kumar, Professor',
+            'team_members': json.dumps(team_members),
+            'amount_paid': '₹ 500',
+            'payment_mode': 'UPI / QR Code',
+            'transaction_ref': 'UPI889977665544'
+        }, follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Registration Confirmed', response.data)
+        self.assertIn(b'Nitish N', response.data)
+        self.assertIn(b'1RV23CS001', response.data)
+        self.assertIn(b'Ananya Rao', response.data)
+        self.assertIn(b'1RV23CS045', response.data)
+        self.assertIn(b'500', response.data)
+
+        team_reg = Registration.query.filter_by(email='nitish12@gmail.com').first()
+        self.assertIsNotNone(team_reg)
+        self.assertEqual(team_reg.srn, '1RV23CS001')
+        self.assertEqual(team_reg.amount_paid, '₹ 500')
+        self.assertEqual(len(team_reg.team_members), 2)
+        print(f"Verified /registration project team entry flow -> Generated {team_reg.registration_id}")
+
+    def test_04c_invalid_email_format_rejected(self):
+        # Test rejection of improper email formats (e.g. missing domain, missing @, etc.)
+        invalid_emails = ['notanemail', 'user@', 'user@domain', 'user@.com', 'user@domain.']
+        for bad_email in invalid_emails:
+            response = self.client.post('/registration', data={
+                'name': 'Invalid Email Test',
+                'email': bad_email,
+                'phone': '9845012345',
+                'department': 'Computer Science & Engineering',
+                'semester': '6th Semester',
+                'participant_type': 'Project Team Entry (2-5 Students)'
+            })
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'format name12@gmail.com is required', response.data)
+        print("Verified invalid email format rejection for team leader and members.")
+
     def test_05_paper_submission_flow(self):
         dummy_file = (io.BytesIO(b"%PDF-1.4 Mock manuscript content for ICBDTT-2026 conference research paper testing."), "scalable_lakehouse_paper.pdf")
         response = self.client.post('/submission', data={

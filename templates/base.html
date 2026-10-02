@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}International Conference on Big Data Tools & Techniques (ICBDTT-2026) | Sapthagiri NPS University{% endblock %}</title>
+  <title>{% block title %}{{ CONF_BRAND }} | {{ CONF_NAME }} | Sapthagiri NPS University{% endblock %}</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="{% block meta_description %}Official website for the International Conference on Big Data Tools and Techniques (ICBDTT-2026), hosted by Sapthagiri NPS University (SNPSU), Bengaluru. Advancing data-driven research, AI, and intelligent distributed solutions.{% endblock %}">
-  <meta name="keywords" content="Big Data Conference, ICBDTT 2026, Sapthagiri NPS University, SNPSU, Artificial Intelligence, Machine Learning, Apache Spark, Cloud Computing, Data Science, Bengaluru Conference">
+  <meta name="description" content="{% block meta_description %}Official website for the National Conference in Emerging Trends of Big Data Engineering 2.6 (Saptha DataZen 2.6), hosted by Sapthagiri NPS University, Bangalore. Advancing data-driven research, AI, and intelligent computing systems.{% endblock %}">
+  <meta name="keywords" content="Big Data Conference, Saptha DataZen 2.6, Sapthagiri NPS University, SNPSU, Artificial Intelligence, Machine Learning, Big Data Engineering, Bangalore Conference">
   <meta name="author" content="Sapthagiri NPS University">
-  <meta property="og:title" content="International Conference on Big Data Tools & Techniques | SNPSU">
-  <meta property="og:description" content="Advancing Data-Driven Research, Innovation and Intelligent Solutions - SNPSU Bengaluru">
+  <meta property="og:title" content="{{ CONF_BRAND }} | {{ CONF_NAME }} | SNPSU">
+  <meta property="og:description" content="National Conference in Emerging Trends of Big Data Engineering 2.6 - Sapthagiri NPS University, Bangalore">
   <meta property="og:type" content="website">
   
   <!-- Favicon -->
@@ -62,14 +62,15 @@
         <div class="banner-title-block">
           <div class="banner-uni-name">
             <span class="uni-main">SAPTHAGIRI NPS UNIVERSITY</span>
-            <span class="uni-loc">Bengaluru, Karnataka, India</span>
+            <span class="uni-loc">Bangalore, Karnataka, India</span>
           </div>
           <div class="banner-conf-title-wrap">
-            <div class="banner-conf-super">International Conference on</div>
-            <div class="banner-conf-heading">BIG DATA TOOLS AND TECHNIQUES</div>
+            <div class="banner-brand-callout" style="margin-bottom: 4px;">
+              <span class="conf-badge-acronym" style="font-size: 0.95rem; padding: 3px 14px; letter-spacing: 0.06em; font-weight: 800; background: var(--primary-navy); color: var(--accent-gold); border: 1.5px solid var(--accent-gold); border-radius: 4px; display: inline-block;">{{ CONF_BRAND }}</span>
+            </div>
+            <div class="banner-conf-heading" style="font-size: 1.4rem; font-weight: 800; line-height: 1.25; color: var(--primary-navy); text-transform: uppercase;">{{ CONF_NAME }}</div>
             <div class="banner-conf-subline">
-              <span class="conf-badge-acronym">{{ CONF_ACRONYM }}</span>
-              <span class="conf-subline-theme">"{{ CONF_THEME }}"</span>
+              <span class="conf-subline-theme">Sapthagiri NPS University &bull; {{ CONF_DATE }} &bull; Bangalore</span>
             </div>
           </div>
         </div>
@@ -79,15 +80,15 @@
           <div class="banner-meta-pill">
             <i class="bi bi-calendar-event-fill"></i>
             <div>
-              <span class="meta-label">Date</span>
+              <span class="meta-label">Conference Date</span>
               <span class="meta-value">{{ CONF_DATE }}</span>
             </div>
           </div>
           <div class="banner-meta-pill">
             <i class="bi bi-geo-alt-fill"></i>
             <div>
-              <span class="meta-label">Venue</span>
-              <span class="meta-value">SNPSU Bengaluru</span>
+              <span class="meta-label">Inauguration Venue</span>
+              <span class="meta-value">C Block, 1st Floor, Auditorium</span>
             </div>
           </div>
         </div>
@@ -107,8 +108,8 @@
             <img src="{{ url_for('static', filename='images/snpsu_logo.webp') }}" alt="Sapthagiri NPS University Logo">
           </div>
           <div class="conf-brand-text">
-            <span class="conf-acronym">{{ CONF_ACRONYM }}</span>
-            <span class="conf-year-tag">Big Data Tools &amp; Techniques</span>
+            <span class="conf-acronym">{{ CONF_BRAND }}</span>
+            <span class="conf-year-tag">National Conference</span>
           </div>
         </a>
 
@@ -155,7 +156,7 @@
   <div class="drawer-backdrop"></div>
   <div class="mobile-nav-drawer">
     <div class="mobile-drawer-header">
-      <h5>ICBDTT-2026</h5>
+      <h5>{{ CONF_BRAND }}</h5>
       <button class="mobile-drawer-close" aria-label="Close menu">&times;</button>
     </div>
     <ul class="mobile-nav-links">
@@ -209,8 +210,9 @@
         <!-- Column 1: University & Conference Identity -->
         <div class="footer-col">
           <img src="{{ url_for('static', filename='images/snpsu_logo.webp') }}" alt="SNPSU Bengaluru" style="height: 52px; filter: brightness(0) invert(1); margin-bottom: 18px;">
-          <h4 style="border-bottom:none; padding-bottom:0; font-size:1.1rem; color:#ffffff;">{{ CONF_NAME }}</h4>
-          <p style="color:#cbd5e1; font-size:0.86rem; margin-top:8px;">
+          <h4 style="border-bottom:none; padding-bottom:0; font-size:1.15rem; color:#ffffff; font-family:'Outfit',sans-serif;">{{ CONF_BRAND }}</h4>
+          <div style="font-size:0.92rem; color:var(--accent-gold); font-weight:700; margin-top:2px; margin-bottom:8px;">{{ CONF_NAME }}</div>
+          <p style="color:#cbd5e1; font-size:0.86rem; margin-top:6px;">
             "{{ CONF_THEME }}"
           </p>
           <p style="font-size:0.84rem; color:#94a3b8;">

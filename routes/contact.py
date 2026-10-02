@@ -39,13 +39,16 @@ def contact():
             db.session.add(msg)
             db.session.commit()
 
-            flash('Thank you for contacting the ICBDTT-2026 Organizing Secretariat! We will respond shortly.', 'success')
+            conf_brand = current_app.config.get('CONFERENCE_BRAND_NAME', 'Saptha DataZen 2.6')
+            conf_email = current_app.config.get('CONFERENCE_EMAIL', 'datazen@snpsu.edu.in')
+            flash(f'Thank you for contacting the {conf_brand} Organizing Secretariat! We will respond shortly.', 'success')
             return redirect(url_for('contact.contact'))
 
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Contact Form Error: {e}")
-            flash('Failed to submit your message. Please reach us directly via email at icbdtt@snpsu.edu.in.', 'danger')
+            conf_email = current_app.config.get('CONFERENCE_EMAIL', 'datazen@snpsu.edu.in')
+            flash(f'Failed to submit your message. Please reach us directly via email at {conf_email}.', 'danger')
             return render_template('contact.html', form=request.form)
 
     return render_template('contact.html', form={})

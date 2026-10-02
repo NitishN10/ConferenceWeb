@@ -22,15 +22,16 @@ class Config:
     ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB max limit
     
-    # Official Conference Branding (Using Clean Placeholders for unconfirmed details)
-    CONFERENCE_NAME = "International Conference on Big Data Tools and Techniques"
-    CONFERENCE_ACRONYM = "ICBDTT-2026"
-    CONFERENCE_THEME = "Advancing Data-Driven Research, Innovation and Intelligent Solutions"
-    HOST_INSTITUTION = "Sapthagiri NPS University (SNPSU)"
-    HOST_LOCATION = "Bengaluru, Karnataka, India"
-    HOST_CAMPUS = "Sapthagiri NPS University Campus, Bengaluru, Karnataka, India"
-    VENUE_NAME = "[VENUE NAME]"
-    CONFERENCE_DATE = "[CONFERENCE DATE]"
-    CONFERENCE_EMAIL = "[CONFERENCE EMAIL]"
-    CONFERENCE_PHONE = "[CONFERENCE PHONE]"
-    REGISTRATION_FEE_PLACEHOLDER = "[REGISTRATION FEE]"
+    # Official Conference Branding
+    CONFERENCE_NAME = "National Conference in Emerging Trends of Big Data Engineering 2.6"
+    CONFERENCE_ACRONYM = "Saptha DataZen 2.6"
+    CONFERENCE_BRAND_NAME = "Saptha DataZen 2.6"
+    CONFERENCE_THEME = "Emerging Trends in Big Data Engineering & Intelligent Computing Systems"
+    HOST_INSTITUTION = "Sapthagiri NPS University"
+    HOST_LOCATION = "Bangalore, Karnataka, India"
+    HOST_CAMPUS = "Sapthagiri NPS University Campus, Chikkasandra, Hesaraghatta Main Road, Bangalore, Karnataka 560057"
+    VENUE_NAME = "C Block, 1st Floor, Auditorium, Sapthagiri NPS University, Bangalore"
+    CONFERENCE_DATE = "08th August 2026"
+    CONFERENCE_EMAIL = "datazen@snpsu.edu.in"
+    CONFERENCE_PHONE = "+91 (080) 2837 2800 / +91 94808 31234"
+    REGISTRATION_FEE_PLACEHOLDER = "₹ 500 – ₹ 2,500"

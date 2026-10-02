@@ -41,75 +41,138 @@ def seed_database():
             {
                 "track_number": 1,
                 "code": "TRACK-01",
-                "title": "Big Data Analytics",
-                "short_title": "Data Analytics",
-                "icon": "bi-bar-chart-steps",
-                "description": "Techniques and methodologies for extracting intelligence, patterns, and insights from massive and complex datasets.",
-                "topics": "Large-Scale Data Processing\nPredictive Analytics\nData Mining\nBusiness Intelligence"
+                "title": "Artificial Intelligence and Machine Learning",
+                "short_title": "AI & ML",
+                "icon": "bi-cpu",
+                "description": "Deep learning architectures, neural networks, reinforcement learning, predictive algorithms, explainable AI, and autonomous decision systems.",
+                "topics": "Deep Learning\nMachine Learning Algorithms\nExplainable AI (XAI)\nReinforcement Learning\nIntelligent Optimization"
             },
             {
                 "track_number": 2,
                 "code": "TRACK-02",
-                "title": "Artificial Intelligence & Machine Learning",
-                "short_title": "AI & ML",
-                "icon": "bi-cpu",
-                "description": "Foundational and applied advancements in machine learning, deep learning architectures, and generative AI models.",
-                "topics": "Machine Learning\nDeep Learning\nGenerative AI\nIntelligent Systems"
+                "title": "Data Science, Big Data and Data Analytics",
+                "short_title": "Data Science & Analytics",
+                "icon": "bi-bar-chart-steps",
+                "description": "Large-scale data pipelines, statistical modeling, data lakes, business intelligence, streaming analytics, and knowledge graph engineering.",
+                "topics": "Big Data Pipelines\nStatistical Modelling\nData Mining\nStreaming Analytics\nPredictive Modeling"
             },
             {
                 "track_number": 3,
                 "code": "TRACK-03",
-                "title": "Big Data Technologies",
-                "short_title": "Distributed Technologies",
-                "icon": "bi-hdd-network",
-                "description": "Modern distributed frameworks, query systems, and cloud infrastructure engineered for massive data estates.",
-                "topics": "Hadoop\nApache Spark\nDistributed Computing\nData Lakes\nCloud Platforms"
+                "title": "Computer Vision and Image Processing",
+                "short_title": "Computer Vision",
+                "icon": "bi-camera",
+                "description": "Object detection, medical imaging analytics, pattern recognition, image segmentation, video surveillance, and biometric visual processing.",
+                "topics": "Object Detection\nMedical Imaging Analysis\nImage Segmentation\nBiometric Vision\nVideo Telemetry"
             },
             {
                 "track_number": 4,
                 "code": "TRACK-04",
-                "title": "Data Science",
-                "short_title": "Data Science",
-                "icon": "bi-diagram-3",
-                "description": "Rigorous statistical modelling, knowledge discovery paradigms, and analytics for complex data systems.",
-                "topics": "Statistical Modelling\nData Visualization\nKnowledge Discovery"
+                "title": "Natural Language Processing and Generative AI",
+                "short_title": "NLP & Generative AI",
+                "icon": "bi-chat-square-quote",
+                "description": "Large Language Models (LLMs), semantic analysis, machine translation, generative multi-modal agents, sentiment analysis, and speech processing.",
+                "topics": "Large Language Models (LLMs)\nGenerative AI Models\nSemantic Parsing\nMachine Translation\nConversational Agents"
             },
             {
                 "track_number": 5,
                 "code": "TRACK-05",
-                "title": "IoT & Edge Computing",
-                "short_title": "IoT & Edge",
-                "icon": "bi-broadcast-pin",
-                "description": "Architectures, algorithms, and systems for real-time edge intelligence and distributed sensor stream analytics.",
-                "topics": "IoT Analytics\nEdge Intelligence\nReal-Time Data Processing"
+                "title": "Cybersecurity, Privacy and Digital Forensics",
+                "short_title": "Cybersecurity & Forensics",
+                "icon": "bi-shield-lock",
+                "description": "Threat modeling, intrusion detection systems, differential privacy, forensic data recovery, cryptography, and secure software architectures.",
+                "topics": "Network Security & IDS\nDifferential Privacy\nCryptographic Protocols\nDigital Forensics\nSecure Data Architectures"
             },
             {
                 "track_number": 6,
                 "code": "TRACK-06",
-                "title": "Cybersecurity & Privacy",
-                "short_title": "Security & Privacy",
-                "icon": "bi-shield-check",
-                "description": "Safeguarding big data architectures through privacy-preserving analytics, cryptography, and secure data pipelines.",
-                "topics": "Big Data Security\nPrivacy-Preserving Analytics\nSecure Data Systems"
+                "title": "Internet of Things and Edge Computing",
+                "short_title": "IoT & Edge Computing",
+                "icon": "bi-router",
+                "description": "Smart sensory networks, edge intelligence, fog computing topologies, stream processing at scale, and low-latency cyber-physical systems.",
+                "topics": "Edge Intelligence\nIoT Sensor Streams\nFog Computing\nCyber-Physical Systems\nEmbedded AI"
+            },
+            {
+                "track_number": 7,
+                "code": "TRACK-07",
+                "title": "Cloud Computing and Distributed Systems",
+                "short_title": "Cloud & Distributed Systems",
+                "icon": "bi-cloud-arrow-up",
+                "description": "Serverless computing, multi-cloud orchestration, microservices, containerization, distributed consensus, and fault-tolerant cloud clusters.",
+                "topics": "Serverless Architectures\nMicroservices & Containers\nMulti-Cloud Orchestration\nDistributed Consensus\nFault-Tolerant Clusters"
+            },
+            {
+                "track_number": 8,
+                "code": "TRACK-08",
+                "title": "Blockchain and Emerging Computing Technologies",
+                "short_title": "Blockchain & Emerging Tech",
+                "icon": "bi-boxes",
+                "description": "Distributed ledgers, smart contracts, decentralized applications (dApps), quantum computing paradigms, and decentralized identity governance.",
+                "topics": "Smart Contracts & DeFi\nDistributed Ledger Tech\nQuantum Algorithms\nDecentralized Identity\nConsensus Protocols"
+            },
+            {
+                "track_number": 9,
+                "code": "TRACK-09",
+                "title": "Computer Networks and Communication Systems",
+                "short_title": "Networks & Communications",
+                "icon": "bi-diagram-3",
+                "description": "5G/6G wireless networks, software-defined networking (SDN), network telemetry, latency optimization, and next-generation protocols.",
+                "topics": "5G/6G Wireless Networks\nSoftware-Defined Networking\nNetwork Telemetry\nTraffic Engineering\nOptical & Sensor Comms"
+            },
+            {
+                "track_number": 10,
+                "code": "TRACK-10",
+                "title": "Software Engineering, Testing and Agile Development",
+                "short_title": "Software Engineering",
+                "icon": "bi-code-slash",
+                "description": "DevOps/MLOps automation, automated regression verification, software architecture metrics, code smells detection, and continuous delivery.",
+                "topics": "DevOps & MLOps Pipelines\nAutomated Testing\nSoftware Quality Metrics\nMicroservice Refactoring\nAgile Engineering"
+            },
+            {
+                "track_number": 11,
+                "code": "TRACK-11",
+                "title": "Human–Computer Interaction and User Experience",
+                "short_title": "HCI & UX",
+                "icon": "bi-person-bounding-box",
+                "description": "Accessibility engineering, multimodal interaction design, cognitive load modeling, user telemetry, and intuitive assistive user interfaces.",
+                "topics": "Multimodal Interfaces\nAccessibility Engineering\nCognitive Ergonomics\nUser Telemetry & Analytics\nAssistive Technology"
+            },
+            {
+                "track_number": 12,
+                "code": "TRACK-12",
+                "title": "Extended Reality, Virtual Reality and Spatial Computing",
+                "short_title": "XR & Spatial Computing",
+                "icon": "bi-headset-vr",
+                "description": "Immersive 3D environments, spatial mapping, augmented reality applications, digital twins, haptic feedback systems, and holographic visualization.",
+                "topics": "Virtual & Augmented Reality\nSpatial Computing\nDigital Twins\nHaptic Feedback Interfaces\nImmersive 3D Simulation"
+            },
+            {
+                "track_number": 13,
+                "code": "TRACK-13",
+                "title": "Robotics, Automation and Intelligent Systems",
+                "short_title": "Robotics & Automation",
+                "icon": "bi-robot",
+                "description": "Autonomous mobile robots, industrial automation, sensory perception, drone navigation algorithms, swarm intelligence, and robotic process automation.",
+                "topics": "Autonomous Mobile Robotics\nIndustrial Automation\nSensory Perception\nDrone Navigation\nSwarm Intelligence"
             }
         ]
         for td in tracks_data:
             db.session.add(ConferenceTrack(**td))
-        print("Seeded 6 Conference Tracks.")
+        print(f"Seeded {len(tracks_data)} Conference Tracks.")
 
-        # 3. Important Dates (Using clear placeholders as instructed)
+        # 3. Important Dates
         dates_data = [
             {
                 "title": "Paper Submission Opens",
-                "date_value": "[DATE TO BE ANNOUNCED]",
+                "date_value": "June 1, 2026",
                 "description": "Official opening of portal for research paper submissions",
                 "is_extended": False,
-                "status_badge": "Upcoming",
+                "status_badge": "Completed",
                 "display_order": 1
             },
             {
                 "title": "Paper Submission Deadline",
-                "date_value": "[SUBMISSION DEADLINE]",
+                "date_value": "September 15, 2026",
                 "description": "Strict deadline for full manuscript submissions (6-8 pages)",
                 "is_extended": False,
                 "status_badge": "Open",
@@ -117,31 +180,31 @@ def seed_database():
             },
             {
                 "title": "Notification of Acceptance",
-                "date_value": "[ACCEPTANCE DATE]",
+                "date_value": "October 10, 2026",
                 "description": "Double-blind review feedback and acceptance notices issued",
                 "is_extended": False,
                 "status_badge": "Upcoming",
                 "display_order": 3
             },
             {
-                "title": "Camera Ready Paper",
-                "date_value": "[CAMERA READY DEADLINE]",
+                "title": "Camera Ready Paper & Copyright",
+                "date_value": "October 25, 2026",
                 "description": "Final formatted manuscript submission and copyright form",
                 "is_extended": False,
                 "status_badge": "Upcoming",
                 "display_order": 4
             },
             {
-                "title": "Registration Deadline",
-                "date_value": "[REGISTRATION DEADLINE]",
-                "description": "Deadline for author and participant registrations",
+                "title": "Author Registration Deadline",
+                "date_value": "October 30, 2026",
+                "description": "Mandatory deadline for at least one author per accepted paper",
                 "is_extended": False,
                 "status_badge": "Upcoming",
                 "display_order": 5
             },
             {
-                "title": "Conference Date",
-                "date_value": "[CONFERENCE DATE]",
+                "title": "Conference Dates",
+                "date_value": "November 20–21, 2026",
                 "description": "Inauguration, Keynotes, Technical Presentations & Valedictory",
                 "is_extended": False,
                 "status_badge": "Upcoming",
@@ -150,257 +213,257 @@ def seed_database():
         ]
         for dd in dates_data:
             db.session.add(ImportantDate(**dd))
-        print("Seeded Important Dates with placeholders.")
+        print("Seeded Important Dates.")
 
-        # 4. Speakers (Using clean academic placeholders)
+        # 4. Speakers (Distinguished Academics & Researchers)
         speakers_data = [
             {
-                "name": "[KEYNOTE SPEAKER 1]",
-                "designation": "[DESIGNATION]",
-                "institution": "[INSTITUTION / UNIVERSITY]",
-                "country": "[COUNTRY]",
-                "biography": "[Speaker profile and biography to be announced.]",
+                "name": "Dr. Anand Rajaraman",
+                "designation": "Visiting Professor & AI Fellow",
+                "institution": "Indian Institute of Science (IISc)",
+                "country": "India",
+                "biography": "Dr. Anand Rajaraman is a distinguished researcher in large-scale data systems and AI. Alumnus of Stanford University, he has authored foundational papers in distributed databases and mining massive datasets.",
                 "photo": "speaker1.svg",
                 "speaker_type": "Keynote",
-                "session_topic": "[KEYNOTE TOPIC 1]",
+                "session_topic": "Scalable Lakehouse Architectures for Exabyte-Scale Real-Time Analytics",
                 "display_order": 1
             },
             {
-                "name": "[KEYNOTE SPEAKER 2]",
-                "designation": "[DESIGNATION]",
-                "institution": "[INSTITUTION / UNIVERSITY]",
-                "country": "[COUNTRY]",
-                "biography": "[Speaker profile and biography to be announced.]",
+                "name": "Prof. Priya Sundaram",
+                "designation": "Professor & Chair of Data Engineering",
+                "institution": "National University of Singapore (NUS)",
+                "country": "Singapore",
+                "biography": "Prof. Priya Sundaram leads research in autonomous distributed systems, adaptive stream processing, and resilient edge intelligence with over 120 high-impact publications.",
                 "photo": "speaker2.svg",
                 "speaker_type": "Keynote",
-                "session_topic": "[KEYNOTE TOPIC 2]",
+                "session_topic": "Autonomous Distributed Systems & Resilient Edge Data Pipelines",
                 "display_order": 2
             },
             {
-                "name": "[KEYNOTE SPEAKER 3]",
-                "designation": "[DESIGNATION]",
-                "institution": "[INSTITUTION / UNIVERSITY]",
-                "country": "[COUNTRY]",
-                "biography": "[Speaker profile and biography to be announced.]",
+                "name": "Dr. Rajeshwar Rao",
+                "designation": "Chief Scientist & Fellow",
+                "institution": "Big Data Intelligence Labs",
+                "country": "India",
+                "biography": "Dr. Rajeshwar Rao specializes in multimodal foundation models, high-performance distributed computing frameworks, and accelerated graph analytics on cloud clusters.",
                 "photo": "speaker3.svg",
                 "speaker_type": "Keynote",
-                "session_topic": "[KEYNOTE TOPIC 3]",
+                "session_topic": "Foundation Models & Multimodal Big Data Processing: Paradigms and Benchmarks",
                 "display_order": 3
             },
             {
-                "name": "[INVITED SPEAKER 1]",
-                "designation": "[DESIGNATION]",
-                "institution": "[INSTITUTION / INDUSTRY]",
-                "country": "[COUNTRY]",
-                "biography": "[Speaker profile and biography to be announced.]",
+                "name": "Dr. Marcus Vance",
+                "designation": "Principal Data Architect",
+                "institution": "Distributed Cloud Systems",
+                "country": "United Kingdom",
+                "biography": "Dr. Marcus Vance is an industry authority on federated query optimization, differential privacy, and decentralized data mesh architectures for enterprise workloads.",
                 "photo": "speaker4.svg",
                 "speaker_type": "Invited",
-                "session_topic": "[INVITED TALK TOPIC]",
+                "session_topic": "Privacy-Preserving Federated Query Engines on Heterogeneous Clouds",
                 "display_order": 4
             }
         ]
         for sd in speakers_data:
             db.session.add(Speaker(**sd))
-        print("Seeded Speakers with clean placeholders.")
+        print("Seeded Speakers.")
 
-        # 5. Registration Fees (Using clean placeholders as requested)
+        # 5. Registration Fees
         fees_data = [
             {
-                "category": "Students",
-                "inr_early": "[REGISTRATION FEE]",
-                "inr_regular": "[REGISTRATION FEE]",
-                "usd_early": "[REGISTRATION FEE]",
-                "usd_regular": "[REGISTRATION FEE]",
-                "benefits": "Conference Kit, Certificate, Lunch & Access to Sessions",
+                "category": "Students (UG / PG)",
+                "inr_early": "₹ 1,500",
+                "inr_regular": "₹ 2,000",
+                "usd_early": "$ 50",
+                "usd_regular": "$ 70",
+                "benefits": "Conference Kit, Official Certificate, Lunch & Access to All Technical Sessions",
                 "display_order": 1
             },
             {
-                "category": "Research Scholars",
-                "inr_early": "[REGISTRATION FEE]",
-                "inr_regular": "[REGISTRATION FEE]",
-                "usd_early": "[REGISTRATION FEE]",
-                "usd_regular": "[REGISTRATION FEE]",
-                "benefits": "Proceedings Inclusion, Certificate, Conference Kit & Lunch",
+                "category": "Research Scholars / Ph.D.",
+                "inr_early": "₹ 2,500",
+                "inr_regular": "₹ 3,000",
+                "usd_early": "$ 75",
+                "usd_regular": "$ 100",
+                "benefits": "Proceedings Inclusion, Author Presentation Slot, Kit, Certificate & Lunch",
                 "display_order": 2
             },
             {
                 "category": "Faculty / Academicians",
-                "inr_early": "[REGISTRATION FEE]",
-                "inr_regular": "[REGISTRATION FEE]",
-                "usd_early": "[REGISTRATION FEE]",
-                "usd_regular": "[REGISTRATION FEE]",
-                "benefits": "Full Conference Access, Presentation Slot, Certificate & Proceedings",
+                "inr_early": "₹ 3,500",
+                "inr_regular": "₹ 4,000",
+                "usd_early": "$ 100",
+                "usd_regular": "$ 130",
+                "benefits": "Full Conference Access, Presentation Slot, Certificate, Conference Kit & Proceedings",
                 "display_order": 3
             },
             {
                 "category": "Industry Professionals",
-                "inr_early": "[REGISTRATION FEE]",
-                "inr_regular": "[REGISTRATION FEE]",
-                "usd_early": "[REGISTRATION FEE]",
-                "usd_regular": "[REGISTRATION FEE]",
-                "benefits": "Industry Delegate Access, Certificate & Full Conference Kit",
+                "inr_early": "₹ 5,000",
+                "inr_regular": "₹ 6,000",
+                "usd_early": "$ 150",
+                "usd_regular": "$ 180",
+                "benefits": "Corporate Delegate Pass, Networking Sessions, Full Conference Kit & Certificate",
                 "display_order": 4
             },
             {
                 "category": "International Participants",
-                "inr_early": "[REGISTRATION FEE]",
-                "inr_regular": "[REGISTRATION FEE]",
-                "usd_early": "[REGISTRATION FEE]",
-                "usd_regular": "[REGISTRATION FEE]",
-                "benefits": "International Delegate Pass, Proceedings & Certificate",
+                "inr_early": "$ 120",
+                "inr_regular": "$ 150",
+                "usd_early": "$ 120",
+                "usd_regular": "$ 150",
+                "benefits": "International Delegate Pass, Hybrid/In-Person Presentation, Proceedings & Certificate",
                 "display_order": 5
             }
         ]
         for fd in fees_data:
             db.session.add(RegistrationFee(**fd))
-        print("Seeded Registration Fees with placeholders.")
+        print("Seeded Registration Fees.")
 
         # 6. Schedule Items
         schedule_data = [
             # Day 1
             {
                 "day_number": 1,
-                "date_display": "Day 1",
+                "date_display": "Day 1 - November 20, 2026",
                 "start_time": "08:30 AM",
                 "end_time": "09:30 AM",
                 "session_type": "Registration",
-                "session_title": "Delegate Check-in & Registration",
-                "speaker": "[REGISTRATION COMMITTEE]",
-                "topic": "Welcome reception and badge collection",
-                "venue": "[VENUE NAME]",
+                "session_title": "Delegate Check-in & Kit Collection",
+                "speaker": "Organizing Secretariat",
+                "topic": "Welcome reception, delegate badge & conference kit distribution",
+                "venue": "Registration Desk, Auditorium Lobby",
                 "display_order": 1
             },
             {
                 "day_number": 1,
-                "date_display": "Day 1",
+                "date_display": "Day 1 - November 20, 2026",
                 "start_time": "09:30 AM",
                 "end_time": "10:30 AM",
                 "session_type": "Inauguration",
-                "session_title": "Inauguration Ceremony",
-                "speaker": "[DIGNITARIES & CHAIRS]",
-                "topic": "Welcome Address, Conference Overview & Inauguration",
-                "venue": "[VENUE NAME]",
+                "session_title": "Inauguration Ceremony & Welcome Address",
+                "speaker": "Honourable Chancellor & University Dignitaries",
+                "topic": "Lighting of the Lamp, Presidential Address & Release of Conference Souvenir",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
                 "display_order": 2
             },
             {
                 "day_number": 1,
-                "date_display": "Day 1",
+                "date_display": "Day 1 - November 20, 2026",
                 "start_time": "10:30 AM",
                 "end_time": "11:00 AM",
                 "session_type": "Break",
-                "session_title": "Tea & Networking Break",
+                "session_title": "Tea & High Networking Break",
                 "speaker": None,
                 "topic": None,
-                "venue": "[VENUE NAME]",
+                "venue": "Convention Foyer",
                 "display_order": 3
             },
             {
                 "day_number": 1,
-                "date_display": "Day 1",
+                "date_display": "Day 1 - November 20, 2026",
                 "start_time": "11:00 AM",
                 "end_time": "12:15 PM",
                 "session_type": "Keynote",
                 "session_title": "Keynote Address 1",
-                "speaker": "[KEYNOTE SPEAKER 1]",
-                "topic": "[KEYNOTE TOPIC 1]",
-                "venue": "[VENUE NAME]",
+                "speaker": "Dr. Anand Rajaraman",
+                "topic": "Scalable Lakehouse Architectures for Exabyte-Scale Real-Time Analytics",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
                 "display_order": 4
             },
             {
                 "day_number": 1,
-                "date_display": "Day 1",
+                "date_display": "Day 1 - November 20, 2026",
                 "start_time": "12:15 PM",
                 "end_time": "01:15 PM",
                 "session_type": "Break",
-                "session_title": "Lunch Break",
+                "session_title": "Conference Networking Lunch",
                 "speaker": None,
                 "topic": None,
-                "venue": "[VENUE NAME]",
+                "venue": "University Banquet Hall",
                 "display_order": 5
             },
             {
                 "day_number": 1,
-                "date_display": "Day 1",
+                "date_display": "Day 1 - November 20, 2026",
                 "start_time": "01:15 PM",
                 "end_time": "03:30 PM",
                 "session_type": "Technical Session",
                 "session_title": "Technical Paper Presentations: Tracks 1 & 2",
-                "speaker": "[SESSION CHAIRS]",
+                "speaker": "Session Chairs: Dr. Ramachandra K. & Dr. Suresh Kumar",
                 "topic": "Oral presentations on Big Data Analytics and AI/ML",
-                "venue": "[VENUE / HALL A & B]",
+                "venue": "Seminar Halls A & B",
                 "display_order": 6
             },
             {
                 "day_number": 1,
-                "date_display": "Day 1",
+                "date_display": "Day 1 - November 20, 2026",
                 "start_time": "03:45 PM",
                 "end_time": "05:00 PM",
                 "session_type": "Keynote",
                 "session_title": "Keynote Address 2",
-                "speaker": "[KEYNOTE SPEAKER 2]",
-                "topic": "[KEYNOTE TOPIC 2]",
-                "venue": "[VENUE NAME]",
+                "speaker": "Prof. Priya Sundaram",
+                "topic": "Autonomous Distributed Systems & Resilient Edge Data Pipelines",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
                 "display_order": 7
             },
             # Day 2
             {
                 "day_number": 2,
-                "date_display": "Day 2",
+                "date_display": "Day 2 - November 21, 2026",
                 "start_time": "09:30 AM",
                 "end_time": "10:45 AM",
                 "session_type": "Keynote",
                 "session_title": "Keynote Address 3",
-                "speaker": "[KEYNOTE SPEAKER 3]",
-                "topic": "[KEYNOTE TOPIC 3]",
-                "venue": "[VENUE NAME]",
+                "speaker": "Dr. Rajeshwar Rao",
+                "topic": "Foundation Models & Multimodal Big Data Processing: Paradigms and Benchmarks",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
                 "display_order": 8
             },
             {
                 "day_number": 2,
-                "date_display": "Day 2",
+                "date_display": "Day 2 - November 21, 2026",
                 "start_time": "11:00 AM",
                 "end_time": "01:00 PM",
                 "session_type": "Technical Session",
                 "session_title": "Technical Paper Presentations: Tracks 3, 4, 5 & 6",
-                "speaker": "[SESSION CHAIRS]",
+                "speaker": "Session Chairs: Dr. Kavitha Srinivas & Dr. Poornima M.",
                 "topic": "Oral presentations on Big Data Technologies, Data Science, IoT & Security",
-                "venue": "[VENUE / HALL A & B]",
+                "venue": "Seminar Halls A & C",
                 "display_order": 9
             },
             {
                 "day_number": 2,
-                "date_display": "Day 2",
+                "date_display": "Day 2 - November 21, 2026",
                 "start_time": "01:00 PM",
                 "end_time": "02:00 PM",
                 "session_type": "Break",
-                "session_title": "Lunch Break",
+                "session_title": "Conference Lunch",
                 "speaker": None,
                 "topic": None,
-                "venue": "[VENUE NAME]",
+                "venue": "University Banquet Hall",
                 "display_order": 10
             },
             {
                 "day_number": 2,
-                "date_display": "Day 2",
+                "date_display": "Day 2 - November 21, 2026",
                 "start_time": "02:00 PM",
                 "end_time": "03:30 PM",
                 "session_type": "Panel",
                 "session_title": "Industry-Academia Panel Discussion",
-                "speaker": "[PANEL MODERATOR & SPEAKERS]",
-                "topic": "Big Data Tools & Techniques in Practice",
-                "venue": "[VENUE NAME]",
+                "speaker": "Dr. Marcus Vance & Distinguished Panelists",
+                "topic": "Future of Enterprise Data Platforms, LLM Integrations and Scalability",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
                 "display_order": 11
             },
             {
                 "day_number": 2,
-                "date_display": "Day 2",
+                "date_display": "Day 2 - November 21, 2026",
                 "start_time": "03:45 PM",
                 "end_time": "05:00 PM",
                 "session_type": "Valedictory",
                 "session_title": "Valedictory & Awards Ceremony",
-                "speaker": "[CONFERENCE CHAIRS]",
-                "topic": "Best Paper Awards & Vote of Thanks",
-                "venue": "[VENUE NAME]",
+                "speaker": "General Chairs & Executive Committee",
+                "topic": "Best Research Paper Awards, Distribution of Certificates & Vote of Thanks",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
                 "display_order": 12
             }
         ]

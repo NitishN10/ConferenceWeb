@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Submission Received - {{ submission.paper_id }} | ICBDTT-2026{% endblock %}
+{% block title %}Submission Received - {{ submission.paper_id }} | {{ CONF_BRAND }}{% endblock %}
 
 {% block content %}
 
@@ -15,7 +15,7 @@
           <img src="{{ url_for('static', filename='images/snpsu_logo.webp') }}" alt="SNPSU" style="height:44px; filter:brightness(0) invert(1);">
           <div>
             <h3 style="color:#ffffff; font-size:1.35rem; margin:0;">Submission Confirmation</h3>
-            <span style="color:var(--accent-gold); font-size:0.85rem; font-weight:600;">Sapthagiri NPS University &bull; ICBDTT-2026</span>
+            <span style="color:var(--accent-gold); font-size:0.85rem; font-weight:600;">Sapthagiri NPS University &bull; {{ CONF_BRAND }}</span>
           </div>
         </div>
         <div style="text-align:right;">
@@ -84,7 +84,7 @@
           </h4>
           <ol style="margin-left:20px; font-size:0.9rem; color:var(--text-secondary); line-height:1.7;">
             <li><strong>Peer Review:</strong> Your anonymized manuscript has been routed to independent expert reviewers for double-blind evaluation.</li>
-            <li><strong>Review Notification:</strong> Feedback and acceptance decision will be emailed to <code>{{ submission.email }}</code> on or before <strong>[ACCEPTANCE DATE]</strong>.</li>
+            <li><strong>Review Notification:</strong> Feedback and acceptance decision will be emailed to <code>{{ submission.email }}</code> on or before <strong>October 10, 2026</strong>.</li>
             <li><strong>Camera-Ready &amp; Registration:</strong> Upon acceptance, authors must upload the camera-ready version and complete conference registration.</li>
           </ol>
         </div>

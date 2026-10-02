@@ -4,8 +4,8 @@
 Official web portal and conference management platform for the **International Conference on Big Data Tools and Techniques (ICBDTT-2026)**, hosted by **Sapthagiri NPS University (SNPSU), Bengaluru**.
 
 > **Conference Theme**: *"Advancing Data-Driven Research, Innovation and Intelligent Solutions"*  
-> **Dates**: [CONFERENCE DATE]  
-> **Venue**: [VENUE NAME], Sapthagiri NPS University Campus, Bengaluru, Karnataka, India  
+> **Dates**: November 20–21, 2026  
+> **Venue**: Dr. APJ Abdul Kalam Auditorium, Sapthagiri NPS University Campus, Bengaluru, Karnataka, India  
 > **Official University Reference**: [https://snpsu.edu.in/](https://snpsu.edu.in/)  
 
 ---

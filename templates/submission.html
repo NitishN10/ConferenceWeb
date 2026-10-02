@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Paper Submission Portal | ICBDTT-2026 Sapthagiri NPS University{% endblock %}
+{% block title %}Paper Submission Portal | {{ CONF_BRAND }} Sapthagiri NPS University{% endblock %}
 
 {% block content %}
 
@@ -10,7 +10,7 @@
     <span class="badge badge-gold" style="margin-bottom: 12px;">Submission Portal</span>
     <h1 style="color:#ffffff; font-size:2.5rem; margin-bottom:8px;">Online Research Paper Submission</h1>
     <p style="color:#cbd5e1; font-size:1.05rem; max-width:720px;">
-      Submit your manuscript for ICBDTT-2026. Please ensure your paper is prepared according to the formatting guidelines before uploading.
+      Submit your manuscript for {{ CONF_NAME }} ({{ CONF_BRAND }}). Please ensure your paper is prepared according to the formatting guidelines before uploading.
     </p>
   </div>
 </section>
@@ -157,7 +157,7 @@
           <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer;">
             <input type="checkbox" name="declaration" required style="margin-top:4px;">
             <span style="font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">
-              I hereby declare that this manuscript represents original research, is not plagiarized, has not been published elsewhere, and is not currently under review by any other venue. I confirm that all authors approve of this submission to ICBDTT-2026.
+              I hereby declare that this manuscript represents original research, is not plagiarized, has not been published elsewhere, and is not currently under review by any other venue. I confirm that all authors approve of this submission to {{ CONF_BRAND }}.
             </span>
           </label>
         </div>

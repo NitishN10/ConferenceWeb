@@ -1,7 +1,6 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
-*$py.class
 
 # Virtual environments
 venv/
@@ -9,21 +8,22 @@ venv/
 env/
 ENV/
 
-# Environment files (use .env.example instead)
+# Environment variables / secrets
 .env
 
-# IDE and Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
+# Flask local data
+instance/
 
-# Operating System files
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploaded files
+uploads/
+
+# macOS
 .DS_Store
-Thumbs.db
-desktop.ini
 
-# Test and coverage caches
-.pytest_cache/
-.coverage
-htmlcov/
+# Conference working documents
+con1.docx

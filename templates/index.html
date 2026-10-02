@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}International Conference on Big Data Tools and Techniques (ICBDTT-2026) | Sapthagiri NPS University{% endblock %}
+{% block title %}Saptha DataZen 2.6 | National Conference in Emerging Trends of Big Data Engineering 2.6 | Sapthagiri NPS University{% endblock %}
 
 {% block content %}
 
@@ -11,20 +11,25 @@
       
       <!-- Institutional Affiliation Badge -->
       <div class="hero-affiliation">
-        <span class="affil-inst">Sapthagiri NPS University (SNPSU), Bengaluru</span>
-        <span class="affil-dept">School of Computer Science &amp; Engineering</span>
+        <span class="affil-inst">Sapthagiri NPS University, Bangalore</span>
+        <span class="affil-dept">Department of Computer Science &amp; Engineering</span>
       </div>
 
       <!-- Main Conference Heading -->
-      <h1 class="hero-title">
-        <span class="hero-conf-super">International Conference on</span>
-        <span class="hero-conf-main">Big Data Tools and Techniques</span>
-        <span class="hero-conf-tag">ICBDTT-2026</span>
+      <div style="margin-bottom: 14px;">
+        <span class="hero-conf-tag" style="font-size: 1.15rem; padding: 6px 22px; font-weight: 800; letter-spacing: 0.05em; box-shadow: 0 4px 14px rgba(198,158,102,0.35);">
+          <i class="bi bi-stars"></i> {{ CONF_BRAND }}
+        </span>
+      </div>
+      <h1 class="hero-title" style="margin-bottom: 16px;">
+        <span class="hero-conf-main" style="font-size: 2.85rem; font-weight: 800; line-height: 1.2; text-transform: uppercase;">
+          {{ CONF_NAME }}
+        </span>
       </h1>
 
       <!-- Conference Theme -->
       <p class="hero-theme">
-        "Advancing Data-Driven Research, Innovation and Intelligent Solutions"
+        "Emerging Trends in Big Data Engineering &amp; Intelligent Computing Systems"
       </p>
 
       <!-- Key Conference Parameters Grid -->
@@ -39,22 +44,22 @@
         <div class="meta-panel-item">
           <i class="bi bi-building"></i>
           <div>
-            <span class="meta-label">Host Venue</span>
-            <span class="meta-val">{{ CONF_VENUE }}</span>
+            <span class="meta-label">Inauguration Venue</span>
+            <span class="meta-val">C Block Auditorium, SNPSU</span>
           </div>
         </div>
         <div class="meta-panel-item">
           <i class="bi bi-geo-alt-fill"></i>
           <div>
             <span class="meta-label">Location</span>
-            <span class="meta-val">Sapthagiri NPS University, Bengaluru</span>
+            <span class="meta-val">Bangalore, Karnataka, India</span>
           </div>
         </div>
         <div class="meta-panel-item">
-          <i class="bi bi-cpu-fill"></i>
+          <i class="bi bi-broadcast-pin"></i>
           <div>
-            <span class="meta-label">Conference Focus</span>
-            <span class="meta-val">Big Data Tools &amp; Techniques</span>
+            <span class="meta-label">Event Format</span>
+            <span class="meta-val">Hybrid (In-Person &amp; Online)</span>
           </div>
         </div>
       </div>
@@ -70,6 +75,58 @@
         <a href="{{ url_for('main.download_template') }}" class="btn btn-outline-gold btn-lg">
           <i class="bi bi-file-earmark-word"></i> Paper Template (.docx)
         </a>
+        <a href="{{ url_for('main.call_for_papers') }}" class="btn btn-navy btn-lg">
+          <i class="bi bi-journal-text"></i> Call for Papers
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Conference Highlights & Metrics Strip -->
+<section style="background:#ffffff; border-bottom:1px solid var(--border-light); padding:32px 0; box-shadow:0 2px 10px rgba(0,16,64,0.03);">
+  <div class="container">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
+      
+      <div style="display:flex; align-items:center; gap:16px; padding:12px; border-right:1px solid #f1f5f9;">
+        <div style="width:48px; height:48px; border-radius:10px; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;">
+          <i class="bi bi-diagram-3-fill"></i>
+        </div>
+        <div>
+          <strong style="color:var(--primary-navy); font-size:1.05rem; display:block;">6 Technical Tracks</strong>
+          <span style="font-size:0.8rem; color:#64748b;">AI/ML, Cloud, IoT, Security &amp; Analytics</span>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:16px; padding:12px; border-right:1px solid #f1f5f9;">
+        <div style="width:48px; height:48px; border-radius:10px; background:rgba(0,16,64,0.06); color:var(--primary-navy); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;">
+          <i class="bi bi-patch-check-fill"></i>
+        </div>
+        <div>
+          <strong style="color:var(--primary-navy); font-size:1.05rem; display:block;">Double-Blind Review</strong>
+          <span style="font-size:0.8rem; color:#64748b;">Rigorous evaluation by expert reviewers</span>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:16px; padding:12px; border-right:1px solid #f1f5f9;">
+        <div style="width:48px; height:48px; border-radius:10px; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;">
+          <i class="bi bi-journal-bookmark-fill"></i>
+        </div>
+        <div>
+          <strong style="color:var(--primary-navy); font-size:1.05rem; display:block;">Proceedings Publication</strong>
+          <span style="font-size:0.8rem; color:#64748b;">All presented papers included in proceedings</span>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:16px; padding:12px;">
+        <div style="width:48px; height:48px; border-radius:10px; background:rgba(0,16,64,0.06); color:var(--primary-navy); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;">
+          <i class="bi bi-people-fill"></i>
+        </div>
+        <div>
+          <strong style="color:var(--primary-navy); font-size:1.05rem; display:block;">Keynote Lectures</strong>
+          <span style="font-size:0.8rem; color:#64748b;">Plenaries by renowned global researchers</span>
+        </div>
       </div>
 
     </div>
@@ -85,18 +142,34 @@
       <div>
         <div class="section-title-wrap">
           <span class="section-subheading">Conference Overview</span>
-          <h2 class="academic-heading">Welcome to ICBDTT-2026</h2>
+          <h2 class="academic-heading">Welcome to Saptha DataZen 2.6</h2>
         </div>
 
         <p class="academic-lead-text">
-          The <strong>International Conference on Big Data Tools and Techniques (ICBDTT-2026)</strong> is organized and hosted by <strong>Sapthagiri NPS University (SNPSU), Bengaluru, India</strong>. The conference serves as a premier international academic forum for scholars, faculty members, researchers, and technical specialists to present and deliberate on foundational and applied innovations in large-scale data engineering.
+          The <strong>National Conference in Emerging Trends of Big Data Engineering 2.6 (Saptha DataZen 2.6)</strong> is organized and hosted by <strong>Sapthagiri NPS University, Bangalore</strong>. The conference serves as a premier national academic forum for scholars, faculty members, researchers, and technical specialists to present and deliberate on foundational and applied innovations in large-scale data engineering.
         </p>
 
         <p class="academic-text">
-          With the exponential expansion of digital datasets across healthcare, scientific computing, enterprise platforms, and IoT networks, developing reliable, scalable, and secure data tools is paramount. ICBDTT-2026 brings together original contributions spanning <strong>Big Data Analytics</strong>, <strong>Artificial Intelligence &amp; Machine Learning</strong>, <strong>Distributed Cloud Platforms</strong>, <strong>Data Science</strong>, <strong>IoT Edge Computing</strong>, and <strong>Data Privacy &amp; Cybersecurity</strong>.
+          With the exponential expansion of digital datasets across healthcare, scientific computing, enterprise platforms, and IoT networks, developing reliable, scalable, and secure data tools is paramount. Saptha DataZen 2.6 brings together original contributions spanning <strong>Artificial Intelligence &amp; Machine Learning</strong>, <strong>Data Science &amp; Big Data</strong>, <strong>Computer Vision</strong>, <strong>NLP &amp; Generative AI</strong>, <strong>Cybersecurity</strong>, <strong>Cloud &amp; Distributed Systems</strong>, and <strong>Robotics &amp; Automation</strong>.
         </p>
 
-        <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:24px;">
+        <!-- Feature Points -->
+        <div style="margin:20px 0 28px; display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:flex-start; gap:10px; font-size:0.92rem; color:#334155;">
+            <i class="bi bi-check-circle-fill" style="color:var(--accent-gold); font-size:1.1rem; margin-top:2px;"></i>
+            <span><strong>Rigorous Peer Review:</strong> High-integrity double-blind review process by an international program committee.</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:10px; font-size:0.92rem; color:#334155;">
+            <i class="bi bi-check-circle-fill" style="color:var(--accent-gold); font-size:1.1rem; margin-top:2px;"></i>
+            <span><strong>Conference Proceedings:</strong> All accepted, registered, and presented papers published in official conference proceedings.</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:10px; font-size:0.92rem; color:#334155;">
+            <i class="bi bi-check-circle-fill" style="color:var(--accent-gold); font-size:1.1rem; margin-top:2px;"></i>
+            <span><strong>Recognition &amp; Awards:</strong> Best Research Paper and Outstanding Student Innovation awards presented in every technical track.</span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
           <a href="{{ url_for('main.about') }}" class="btn btn-navy">
             Detailed About Conference <i class="bi bi-arrow-right"></i>
           </a>
@@ -166,15 +239,23 @@
       <span class="section-subtitle">Conference Timeline</span>
       <h2 class="section-title">Important Deadlines &amp; Dates</h2>
       <p class="section-description">
-        Key timeline milestones for research manuscript submissions, peer review notifications, and registration.
+        Key timeline milestones for research manuscript submissions, peer review notifications, camera-ready submissions, and author registration.
       </p>
     </div>
 
     <div class="dates-grid">
       {% for d in dates %}
-      <div class="date-card {% if loop.first %}active-date{% endif %}">
-        <div class="date-status">
-          <span class="badge badge-gold">Milestone 0{{ loop.index }}</span>
+      <div class="date-card {% if d.status_badge == 'Open' %}active-date{% endif %}">
+        <div class="date-status" style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="badge {% if d.status_badge == 'Open' %}badge-gold{% elif d.status_badge == 'Completed' %}badge-navy{% else %}badge-gold{% endif %}">
+            Milestone 0{{ loop.index }}
+          </span>
+          {% if d.status_badge == 'Open' %}
+            <span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:700; color:#059669;">
+              <span style="width:8px; height:8px; border-radius:50%; background:#10b981; display:inline-block; animation:pulse 1.5s infinite;"></span>
+              Active
+            </span>
+          {% endif %}
         </div>
         <div class="date-val">{{ d.date_value }}</div>
         <div class="date-title">{{ d.title }}</div>
@@ -195,8 +276,51 @@
   </div>
 </section>
 
-<!-- Keynote Speakers Section -->
+<!-- Conference Technical Tracks Overview Section -->
 <section class="section">
+  <div class="container">
+    
+    <div class="section-header">
+      <span class="section-subtitle">Technical Scope</span>
+      <h2 class="section-title">Conference Tracks &amp; Domains</h2>
+      <p class="section-description">
+        Original, unpublished research manuscripts are invited across six core technical tracks spanning big data systems, intelligent algorithms, and applied computing.
+      </p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px;">
+      {% for track in tracks %}
+      <div style="background:#ffffff; border:1px solid var(--border-light); border-radius:var(--radius-md); padding:26px; box-shadow:var(--shadow-sm); transition:all 0.25s ease; border-top:3px solid var(--accent-gold); display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <span class="badge badge-gold" style="font-size:0.75rem;">{{ track.code }}</span>
+            <div style="width:40px; height:40px; border-radius:8px; background:rgba(0,16,64,0.06); color:var(--primary-navy); display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
+              <i class="bi {{ track.icon }}"></i>
+            </div>
+          </div>
+          <h3 style="font-size:1.18rem; color:var(--primary-navy); margin-bottom:8px;">{{ track.title }}</h3>
+          <p style="font-size:0.88rem; color:#64748b; line-height:1.55; margin-bottom:14px;">
+            {{ track.description }}
+          </p>
+        </div>
+        <div style="border-top:1px solid #f1f5f9; padding-top:12px; font-size:0.8rem; color:#475569;">
+          <strong>Key Topics:</strong> {{ track.topics.replace('\n', ' • ') }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div style="text-align:center; margin-top:36px;">
+      <a href="{{ url_for('main.tracks') }}" class="btn btn-navy">
+        View Detailed Track Topics &amp; Scope <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Keynote Speakers Section -->
+<section class="section section-alt">
   <div class="container">
     
     <div class="section-header">
@@ -217,12 +341,12 @@
         <div class="speaker-info">
           <h4 class="speaker-name">{{ speaker.name }}</h4>
           <div class="speaker-desig">{{ speaker.designation }}</div>
-          <div class="speaker-inst"><i class="bi bi-building"></i> {{ speaker.institution }}</div>
+          <div class="speaker-inst"><i class="bi bi-building"></i> {{ speaker.institution }} &bull; {{ speaker.country }}</div>
           
           {% if speaker.session_topic %}
           <div class="speaker-topic">
             <strong>Keynote Topic:</strong><br>
-            {{ speaker.session_topic }}
+            "{{ speaker.session_topic }}"
           </div>
           {% endif %}
         </div>
@@ -262,6 +386,10 @@
             <i class="bi bi-envelope-fill" style="color:var(--accent-gold); font-size:1.2rem;"></i>
             <span><strong>Secretariat:</strong> {{ CONF_EMAIL }}</span>
           </div>
+          <div style="display:flex; align-items:center; gap:12px; color:#ffffff;">
+            <i class="bi bi-telephone-fill" style="color:var(--accent-gold); font-size:1.2rem;"></i>
+            <span><strong>Phone:</strong> {{ CONF_PHONE }}</span>
+          </div>
         </div>
         <div style="display:flex; gap:14px; flex-wrap:wrap;">
           <a href="{{ url_for('main.venue') }}" class="btn btn-primary">
@@ -277,7 +405,7 @@
         <i class="bi bi-pin-map-fill" style="font-size:3.2rem; color:var(--accent-gold); margin-bottom:14px; display:inline-block;"></i>
         <h3 style="color:#ffffff; font-size:1.35rem; margin-bottom:8px;">Sapthagiri NPS University</h3>
         <p style="color:#cbd5e1; font-size:0.92rem; margin-bottom:24px;">
-          Bengaluru, Karnataka, India
+          Chikkasandra, Hesaraghatta Main Road, Bengaluru, Karnataka, India
         </p>
         <a href="https://maps.google.com/?q=Sapthagiri+NPS+University+Bengaluru" target="_blank" rel="noopener" class="btn btn-outline-gold" style="width:100%;">
           <i class="bi bi-geo-alt"></i> Open in Google Maps
@@ -286,5 +414,13 @@
     </div>
   </div>
 </section>
+
+<style>
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+</style>
 
 {% endblock %}

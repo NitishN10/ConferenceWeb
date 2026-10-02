@@ -1,36 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}Project Team Entry Portal | ICBDTT-2026 Sapthagiri NPS University{% endblock %}
+{% block title %}Project Team Entry Portal | {{ CONF_BRAND }} Sapthagiri NPS University{% endblock %}
 
 {% block content %}
 
-<!-- Header Banner -->
-<section style="background: linear-gradient(135deg, #001040 0%, #000c30 100%); color: #ffffff; padding: 44px 0 40px; border-bottom: 3px solid var(--accent-gold);">
-  <div class="container">
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+<!-- Official Registration Portal Container -->
+<section style="background-color: #f8fafc; padding: 40px 0 80px; min-height: 80vh;">
+  <div class="container" style="max-width: 1020px;">
+
+    <!-- Top Header matching screenshot -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
       <div>
-        <span class="badge badge-gold" style="margin-bottom: 8px; text-transform:uppercase; font-size:0.75rem; letter-spacing:0.08em;">Official Registration</span>
-        <h1 style="color:#ffffff; font-size:2.2rem; font-weight:800; margin-bottom:6px; letter-spacing:-0.02em;">Project Team Entry Portal</h1>
-        <p style="color:#cbd5e1; font-size:0.98rem; max-width:680px; margin:0;">
-          Submit your project innovation, configure your team roster (2–5 students), and complete official registration for <strong>ICBDTT-2026 / Project Expo</strong> at Sapthagiri NPS University.
-        </p>
+        <div class="reg-portal-eyebrow">{{ CONF_BRAND }} &bull; OFFICIAL REGISTRATION</div>
+        <h1 class="reg-portal-title">Project Team Entry Portal</h1>
       </div>
       <div>
-        <button type="button" id="btn-reset-form-trigger" class="btn" style="background:#ffffff; color:#334155; border:1px solid #cbd5e1; font-size:0.85rem; padding:8px 16px; border-radius:6px; font-weight:600; display:inline-flex; align-items:center; gap:8px; box-shadow:0 1px 2px rgba(0,0,0,0.05);" title="Clear form draft and start over">
+        <button type="button" id="btn-reset-form" class="btn-reset-form" title="Clear form draft and start over">
           <i class="bi bi-arrow-counterclockwise"></i> Reset Form
         </button>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="section" style="padding: 36px 0 70px; background-color: #f8fafc;">
-  <div class="container container-narrow" style="max-width: 900px;">
-
-    <!-- 5-Step Progress Steps Indicator -->
+    <!-- 5-Step Stepper Progress Bar -->
     <div class="reg-stepper-card">
       <nav aria-label="Registration Progress">
         <ol class="reg-steps-list" id="stepper-nav">
+          
           <!-- Step 1: Team Leader -->
           <li class="reg-step-item active" data-step="1">
             <button type="button" class="reg-step-btn" data-step-target="1">
@@ -41,8 +36,9 @@
               </div>
             </button>
           </li>
+          <li class="reg-step-connector" id="connector-1"></li>
 
-          <!-- Step 2: Team Members -->
+          <!-- Step 2: Members -->
           <li class="reg-step-item" data-step="2">
             <button type="button" class="reg-step-btn" data-step-target="2" disabled>
               <span class="reg-step-circle">2</span>
@@ -52,8 +48,9 @@
               </div>
             </button>
           </li>
+          <li class="reg-step-connector" id="connector-2"></li>
 
-          <!-- Step 3: Project Details -->
+          <!-- Step 3: Project -->
           <li class="reg-step-item" data-step="3">
             <button type="button" class="reg-step-btn" data-step-target="3" disabled>
               <span class="reg-step-circle">3</span>
@@ -63,6 +60,7 @@
               </div>
             </button>
           </li>
+          <li class="reg-step-connector" id="connector-3"></li>
 
           <!-- Step 4: Review -->
           <li class="reg-step-item" data-step="4">
@@ -74,6 +72,7 @@
               </div>
             </button>
           </li>
+          <li class="reg-step-connector" id="connector-4"></li>
 
           <!-- Step 5: Payment -->
           <li class="reg-step-item" data-step="5">
@@ -81,496 +80,705 @@
               <span class="reg-step-circle">5</span>
               <div class="reg-step-text">
                 <span class="reg-step-title">Step 5 — Payment</span>
-                <span class="reg-step-subtitle">&#8377;500 fee</span>
+                <span class="reg-step-subtitle">₹500 fee</span>
               </div>
             </button>
           </li>
+
         </ol>
       </nav>
     </div>
 
     <!-- Alert / Validation Notice Container -->
-    <div id="step-error-alert" style="display:none; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:14px 18px; margin-bottom:24px; color:#991b1b; font-size:0.88rem;">
+    <div id="step-error-alert" style="display:none; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:14px 18px; margin-bottom:20px; color:#991b1b;">
       <div style="display:flex; align-items:flex-start; gap:10px;">
         <i class="bi bi-exclamation-triangle-fill" style="font-size:1.1rem; color:#dc2626; margin-top:2px;"></i>
-        <div id="step-error-text" style="flex:1; line-height:1.5;"></div>
+        <div id="step-error-text" style="flex:1; line-height:1.5; font-size:0.88rem;"></div>
       </div>
     </div>
 
     <!-- Main Multi-Step Form Card -->
-    <div class="form-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; box-shadow:0 4px 16px rgba(0,16,64,0.06); padding:32px 36px;">
-      
-      <form id="multi-step-reg-form" action="{{ url_for('registration.register') }}" method="POST">
+    <div class="reg-main-card">
+      <form id="project-team-reg-form" action="{{ url_for('registration.register') }}" method="POST" novalidate>
         
-        <!-- ===================================================================
-             STEP 1: TEAM LEADER INFO
-             =================================================================== -->
-        <div class="reg-step-content" id="step-panel-1" style="display:block;">
-          <div style="border-bottom:1px solid #e2e8f0; padding-bottom:14px; margin-bottom:24px;">
-            <h2 style="font-size:1.4rem; font-weight:700; color:var(--primary-navy); margin:0 0 4px; display:flex; align-items:center; gap:10px;">
-              <i class="bi bi-person-badge-fill" style="color:var(--accent-gold);"></i> Team Leader Information
-            </h2>
-            <p style="font-size:0.85rem; color:#64748b; margin:0;">
-              Enter the primary point of contact and team leader details for institutional notifications.
-            </p>
-          </div>
+        <!-- Hidden Metadata Fields -->
+        <input type="hidden" name="participant_type" value="Project Team Entry (2-5 Students)">
+        <input type="hidden" name="institution" value="Sapthagiri NPS University (SNPSU)">
+        <input type="hidden" name="designation" value="Student Team Leader">
+        <input type="hidden" name="country" value="India">
+        <input type="hidden" id="team_members_payload" name="team_members" value="[]">
+        <input type="hidden" id="hidden_amount_paid" name="amount_paid" value="₹ 500">
+        <input type="hidden" id="hidden_payment_status" name="payment_status" value="Confirmed">
 
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label" for="leader_name">Team Leader Full Name <span class="req">*</span></label>
+        <!-- ===================================================================
+             STEP 1: TEAM LEADER INFO (EXACTLY MATCHING SCREENSHOT)
+             =================================================================== -->
+        <div class="reg-step-panel" id="step-panel-1" style="display:block;">
+          
+          <h2 class="reg-section-title">Create Your Team</h2>
+          <p class="reg-section-subtitle">
+            The team leader will complete the registration on behalf of the entire team and act as the primary point of contact for all expo communications.
+          </p>
+
+          <div class="reg-form-grid">
+            
+            <!-- Full Name -->
+            <div class="reg-form-field">
+              <label class="reg-field-label" for="leader_name">
+                FULL NAME <span class="req">*</span>
+              </label>
               <div class="input-icon-wrap">
                 <i class="bi bi-person"></i>
-                <input type="text" id="leader_name" name="leader_name" class="form-input" placeholder="e.g. Rahul Sharma" required>
+                <input type="text" id="leader_name" name="name" class="form-input" placeholder="e.g. Nitish N" required autocomplete="name">
               </div>
-              <span class="form-helper">Official full name as registered in college records.</span>
+              <span class="form-helper-text">Enter your official name as shown on college ID card.</span>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="leader_srn">SRN / USN / Student ID <span class="req">*</span></label>
+            <!-- SRN -->
+            <div class="reg-form-field">
+              <label class="reg-field-label" for="leader_srn">
+                SRN (STUDENT REGISTRATION NUMBER) <span class="req">*</span>
+              </label>
               <div class="input-icon-wrap">
-                <i class="bi bi-card-text"></i>
-                <input type="text" id="leader_srn" name="leader_srn" class="form-input" placeholder="e.g. 1MS21CS042" style="font-family:monospace; text-transform:uppercase;" required>
+                <i class="bi bi-hash"></i>
+                <input type="text" id="leader_srn" name="srn" class="form-input" placeholder="e.g. 1RV23CS001" style="text-transform:uppercase;" required autocomplete="off">
               </div>
-              <span class="form-helper">University Registration Number.</span>
+              <span class="form-helper-text">Format: 1XX23CS001 or equivalent institutional identifier.</span>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="leader_email">College Email Address <span class="req">*</span></label>
+            <!-- College Email -->
+            <div class="reg-form-field">
+              <label class="reg-field-label" for="leader_email">
+                COLLEGE EMAIL ADDRESS <span class="req">*</span>
+              </label>
               <div class="input-icon-wrap">
                 <i class="bi bi-envelope"></i>
-                <input type="email" id="leader_email" name="leader_email" class="form-input" placeholder="e.g. rahul.sharma@snpsu.edu.in" required>
+                <input type="email" id="leader_email" name="email" class="form-input" placeholder="e.g. name12@gmail.com" required autocomplete="email" pattern="[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}" title="Format: name12@gmail.com">
               </div>
-              <span class="form-helper">Registration voucher and instructions will be sent here.</span>
+              <span class="form-helper-text">Format: name12@gmail.com &bull; Confirmation receipt and desk allocations will be sent here.</span>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="leader_phone">Phone / WhatsApp Number <span class="req">*</span></label>
+            <!-- Mobile Phone -->
+            <div class="reg-form-field">
+              <label class="reg-field-label" for="leader_phone">
+                MOBILE PHONE NUMBER <span class="req">*</span>
+              </label>
               <div class="input-icon-wrap">
                 <i class="bi bi-telephone"></i>
-                <input type="tel" id="leader_phone" name="leader_phone" class="form-input" placeholder="e.g. +91 98765 43210" required>
+                <input type="tel" id="leader_phone" name="phone" class="form-input" placeholder="e.g. 9845012345" required autocomplete="tel">
               </div>
-              <span class="form-helper">For emergency event day coordination.</span>
+              <span class="form-helper-text">Include 10 digits for SMS alerts on evaluation schedule.</span>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="leader_department">Department <span class="req">*</span></label>
-              <select id="leader_department" name="leader_department" class="form-select" required>
+            <!-- Department -->
+            <div class="reg-form-field">
+              <label class="reg-field-label" for="leader_department">
+                DEPARTMENT <span class="req">*</span>
+              </label>
+              <select id="leader_department" name="department" class="form-input form-select-custom" required>
                 <option value="Computer Science &amp; Engineering" selected>Computer Science &amp; Engineering</option>
                 <option value="Information Science &amp; Engineering">Information Science &amp; Engineering</option>
-                <option value="Artificial Intelligence &amp; Data Science">Artificial Intelligence &amp; Data Science</option>
+                <option value="Artificial Intelligence &amp; Machine Learning">Artificial Intelligence &amp; Machine Learning</option>
+                <option value="Data Science &amp; Analytics">Data Science &amp; Analytics</option>
                 <option value="Electronics &amp; Communication Engineering">Electronics &amp; Communication Engineering</option>
                 <option value="Electrical &amp; Electronics Engineering">Electrical &amp; Electronics Engineering</option>
                 <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Biotechnology">Biotechnology</option>
                 <option value="Civil Engineering">Civil Engineering</option>
-                <option value="Biotechnology / Biomedical">Biotechnology / Biomedical</option>
+                <option value="Master of Computer Applications (MCA)">Master of Computer Applications (MCA)</option>
                 <option value="Other Department">Other Department</option>
               </select>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="leader_semester">Current Semester <span class="req">*</span></label>
-              <select id="leader_semester" name="leader_semester" class="form-select" required>
-                <option value="1st">1st Semester</option>
-                <option value="2nd">2nd Semester</option>
-                <option value="3rd">3rd Semester</option>
-                <option value="4th">4th Semester</option>
-                <option value="5th">5th Semester</option>
-                <option value="6th" selected>6th Semester</option>
-                <option value="7th">7th Semester</option>
-                <option value="8th">8th Semester</option>
-                <option value="PG / Post Graduate">PG / Post Graduate</option>
+            <!-- Current Semester -->
+            <div class="reg-form-field">
+              <label class="reg-field-label" for="leader_semester">
+                CURRENT SEMESTER <span class="req">*</span>
+              </label>
+              <select id="leader_semester" name="semester" class="form-input form-select-custom" required>
+                <option value="1st Semester">1st Semester</option>
+                <option value="2nd Semester">2nd Semester</option>
+                <option value="3rd Semester">3rd Semester</option>
+                <option value="4th Semester">4th Semester</option>
+                <option value="5th Semester">5th Semester</option>
+                <option value="6th Semester" selected>6th Semester</option>
+                <option value="7th Semester">7th Semester</option>
+                <option value="8th Semester">8th Semester</option>
               </select>
             </div>
+
           </div>
 
-          <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; padding:14px 18px; margin-top:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-            <div style="font-size:0.85rem; color:#475569;">
-              <strong>Institution:</strong> {{ CONF_HOST }} (Bengaluru Campus)
+          <!-- Step 1 Footer -->
+          <div class="reg-footer-bar">
+            <div>
+              <span style="color:#ef4444; font-weight:700;">*</span>
+              <span style="color:#64748b; font-size:0.85rem;">All fields are mandatory</span>
             </div>
-            <div style="font-size:0.8rem; color:#64748b;">
-              Role: <span class="badge badge-navy" style="font-size:0.75rem;">Team Leader</span>
+            <div>
+              <button type="button" id="btn-next-step-1" class="btn-step-next">
+                <span>Proceed to Team Members</span>
+                <i class="bi bi-arrow-right"></i>
+              </button>
             </div>
           </div>
 
-          <!-- Navigation -->
-          <div style="display:flex; justify-content:flex-end; margin-top:28px; padding-top:20px; border-top:1px solid #e2e8f0;">
-            <button type="button" id="btn-next-step-1" class="btn btn-primary" style="padding:10px 24px;">
-              <span>Next: Add Team Members</span> <i class="bi bi-arrow-right"></i>
-            </button>
-          </div>
         </div>
 
         <!-- ===================================================================
-             STEP 2: TEAM MEMBERS (2 TO 5 STUDENTS TOTAL)
+             STEP 2: TEAM MEMBERS (2–5 STUDENTS TOTAL)
              =================================================================== -->
-        <div class="reg-step-content" id="step-panel-2" style="display:none;">
-          <div style="border-bottom:1px solid #e2e8f0; padding-bottom:14px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-            <div>
-              <h2 style="font-size:1.4rem; font-weight:700; color:var(--primary-navy); margin:0 0 4px; display:flex; align-items:center; gap:10px;">
-                <i class="bi bi-people-fill" style="color:var(--accent-gold);"></i> Team Members Roster
-              </h2>
-              <p style="font-size:0.85rem; color:#64748b; margin:0;">
-                Add additional student members. Minimum team size is <strong>2 students</strong> and maximum is <strong>5 students</strong> (including Leader).
-              </p>
+        <div class="reg-step-panel" id="step-panel-2" style="display:none;">
+          
+          <h2 class="reg-section-title">Add Team Members</h2>
+          <p class="reg-section-subtitle">
+            A project team requires the Team Leader plus 1 to 4 additional student members (total 2 to 5 students). Add your team members below.
+          </p>
+
+          <!-- Leader Recap Pill -->
+          <div style="background:#f1f5f9; border:1px solid #e2e8f0; border-radius:8px; padding:12px 18px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="background:#0b1f51; color:#ffffff; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:4px;">Team Leader</span>
+              <span id="recap-leader-info" style="font-weight:700; color:#0f172a; font-size:0.92rem;">Leader Name</span>
             </div>
-            <span id="team-size-counter-badge" class="badge badge-gold" style="font-size:0.82rem; padding:6px 14px;">
-              Total Team Size: 2 Students
+            <div style="font-size:0.82rem; color:#64748b;">
+              Total Members: <strong id="team-count-badge" style="color:#0b1f51;">2 Students</strong> (Max: 5)
+            </div>
+          </div>
+
+          <!-- Dynamic Team Members Container -->
+          <div id="team-members-container" style="display:flex; flex-direction:column; gap:20px;">
+
+            <!-- Member 2 (Required) -->
+            <div class="team-member-card" data-member-index="2" style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:10px; padding:20px; position:relative;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">
+                <h3 style="font-size:1.05rem; font-weight:700; color:#0b1f51; margin:0; display:flex; align-items:center; gap:8px;">
+                  <i class="bi bi-person-fill" style="color:#14378f;"></i> Team Member 2 <span style="color:#ef4444; font-size:0.9rem;">*</span>
+                </h3>
+                <span class="badge" style="background:#e0e7ff; color:#3730a3; font-size:0.72rem; font-weight:600; padding:2px 8px; border-radius:4px;">Mandatory Member</span>
+              </div>
+
+              <div class="reg-form-grid">
+                <div class="reg-form-field">
+                  <label class="reg-field-label">FULL NAME <span class="req">*</span></label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-person"></i>
+                    <input type="text" class="form-input member-name" placeholder="e.g. Rahul Sharma" required>
+                  </div>
+                  <span class="form-helper-text">Official name for certificate.</span>
+                </div>
+
+                <div class="reg-form-field">
+                  <label class="reg-field-label">SRN (STUDENT REGISTRATION NUMBER) <span class="req">*</span></label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-hash"></i>
+                    <input type="text" class="form-input member-srn" placeholder="e.g. 1RV23CS045" style="text-transform:uppercase;" required>
+                  </div>
+                  <span class="form-helper-text">Format: 1XX23CS001</span>
+                </div>
+
+                <div class="reg-form-field" style="grid-column: 1 / -1;">
+                  <label class="reg-field-label">COLLEGE EMAIL ADDRESS <span class="req">*</span></label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-envelope"></i>
+                    <input type="email" class="form-input member-email" placeholder="e.g. name12@gmail.com" required pattern="[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}" title="Format: name12@gmail.com">
+                  </div>
+                  <span class="form-helper-text">Format: name12@gmail.com &bull; Entry badge and schedule sent here.</span>
+                </div>
+
+                <div class="reg-form-field">
+                  <label class="reg-field-label">DEPARTMENT</label>
+                  <select class="form-input form-select-custom member-dept">
+                    <option value="Computer Science &amp; Engineering" selected>Computer Science &amp; Engineering</option>
+                    <option value="Information Science &amp; Engineering">Information Science &amp; Engineering</option>
+                    <option value="Artificial Intelligence &amp; Machine Learning">Artificial Intelligence &amp; Machine Learning</option>
+                    <option value="Data Science &amp; Analytics">Data Science &amp; Analytics</option>
+                    <option value="Electronics &amp; Communication Engineering">Electronics &amp; Communication Engineering</option>
+                    <option value="Electrical &amp; Electronics Engineering">Electrical &amp; Electronics Engineering</option>
+                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    <option value="Biotechnology">Biotechnology</option>
+                    <option value="Civil Engineering">Civil Engineering</option>
+                    <option value="Master of Computer Applications (MCA)">Master of Computer Applications (MCA)</option>
+                    <option value="Other Department">Other Department</option>
+                  </select>
+                </div>
+
+                <div class="reg-form-field">
+                  <label class="reg-field-label">CURRENT SEMESTER</label>
+                  <select class="form-input form-select-custom member-sem">
+                    <option value="1st Semester">1st Semester</option>
+                    <option value="2nd Semester">2nd Semester</option>
+                    <option value="3rd Semester">3rd Semester</option>
+                    <option value="4th Semester">4th Semester</option>
+                    <option value="5th Semester">5th Semester</option>
+                    <option value="6th Semester" selected>6th Semester</option>
+                    <option value="7th Semester">7th Semester</option>
+                    <option value="8th Semester">8th Semester</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Member 3, 4, 5 will be injected here -->
+            <div id="dynamic-members-list" style="display:flex; flex-direction:column; gap:20px;"></div>
+
+          </div>
+
+          <!-- Add Member Button Container -->
+          <div style="margin-top:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <button type="button" id="btn-add-member" class="btn" style="background:#ffffff; border:1.5px dashed #14378f; color:#14378f; font-weight:700; font-size:0.9rem; padding:10px 18px; border-radius:8px; display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
+              <i class="bi bi-plus-circle-fill"></i> <span id="add-member-text">+ Add Another Team Member (Slot 3 of 5)</span>
+            </button>
+            <span style="font-size:0.8rem; color:#64748b;">
+              <i class="bi bi-info-circle"></i> Min 2 students, Max 5 students per team
             </span>
           </div>
 
-          <!-- Leader Summary Pill -->
-          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px 18px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <span style="width:26px; height:26px; background:#1e40af; color:#ffffff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700;">1</span>
-              <div>
-                <span id="summary-leader-name" style="font-weight:700; color:#1e3a8a; font-size:0.92rem;">Team Leader</span>
-                <span id="summary-leader-srn" style="font-size:0.82rem; color:#3b82f6; font-family:monospace; margin-left:6px;"></span>
-              </div>
+          <!-- Step 2 Footer -->
+          <div class="reg-footer-bar">
+            <div>
+              <button type="button" id="btn-prev-step-2" class="btn-step-prev">
+                <i class="bi bi-arrow-left"></i> <span>Back to Leader Info</span>
+              </button>
             </div>
-            <span class="badge badge-navy" style="font-size:0.75rem;">Team Leader (Registered in Step 1)</span>
-          </div>
-
-          <!-- Dynamic Container for Additional Members -->
-          <div id="members-container" style="display:flex; flex-direction:column; gap:18px;">
-            <!-- Member cards will be rendered dynamically by JavaScript -->
-          </div>
-
-          <!-- Add Member Button Bar -->
-          <div style="margin-top:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:8px; padding:14px 18px;">
-            <div style="font-size:0.85rem; color:#64748b;">
-              Need to add another student to your project group?
+            <div>
+              <button type="button" id="btn-next-step-2" class="btn-step-next">
+                <span>Proceed to Project Details</span>
+                <i class="bi bi-arrow-right"></i>
+              </button>
             </div>
-            <button type="button" id="btn-add-member" class="btn" style="background:#ffffff; border:1px solid #001040; color:var(--primary-navy); font-weight:600; font-size:0.85rem; padding:7px 16px; border-radius:6px; display:inline-flex; align-items:center; gap:6px;">
-              <i class="bi bi-person-plus-fill"></i> + Add Team Member
-            </button>
           </div>
 
-          <!-- Navigation -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:28px; padding-top:20px; border-top:1px solid #e2e8f0;">
-            <button type="button" class="btn btn-outline-navy" data-back-to="1">
-              <i class="bi bi-arrow-left"></i> Back to Team Leader
-            </button>
-            <button type="button" id="btn-next-step-2" class="btn btn-primary" style="padding:10px 24px;">
-              <span>Next: Project Details</span> <i class="bi bi-arrow-right"></i>
-            </button>
-          </div>
         </div>
 
         <!-- ===================================================================
-             STEP 3: PROJECT & ABSTRACT DETAILS
+             STEP 3: PROJECT ABSTRACT & TRACK
              =================================================================== -->
-        <div class="reg-step-content" id="step-panel-3" style="display:none;">
-          <div style="border-bottom:1px solid #e2e8f0; padding-bottom:14px; margin-bottom:24px;">
-            <h2 style="font-size:1.4rem; font-weight:700; color:var(--primary-navy); margin:0 0 4px; display:flex; align-items:center; gap:10px;">
-              <i class="bi bi-lightbulb-fill" style="color:var(--accent-gold);"></i> Tell Us About Your Project
-            </h2>
-            <p style="font-size:0.85rem; color:#64748b; margin:0;">
-              Provide your project innovation summary. This information is submitted to the evaluation committee and jury panel.
-            </p>
-          </div>
+        <div class="reg-step-panel" id="step-panel-3" style="display:none;">
+          
+          <h2 class="reg-section-title">Project Submission &amp; Domain Track</h2>
+          <p class="reg-section-subtitle">
+            Provide your project synopsis, conference domain track, abstract summary, and faculty guide details for the jury panel.
+          </p>
 
           <div style="display:flex; flex-direction:column; gap:20px;">
+            
             <!-- Project Title -->
-            <div class="form-group">
-              <label class="form-label" for="project_title">Project Name / Title <span class="req">*</span></label>
+            <div class="reg-form-field">
+              <label class="reg-field-label" for="project_title">
+                PROJECT TITLE <span class="req">*</span>
+              </label>
               <div class="input-icon-wrap">
-                <i class="bi bi-cpu"></i>
-                <input type="text" id="project_title" name="project_title" class="form-input" placeholder="e.g. AI-Powered Autonomous Crop Disease Detection and Remediation" required>
+                <i class="bi bi-lightbulb"></i>
+                <input type="text" id="project_title" name="project_title" class="form-input" placeholder="e.g. Real-Time Distributed Traffic Flow Optimization using Big Data &amp; AI" required>
               </div>
-              <span class="form-helper">Give your project a concise, descriptive title (minimum 5 characters).</span>
+              <span class="form-helper-text">Full descriptive title of your project presentation or research prototype.</span>
             </div>
 
-            <!-- Project Category / Track -->
-            <div class="form-group">
-              <label class="form-label" for="project_category">Project Category / Track <span class="req">*</span></label>
-              <select id="project_category" name="project_category" class="form-select" required>
-                <option value="">-- Select Project Category --</option>
-                <option value="Artificial Intelligence &amp; Machine Learning">Artificial Intelligence &amp; Machine Learning</option>
-                <option value="Big Data Tools &amp; Distributed Infrastructure">Big Data Tools &amp; Distributed Infrastructure</option>
-                <option value="Data Science &amp; Predictive Analytics">Data Science &amp; Predictive Analytics</option>
-                <option value="Web Development &amp; Cloud Systems">Web Development &amp; Cloud Systems</option>
-                <option value="Cybersecurity &amp; Information Privacy">Cybersecurity &amp; Information Privacy</option>
-                <option value="IoT &amp; Embedded Smart Systems">IoT &amp; Embedded Smart Systems</option>
-                <option value="Healthcare &amp; Biomedical Informatics">Healthcare &amp; Biomedical Informatics</option>
-                <option value="Sustainability, Green Tech &amp; Smart Cities">Sustainability, Green Tech &amp; Smart Cities</option>
-                <option value="Other Emerging Technology">Other Emerging Technology</option>
-              </select>
-              <span class="form-helper">Select the category that best matches your project's primary domain.</span>
+            <!-- Track & Tech Grid -->
+            <div class="reg-form-grid">
+              
+              <!-- Conference Topic / Domain Track -->
+              <div class="reg-form-field">
+                <label class="reg-field-label" for="project_category">
+                  PROPOSED CONFERENCE TOPIC / TRACK <span class="req">*</span>
+                </label>
+                <select id="project_category" name="project_category" class="form-input form-select-custom" required>
+                  <option value="Artificial Intelligence and Machine Learning" selected>Artificial Intelligence and Machine Learning</option>
+                  <option value="Data Science, Big Data and Data Analytics">Data Science, Big Data and Data Analytics</option>
+                  <option value="Computer Vision and Image Processing">Computer Vision and Image Processing</option>
+                  <option value="Natural Language Processing and Generative AI">Natural Language Processing and Generative AI</option>
+                  <option value="Cybersecurity, Privacy and Digital Forensics">Cybersecurity, Privacy and Digital Forensics</option>
+                  <option value="Internet of Things and Edge Computing">Internet of Things and Edge Computing</option>
+                  <option value="Cloud Computing and Distributed Systems">Cloud Computing and Distributed Systems</option>
+                  <option value="Blockchain and Emerging Computing Technologies">Blockchain and Emerging Computing Technologies</option>
+                  <option value="Computer Networks and Communication Systems">Computer Networks and Communication Systems</option>
+                  <option value="Software Engineering, Testing and Agile Development">Software Engineering, Testing and Agile Development</option>
+                  <option value="Human–Computer Interaction and User Experience">Human–Computer Interaction and User Experience</option>
+                  <option value="Extended Reality, Virtual Reality and Spatial Computing">Extended Reality, Virtual Reality and Spatial Computing</option>
+                  <option value="Robotics, Automation and Intelligent Systems">Robotics, Automation and Intelligent Systems</option>
+                </select>
+                <span class="form-helper-text">Select the conference topic matching your team project or presentation.</span>
+              </div>
+
+              <!-- Tech Stack -->
+              <div class="reg-form-field">
+                <label class="reg-field-label" for="technologies">
+                  KEY TECHNOLOGIES &amp; TOOLS USED <span class="req">*</span>
+                </label>
+                <div class="input-icon-wrap">
+                  <i class="bi bi-cpu"></i>
+                  <input type="text" id="technologies" name="technologies" class="form-input" placeholder="e.g. Apache Spark, Python, PyTorch, React, Docker, Kafka" required>
+                </div>
+                <span class="form-helper-text">List programming languages, frameworks, or cloud platforms.</span>
+              </div>
+
             </div>
 
             <!-- Project Abstract -->
-            <div class="form-group">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <label class="form-label" for="project_abstract" style="margin:0;">Project Abstract <span class="req">*</span></label>
-                <span id="abstract-char-counter" style="font-size:0.78rem; color:#64748b; font-family:monospace;">0 / 2000 characters</span>
+            <div class="reg-form-field">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:7px;">
+                <label class="reg-field-label" for="project_abstract" style="margin-bottom:0;">
+                  PROJECT ABSTRACT / SYNOPSIS <span class="req">*</span>
+                </label>
+                <span id="abstract-word-count" style="font-size:0.75rem; color:#64748b; font-weight:600;">0 words</span>
               </div>
-              <textarea id="project_abstract" name="project_abstract" rows="6" class="form-textarea" placeholder="Describe the problem you are solving, your technical methodology, implementation architecture, and the measurable impact or results achieved (minimum 40 characters)..." required style="line-height:1.6;"></textarea>
-              <span class="form-helper">Briefly explain the problem, proposed solution, and expected impact (minimum 40 characters, max 2000).</span>
+              <textarea id="project_abstract" name="project_abstract" class="form-input" rows="5" style="height:auto; min-height:120px; padding:12px 16px; line-height:1.6;" placeholder="Describe the problem statement, proposed methodology, implementation details, key outcomes, and societal or industrial impact of your project (minimum 30 words)..." required></textarea>
+              <span class="form-helper-text">Brief synopsis for the conference technical committee and jury evaluation.</span>
             </div>
 
-            <!-- Optional Additional Info Section -->
-            <div style="border-top:1px solid #f1f5f9; padding-top:16px;">
-              <div style="font-size:0.78rem; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px;">
-                Additional Information (Optional)
+            <!-- Faculty Guide & Demo Link Grid -->
+            <div class="reg-form-grid">
+              
+              <div class="reg-form-field">
+                <label class="reg-field-label" for="mentor_name">
+                  FACULTY MENTOR / GUIDE NAME <span style="font-weight:normal; color:#94a3b8;">(OPTIONAL)</span>
+                </label>
+                <div class="input-icon-wrap">
+                  <i class="bi bi-person-workspace"></i>
+                  <input type="text" id="mentor_name" name="mentor_name" class="form-input" placeholder="e.g. Dr. Ramesh Kumar, Professor, Dept. of CSE">
+                </div>
+                <span class="form-helper-text">Faculty guide or project advisor from your department.</span>
               </div>
 
-              <div class="form-grid">
-                <div class="form-group">
-                  <label class="form-label" for="project_tech">Technologies Used</label>
-                  <div class="input-icon-wrap">
-                    <i class="bi bi-code-slash"></i>
-                    <input type="text" id="project_tech" name="project_tech" class="form-input" placeholder="e.g. Python, TensorFlow, React, FastAPI, Docker">
-                  </div>
-                  <span class="form-helper">Comma separated list of libraries, frameworks, or hardware.</span>
+              <div class="reg-form-field">
+                <label class="reg-field-label" for="project_link">
+                  GITHUB REPO / DEMO LINK <span style="font-weight:normal; color:#94a3b8;">(OPTIONAL)</span>
+                </label>
+                <div class="input-icon-wrap">
+                  <i class="bi bi-link-45deg"></i>
+                  <input type="url" id="project_link" name="project_link" class="form-input" placeholder="e.g. https://github.com/team/project-demo">
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label" for="project_mentor">Project Guide / Faculty Mentor</label>
-                  <div class="input-icon-wrap">
-                    <i class="bi bi-person-check"></i>
-                    <input type="text" id="project_mentor" name="project_mentor" class="form-input" placeholder="e.g. Dr. B. K. Muralidhara, Professor">
-                  </div>
-                  <span class="form-helper">Faculty advisor or industry mentor name and designation.</span>
-                </div>
+                <span class="form-helper-text">Link to code repository, demo video, or project portal.</span>
               </div>
+
+            </div>
+
+          </div>
+
+          <!-- Step 3 Footer -->
+          <div class="reg-footer-bar">
+            <div>
+              <button type="button" id="btn-prev-step-3" class="btn-step-prev">
+                <i class="bi bi-arrow-left"></i> <span>Back to Team Members</span>
+              </button>
+            </div>
+            <div>
+              <button type="button" id="btn-next-step-3" class="btn-step-next">
+                <span>Proceed to Review</span>
+                <i class="bi bi-arrow-right"></i>
+              </button>
             </div>
           </div>
 
-          <!-- Navigation -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:28px; padding-top:20px; border-top:1px solid #e2e8f0;">
-            <button type="button" class="btn btn-outline-navy" data-back-to="2">
-              <i class="bi bi-arrow-left"></i> Back to Team Members
-            </button>
-            <button type="button" id="btn-next-step-3" class="btn btn-primary" style="padding:10px 24px;">
-              <span>Review Registration</span> <i class="bi bi-arrow-right"></i>
-            </button>
-          </div>
         </div>
 
         <!-- ===================================================================
-             STEP 4: REVIEW DETAILS & DECLARATION
+             STEP 4: REVIEW & VERIFY DETAILS
              =================================================================== -->
-        <div class="reg-step-content" id="step-panel-4" style="display:none;">
-          <div style="border-bottom:1px solid #e2e8f0; padding-bottom:14px; margin-bottom:20px;">
-            <h2 style="font-size:1.4rem; font-weight:700; color:var(--primary-navy); margin:0 0 4px; display:flex; align-items:center; gap:10px;">
-              <i class="bi bi-clipboard-check-fill" style="color:var(--accent-gold);"></i> Review Your Registration
-            </h2>
-            <p style="font-size:0.85rem; color:#64748b; margin:0;">
-              Carefully inspect all entered team, member, and project details before proceeding to fee payment. Once submitted, leader and project details are archived for the jury.
-            </p>
-          </div>
+        <div class="reg-step-panel" id="step-panel-4" style="display:none;">
+          
+          <h2 class="reg-section-title">Review &amp; Verify Details</h2>
+          <p class="reg-section-subtitle">
+            Please review your team credentials, member roster, and project submission before proceeding to payment confirmation.
+          </p>
 
-          <!-- SECTION 1: Team Leader Review Card -->
-          <div style="border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
-            <div style="background:#f8fafc; padding:10px 16px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:0.75rem; font-weight:700; color:#334155; text-transform:uppercase; letter-spacing:0.06em;">
-                TEAM DETAILS &bull; TEAM LEADER
-              </span>
-              <button type="button" class="btn btn-sm btn-link" data-jump-step="1" style="color:var(--primary-navy); font-size:0.8rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:0;">
-                <i class="bi bi-pencil-square"></i> Edit Team
-              </button>
-            </div>
-            <div style="padding:16px; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; font-size:0.85rem;">
-              <div>
-                <span style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:600; display:block;">Team Leader Name</span>
-                <span id="rev-leader-name" style="font-weight:700; color:#0f172a; font-size:0.95rem;"></span>
-              </div>
-              <div>
-                <span style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:600; display:block;">SRN / USN</span>
-                <span id="rev-leader-srn" style="font-family:monospace; font-weight:700; color:#001040;"></span>
-              </div>
-              <div>
-                <span style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:600; display:block;">College Email</span>
-                <span id="rev-leader-email" style="color:#334155;"></span>
-              </div>
-              <div>
-                <span style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:600; display:block;">Department &amp; Sem</span>
-                <span id="rev-leader-dept" style="color:#334155; font-weight:600;"></span>
-              </div>
-            </div>
-          </div>
+          <div style="display:flex; flex-direction:column; gap:20px; margin-bottom:24px;">
 
-          <!-- SECTION 2: Team Members Table Review Card -->
-          <div style="border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
-            <div style="background:#f8fafc; padding:10px 16px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:0.75rem; font-weight:700; color:#334155; text-transform:uppercase; letter-spacing:0.06em;">
-                  TEAM MEMBERS ROSTER
+            <!-- Team Leader Review Card -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
+                <span style="font-size:0.8rem; font-weight:700; text-transform:uppercase; color:#0b1f51; letter-spacing:0.04em;">
+                  <i class="bi bi-person-badge"></i> Team Leader (Member 1)
                 </span>
-                <span id="rev-member-count-badge" class="badge badge-navy" style="font-size:0.7rem;"></span>
+                <button type="button" class="btn-link" onclick="window.projectRegStepper.goToStep(1)" style="background:none; border:none; color:#14378f; font-size:0.82rem; font-weight:700; cursor:pointer;">
+                  <i class="bi bi-pencil-square"></i> Edit
+                </button>
               </div>
-              <button type="button" class="btn btn-sm btn-link" data-jump-step="2" style="color:var(--primary-navy); font-size:0.8rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:0;">
-                <i class="bi bi-pencil-square"></i> Edit Members
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; font-size:0.88rem;">
+                <div>
+                  <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; display:block;">Full Name</span>
+                  <strong id="rev-leader-name" style="color:#0f172a;">-</strong>
+                </div>
+                <div>
+                  <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; display:block;">SRN / Reg No</span>
+                  <span id="rev-leader-srn" style="font-family:monospace; font-weight:700; color:#0b1f51;">-</span>
+                </div>
+                <div>
+                  <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; display:block;">Email Address</span>
+                  <span id="rev-leader-email" style="color:#0f172a;">-</span>
+                </div>
+                <div>
+                  <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; display:block;">Phone &amp; Department</span>
+                  <span id="rev-leader-dept" style="color:#0f172a;">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Team Members Roster Review Card -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
+                <span style="font-size:0.8rem; font-weight:700; text-transform:uppercase; color:#0b1f51; letter-spacing:0.04em;">
+                  <i class="bi bi-people"></i> Additional Team Members Roster
+                </span>
+                <button type="button" class="btn-link" onclick="window.projectRegStepper.goToStep(2)" style="background:none; border:none; color:#14378f; font-size:0.82rem; font-weight:700; cursor:pointer;">
+                  <i class="bi bi-pencil-square"></i> Edit
+                </button>
+              </div>
+              <div id="rev-members-list" style="display:flex; flex-direction:column; gap:10px;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Project Details Review Card -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
+                <span style="font-size:0.8rem; font-weight:700; text-transform:uppercase; color:#0b1f51; letter-spacing:0.04em;">
+                  <i class="bi bi-journal-code"></i> Project Submission
+                </span>
+                <button type="button" class="btn-link" onclick="window.projectRegStepper.goToStep(3)" style="background:none; border:none; color:#14378f; font-size:0.82rem; font-weight:700; cursor:pointer;">
+                  <i class="bi bi-pencil-square"></i> Edit
+                </button>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:10px; font-size:0.88rem;">
+                <div>
+                  <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; display:block;">Project Title</span>
+                  <strong id="rev-project-title" style="color:#0f172a; font-size:1rem;">-</strong>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
+                  <div>
+                    <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; display:block;">Track</span>
+                    <span id="rev-project-track" style="color:#0f172a;">-</span>
+                  </div>
+                  <div>
+                    <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; display:block;">Technologies</span>
+                    <span id="rev-project-tech" style="color:#0f172a;">-</span>
+                  </div>
+                  <div>
+                    <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; display:block;">Faculty Mentor</span>
+                    <span id="rev-project-mentor" style="color:#0f172a;">-</span>
+                  </div>
+                </div>
+                <div>
+                  <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; display:block;">Abstract Preview</span>
+                  <p id="rev-project-abstract" style="color:#475569; font-size:0.84rem; line-height:1.5; margin:4px 0 0; background:#ffffff; padding:10px 14px; border-radius:6px; border:1px solid #e2e8f0;">-</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fee Summary Card -->
+            <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:10px; padding:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                <div>
+                  <span style="font-size:0.75rem; text-transform:uppercase; color:#1e40af; font-weight:700; letter-spacing:0.04em; display:block;">Official Registration Tariff</span>
+                  <div style="font-size:1.15rem; font-weight:800; color:#1e3a8a;">Project Team Entry (2–5 Students)</div>
+                  <span style="font-size:0.82rem; color:#2563eb;">Flat all-inclusive fee for the entire student team</span>
+                </div>
+                <div style="text-align:right;">
+                  <span style="font-size:0.75rem; text-transform:uppercase; color:#64748b; display:block;">Total Fee</span>
+                  <div style="font-size:2rem; font-weight:800; color:#059669; line-height:1.1;">₹ 500</div>
+                </div>
+              </div>
+              <ul style="list-style:none; padding:0; margin:14px 0 0; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:8px; font-size:0.8rem; color:#1e3a8a; border-top:1px dashed #bfdbfe; padding-top:12px;">
+                <li><i class="bi bi-check-circle-fill" style="color:#2563eb;"></i> Dedicated Project Stall Allocation</li>
+                <li><i class="bi bi-check-circle-fill" style="color:#2563eb;"></i> Evaluation by Academic &amp; Industry Jury</li>
+                <li><i class="bi bi-check-circle-fill" style="color:#2563eb;"></i> Certificate of Presentation for all members</li>
+                <li><i class="bi bi-check-circle-fill" style="color:#2563eb;"></i> Official Conference Kits &amp; Lanyards</li>
+                <li><i class="bi bi-check-circle-fill" style="color:#2563eb;"></i> Project Abstract in {{ CONF_BRAND }} Proceedings</li>
+              </ul>
+            </div>
+
+            <!-- Mandatory Declaration Checkbox -->
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:16px 20px;">
+              <label style="display:flex; align-items:flex-start; gap:12px; cursor:pointer; font-size:0.88rem; color:#334155; line-height:1.5;">
+                <input type="checkbox" id="review-accuracy-checkbox" required style="width:18px; height:18px; margin-top:2px; accent-color:#0b1f51;">
+                <span>
+                  I hereby certify that all team member details and project submission information are authentic and genuine. The team agrees to present original work at Sapthagiri NPS University as per the conference schedule.
+                </span>
+              </label>
+            </div>
+
+          </div>
+
+          <!-- Step 4 Footer -->
+          <div class="reg-footer-bar">
+            <div>
+              <button type="button" id="btn-prev-step-4" class="btn-step-prev">
+                <i class="bi bi-arrow-left"></i> <span>Back to Project Details</span>
               </button>
             </div>
-            <div style="padding:0; overflow-x:auto;">
-              <table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:left;">
-                <thead style="background:#f1f5f9; color:#475569; font-size:0.75rem; text-transform:uppercase;">
-                  <tr>
-                    <th style="padding:10px 14px; width:40px;">#</th>
-                    <th style="padding:10px 14px;">Full Name</th>
-                    <th style="padding:10px 14px;">SRN / USN</th>
-                    <th style="padding:10px 14px;">Email</th>
-                    <th style="padding:10px 14px;">Department</th>
-                    <th style="padding:10px 14px;">Role</th>
-                  </tr>
-                </thead>
-                <tbody id="rev-members-table-body" style="divide-y:1px solid #e2e8f0;">
-                  <!-- Dynamic rows generated by JS -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- SECTION 3: Project Details Review Card -->
-          <div style="border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; margin-bottom:24px; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
-            <div style="background:#f8fafc; padding:10px 16px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:0.75rem; font-weight:700; color:#334155; text-transform:uppercase; letter-spacing:0.06em;">
-                PROJECT &amp; INNOVATION DETAILS
-              </span>
-              <button type="button" class="btn btn-sm btn-link" data-jump-step="3" style="color:var(--primary-navy); font-size:0.8rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:0;">
-                <i class="bi bi-pencil-square"></i> Edit Project
+            <div>
+              <button type="button" id="btn-next-step-4" class="btn-step-next" disabled>
+                <span>Proceed to Payment (₹500)</span>
+                <i class="bi bi-arrow-right"></i>
               </button>
             </div>
-            <div style="padding:18px; display:flex; flex-direction:column; gap:14px; font-size:0.85rem;">
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
-                <div>
-                  <span style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:600; display:block;">Project Title</span>
-                  <span id="rev-project-title" style="font-weight:700; color:#0f172a; font-size:1.02rem; display:block; margin-top:2px;"></span>
-                </div>
-                <div>
-                  <span style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:600; display:block;">Category / Track</span>
-                  <span id="rev-project-category" class="badge badge-gold" style="margin-top:4px; display:inline-block; font-size:0.8rem;"></span>
-                </div>
-              </div>
-
-              <div>
-                <span style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:600; display:block; margin-bottom:4px;">Abstract Summary</span>
-                <div id="rev-project-abstract" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px 16px; font-size:0.85rem; color:#334155; line-height:1.6; white-space:pre-wrap;"></div>
-              </div>
-
-              <div id="rev-extra-info-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; padding-top:8px; border-top:1px dashed #e2e8f0;">
-                <div>
-                  <span style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:600; display:block;">Technologies</span>
-                  <span id="rev-project-tech" style="color:#0f172a; font-weight:500;"></span>
-                </div>
-                <div>
-                  <span style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:600; display:block;">Project Mentor / Guide</span>
-                  <span id="rev-project-mentor" style="color:#0f172a; font-weight:500;"></span>
-                </div>
-              </div>
-            </div>
           </div>
 
-          <!-- Academic Integrity Declaration Checkbox -->
-          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:16px 20px; margin-bottom:20px;">
-            <label style="display:flex; align-items:flex-start; gap:12px; cursor:pointer; margin:0;">
-              <input type="checkbox" id="review-accuracy-checkbox" style="margin-top:3px; width:17px; height:17px; accent-color:var(--primary-navy); cursor:pointer;">
-              <div style="font-size:0.85rem; color:#1e3a8a; line-height:1.5;">
-                <strong style="display:block; margin-bottom:2px; color:#1e293b;">Declaration of Academic Integrity &amp; Accuracy</strong>
-                I confirm that the information provided is accurate, all registered team members are bona fide enrolled college students, and the project abstract submitted represents our original academic work.
-              </div>
-            </label>
-          </div>
-
-          <!-- Navigation -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:28px; padding-top:20px; border-top:1px solid #e2e8f0;">
-            <button type="button" class="btn btn-outline-navy" data-back-to="3">
-              <i class="bi bi-arrow-left"></i> Back to Project Details
-            </button>
-            <button type="button" id="btn-next-step-4" class="btn btn-primary" style="padding:10px 24px;" disabled>
-              <span>Continue to Payment</span> <i class="bi bi-arrow-right"></i>
-            </button>
-          </div>
         </div>
 
         <!-- ===================================================================
-             STEP 5: PAYMENT & FINAL SUBMISSION
+             STEP 5: PAYMENT (₹500 FLAT FEE)
              =================================================================== -->
-        <div class="reg-step-content" id="step-panel-5" style="display:none;">
-          <div style="border-bottom:1px solid #e2e8f0; padding-bottom:14px; margin-bottom:24px;">
-            <h2 style="font-size:1.4rem; font-weight:700; color:var(--primary-navy); margin:0 0 4px; display:flex; align-items:center; gap:10px;">
-              <i class="bi bi-credit-card-2-front-fill" style="color:var(--accent-gold);"></i> Complete Registration
-            </h2>
-            <p style="font-size:0.85rem; color:#64748b; margin:0;">
-              Finalize your project registration by paying the subsidized college team registration fee.
-            </p>
+        <div class="reg-step-panel" id="step-panel-5" style="display:none;">
+          
+          <h2 class="reg-section-title">Payment &amp; Confirmation</h2>
+          <p class="reg-section-subtitle">
+            Complete the flat registration fee of ₹500 for your project team entry.
+          </p>
+
+          <!-- Banner with ₹500 -->
+          <div style="background:linear-gradient(135deg, #001040 0%, #0b1f51 100%); color:#ffffff; border-radius:10px; padding:22px 28px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; border-bottom:3px solid var(--accent-gold);">
+            <div>
+              <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-gold); font-weight:700; display:block;">
+                Official Project Team Entry
+              </span>
+              <h3 style="font-size:1.3rem; margin:2px 0 0; color:#ffffff;" id="pay-team-title">Team Entry Fee</h3>
+              <span style="font-size:0.85rem; color:#cbd5e1;" id="pay-team-subtitle">Covers all team members &amp; certificates</span>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:#cbd5e1; display:block;">Amount to Pay</span>
+              <div style="font-size:2.2rem; font-weight:800; color:var(--accent-gold); line-height:1.1;">₹ 500</div>
+            </div>
           </div>
 
-          <!-- Payment Fee Breakdown Card -->
-          <div style="max-width:540px; margin:0 auto 28px; background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; overflow:hidden; box-shadow:0 4px 14px rgba(0,0,0,0.06);">
-            <div style="background:#f8fafc; padding:14px 20px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
-              <div style="display:flex; align-items:center; gap:8px; font-weight:700; color:var(--primary-navy); font-size:0.85rem; text-transform:uppercase; letter-spacing:0.05em;">
-                <i class="bi bi-receipt" style="color:var(--accent-gold);"></i> Fee Summary
-              </div>
-              <span class="badge badge-gold" style="font-size:0.75rem;">Per-Team Flat Fee</span>
-            </div>
-
-            <div style="padding:22px; display:flex; flex-direction:column; gap:14px; font-size:0.9rem;">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:12px; border-bottom:1px solid #f1f5f9;">
-                <div>
-                  <div style="font-weight:600; color:#0f172a;">Project Team Entry</div>
-                  <div id="pay-project-title-preview" style="font-size:0.78rem; color:#64748b; max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:2px;"></div>
+          <!-- Payment Options Selection Tabs -->
+          <div style="margin-bottom:24px;">
+            <label class="reg-field-label">SELECT PAYMENT CHANNEL</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;">
+              
+              <!-- Tab 1: UPI / QR -->
+              <label class="payment-method-card active" id="pay-card-upi" style="border:1.5px solid #0b1f51; border-radius:8px; padding:16px; cursor:pointer; background:#f8fafc; display:block;">
+                <input type="radio" name="payment_mode" value="UPI / QR Code" checked style="display:none;">
+                <div style="display:flex; align-items:flex-start; gap:12px;">
+                  <i class="bi bi-qr-code-scan" style="font-size:1.8rem; color:#0b1f51; margin-top:2px;"></i>
+                  <div>
+                    <strong style="color:#0b1f51; display:block; font-size:0.95rem;">Instant UPI / QR Code</strong>
+                    <span style="font-size:0.8rem; color:#64748b; line-height:1.4; display:block; margin-top:2px;">
+                      Scan &amp; pay instantly via GPay, PhonePe, Paytm, BHIM, or any UPI app.
+                    </span>
+                  </div>
                 </div>
-                <div style="font-weight:700; font-family:monospace; color:#0f172a; font-size:1.05rem;">&#8377;500</div>
-              </div>
+              </label>
 
-              <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.85rem; color:#475569; padding-bottom:12px; border-bottom:1px solid #f1f5f9;">
-                <span>Registered Team Size</span>
-                <span id="pay-team-size-preview" style="font-weight:600; color:#0f172a;">2 Members</span>
-              </div>
-
-              <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.85rem; color:#475569; padding-bottom:12px; border-bottom:1px solid #f1f5f9;">
-                <span>Academic Concession / Tax</span>
-                <span style="font-weight:600; color:#059669;">Included (&#8377;0)</span>
-              </div>
-
-              <div style="display:flex; justify-content:space-between; align-items:center; padding-top:4px;">
-                <div>
-                  <div style="font-size:1.1rem; font-weight:800; color:var(--primary-navy);">Total Payable</div>
-                  <div style="font-size:0.75rem; color:#64748b;">Includes expo kits, participation badges &amp; certificates</div>
+              <!-- Tab 2: Bank Transfer -->
+              <label class="payment-method-card" id="pay-card-bank" style="border:1.5px solid #cbd5e1; border-radius:8px; padding:16px; cursor:pointer; background:#ffffff; display:block;">
+                <input type="radio" name="payment_mode" value="NEFT / IMPS Bank Transfer" style="display:none;">
+                <div style="display:flex; align-items:flex-start; gap:12px;">
+                  <i class="bi bi-bank2" style="font-size:1.8rem; color:#0b1f51; margin-top:2px;"></i>
+                  <div>
+                    <strong style="color:#0b1f51; display:block; font-size:0.95rem;">Bank Transfer (NEFT/IMPS)</strong>
+                    <span style="font-size:0.8rem; color:#64748b; line-height:1.4; display:block; margin-top:2px;">
+                      Direct transfer to the official university conference bank account.
+                    </span>
+                  </div>
                 </div>
-                <div style="font-size:1.8rem; font-weight:900; color:var(--primary-navy); font-family:monospace;">&#8377;500</div>
-              </div>
-            </div>
+              </label>
 
-            <!-- Pay Button Trigger -->
-            <div style="background:#f8fafc; padding:20px; border-top:1px solid #e2e8f0; text-align:center;">
-              <button type="button" id="btn-open-payment-gateway" class="btn btn-primary" style="width:100%; padding:14px; font-size:1.05rem; font-weight:700; justify-content:center; box-shadow:0 4px 12px rgba(0,16,64,0.18);">
-                <i class="bi bi-shield-lock-fill"></i> Pay &#8377;500 &amp; Complete Registration
+            </div>
+          </div>
+
+          <!-- UPI Section View -->
+          <div id="upi-channel-details" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:24px; margin-bottom:24px;">
+            <div style="display:grid; grid-template-columns:180px 1fr; gap:24px; align-items:center;" class="upi-grid-wrap">
+              
+              <!-- QR Code Display Box -->
+              <div style="text-align:center;">
+                <div style="width:170px; height:170px; border:2px solid #e2e8f0; border-radius:10px; padding:10px; background:#ffffff; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin:0 auto 8px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                  <i class="bi bi-qr-code" style="font-size:7rem; color:#0b1f51; line-height:1;"></i>
+                </div>
+                <span style="font-size:0.75rem; color:#64748b; font-weight:600;">Scan to Pay ₹ 500</span>
+              </div>
+
+              <!-- UPI Info Box -->
+              <div>
+                <h4 style="font-size:1rem; font-weight:700; color:#0b1f51; margin:0 0 8px;">Sapthagiri NPS University Conference Account</h4>
+                <p style="font-size:0.85rem; color:#64748b; margin:0 0 12px; line-height:1.5;">
+                  Scan the QR code with any UPI application (Google Pay, PhonePe, Paytm, BHIM, CRED) or use the official VPA below.
+                </p>
+                <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; max-width:400px; margin-bottom:12px;">
+                  <div>
+                    <span style="font-size:0.7rem; color:#64748b; text-transform:uppercase; font-weight:700; display:block;">Official UPI ID</span>
+                    <strong id="upi-vpa-text" style="font-family:monospace; color:#0b1f51; font-size:0.95rem;">snpsu.datazen@upi</strong>
+                  </div>
+                  <button type="button" id="btn-copy-upi" class="btn" style="background:#ffffff; border:1px solid #cbd5e1; font-size:0.78rem; font-weight:700; color:#334155; padding:5px 10px; border-radius:4px; display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
+                    <i class="bi bi-clipboard"></i> <span>Copy</span>
+                  </button>
+                </div>
+                <div style="font-size:0.78rem; color:#059669; font-weight:600; display:flex; align-items:center; gap:6px;">
+                  <i class="bi bi-shield-check"></i> Instant Automated Verification Enabled
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Bank Transfer Details (Hidden initially) -->
+          <div id="bank-channel-details" style="display:none; background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:22px; margin-bottom:24px;">
+            <h4 style="font-size:0.98rem; font-weight:700; color:#0b1f51; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+              <i class="bi bi-info-circle-fill" style="color:var(--accent-gold);"></i> University Bank Account for Wire Transfer:
+            </h4>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; font-size:0.85rem; color:#334155; margin-bottom:8px;">
+              <div><strong>Account Name:</strong> Sapthagiri NPS University DataZen Conference</div>
+              <div><strong>Account Number:</strong> 50100492817263</div>
+              <div><strong>Bank Name:</strong> Canara Bank / HDFC Bank</div>
+              <div><strong>IFSC Code:</strong> HDFC0001234</div>
+              <div><strong>Branch:</strong> SNPSU Campus, Bengaluru</div>
+            </div>
+          </div>
+
+          <!-- Transaction Reference Verification Inputs -->
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:22px; margin-bottom:24px;">
+            <h4 style="font-size:0.98rem; font-weight:700; color:#0b1f51; margin:0 0 16px;">Transaction Reference &amp; Verification</h4>
+            
+            <div class="reg-form-grid">
+              
+              <!-- Transaction Ref -->
+              <div class="reg-form-field">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:7px;">
+                  <label class="reg-field-label" for="transaction_ref" style="margin-bottom:0;">
+                    UTR / TRANSACTION REFERENCE ID <span class="req">*</span>
+                  </label>
+                  <button type="button" id="btn-fill-demo-ref" style="background:none; border:none; color:#14378f; font-size:0.75rem; font-weight:700; cursor:pointer; text-decoration:underline;">
+                    Fill Demo Ref ID
+                  </button>
+                </div>
+                <div class="input-icon-wrap">
+                  <i class="bi bi-receipt"></i>
+                  <input type="text" id="transaction_ref" name="transaction_ref" class="form-input" placeholder="e.g. 428912384912 or TXN_UPI_98231" required style="font-family:monospace; text-transform:uppercase;">
+                </div>
+                <span class="form-helper-text">12-digit UPI UTR number or bank transfer transaction reference.</span>
+              </div>
+
+              <!-- Payment Date -->
+              <div class="reg-form-field">
+                <label class="reg-field-label" for="payment_date">PAYMENT DATE <span class="req">*</span></label>
+                <div class="input-icon-wrap">
+                  <i class="bi bi-calendar-check"></i>
+                  <input type="date" id="payment_date" name="payment_date" class="form-input" required>
+                </div>
+                <span class="form-helper-text">Date when payment was transferred.</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Step 5 Footer -->
+          <div class="reg-footer-bar">
+            <div>
+              <button type="button" id="btn-prev-step-5" class="btn-step-prev">
+                <i class="bi bi-arrow-left"></i> <span>Back to Review</span>
               </button>
-              <div style="font-size:0.75rem; color:#64748b; margin-top:10px; display:flex; align-items:center; justify-content:center; gap:6px;">
-                <i class="bi bi-lock-fill" style="color:#059669;"></i> You will be redirected to the secure simulated payment gateway to complete your registration.
-              </div>
+            </div>
+            <div>
+              <button type="submit" id="btn-submit-registration" class="btn-step-next" style="background:#059669; padding:12px 28px; font-weight:700;">
+                <i class="bi bi-check2-circle"></i>
+                <span>Complete Team Registration &amp; Download Pass</span>
+              </button>
             </div>
           </div>
 
-          <!-- Security Badges Grid -->
-          <div style="max-width:540px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:12px;">
-            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; display:flex; align-items:center; gap:10px; font-size:0.8rem; color:#475569;">
-              <i class="bi bi-shield-check" style="font-size:1.3rem; color:#059669;"></i>
-              <span>PCI-DSS Level 1 Compliant Banking Gateway</span>
-            </div>
-            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; display:flex; align-items:center; gap:10px; font-size:0.8rem; color:#475569;">
-              <i class="bi bi-building-check" style="font-size:1.3rem; color:var(--primary-navy);"></i>
-              <span>Official Sapthagiri NPS University Account</span>
-            </div>
-          </div>
-
-          <!-- Navigation -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:28px; padding-top:20px; border-top:1px solid #e2e8f0;">
-            <button type="button" class="btn btn-outline-navy" data-back-to="4">
-              <i class="bi bi-arrow-left"></i> Back to Review
-            </button>
-            <span style="font-size:0.82rem; color:#94a3b8;">Step 5 of 5</span>
-          </div>
         </div>
-
-        <!-- Hidden inputs for serializing members and transaction reference -->
-        <input type="hidden" id="hidden_team_members" name="team_members" value="[]">
-        <input type="hidden" id="hidden_transaction_ref" name="transaction_ref" value="">
-        <input type="hidden" id="hidden_amount_paid" name="amount_paid" value="₹500">
-        <input type="hidden" id="hidden_payment_status" name="payment_status" value="Paid">
 
       </form>
     </div>
@@ -578,81 +786,128 @@
   </div>
 </section>
 
-<!-- ===================================================================
-     RESET CONFIRMATION MODAL
-     =================================================================== -->
-<div id="modal-reset-confirm" class="custom-modal-overlay" style="display:none;">
-  <div class="custom-modal-dialog" style="max-width:400px;">
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px; color:#b45309;">
-      <i class="bi bi-exclamation-triangle-fill" style="font-size:1.3rem;"></i>
-      <h3 style="margin:0; font-size:1.1rem; font-weight:700; color:#0f172a;">Reset Registration Form?</h3>
-    </div>
-    <p style="font-size:0.85rem; color:#475569; line-height:1.5; margin-bottom:20px;">
-      Are you sure you want to clear all entered details? This action cannot be undone and your saved draft will be cleared.
-    </p>
-    <div style="display:flex; justify-content:flex-end; gap:10px;">
-      <button type="button" id="btn-cancel-reset" class="btn" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; font-size:0.85rem; padding:7px 16px;">Cancel</button>
-      <button type="button" id="btn-confirm-reset" class="btn" style="background:#dc2626; color:#ffffff; font-size:0.85rem; padding:7px 16px;">Yes, Reset Form</button>
-    </div>
-  </div>
-</div>
+<!-- Additional Specific Styling for Registration Portal -->
+<style>
+.reg-main-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 36px 40px;
+  box-shadow: 0 2px 8px rgba(0, 16, 64, 0.03);
+}
 
-<!-- ===================================================================
-     PAYMENT GATEWAY CHECKOUT MODAL (RAZORPAY SIMULATION)
-     =================================================================== -->
-<div id="modal-payment-gateway" class="custom-modal-overlay" style="display:none;">
-  <div class="custom-modal-dialog" style="max-width:480px;">
-    
-    <!-- Gateway Header -->
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:14px; margin-bottom:16px;">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <div style="width:34px; height:34px; background:var(--primary-navy); border-radius:6px; display:flex; align-items:center; justify-content:center; color:#ffffff;">
-          <i class="bi bi-shield-shaded"></i>
-        </div>
-        <div>
-          <h4 style="margin:0; font-size:1rem; font-weight:700; color:#0f172a;">Official Payment Gateway</h4>
-          <span style="font-size:0.75rem; color:#64748b;">Secure checkout for ICBDTT-2026 Project Expo</span>
-        </div>
-      </div>
-      <button type="button" id="btn-close-gateway" style="background:none; border:none; font-size:1.2rem; color:#94a3b8; cursor:pointer;" aria-label="Close">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
+.reg-section-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+}
 
-    <!-- Amount banner -->
-    <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:14px 18px; margin-bottom:16px;">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.85rem; font-weight:600; color:#1e40af;">Sapthagiri NPS University Expo Portal</span>
-        <span style="font-size:1.2rem; font-weight:800; color:#1e3a8a; font-family:monospace;">&#8377;500.00</span>
-      </div>
-      <div style="font-size:0.75rem; color:#3b82f6; margin-top:4px;">
-        Order ID: <span id="gateway-order-id" style="font-family:monospace; font-weight:600;">ord_exp_2026_849201</span>
-      </div>
-    </div>
+.reg-section-subtitle {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0 0 24px 0;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
 
-    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px 16px; margin-bottom:18px; font-size:0.82rem; color:#475569; line-height:1.5;">
-      <div style="font-weight:700; color:#0f172a; margin-bottom:3px; text-transform:uppercase; font-size:0.72rem; letter-spacing:0.05em;">
-        Simulated Gateway Interface
-      </div>
-      Wired to trigger the Razorpay UPI / NetBanking backend. Select an action below to simulate the transaction response:
-    </div>
+.reg-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 28px;
+}
 
-    <!-- Gateway Action Buttons -->
-    <div style="display:flex; flex-direction:column; gap:10px;">
-      <button type="button" id="btn-simulate-pay-success" class="btn" style="background:#059669; color:#ffffff; font-weight:700; padding:12px; border-radius:6px; justify-content:center; box-shadow:0 2px 6px rgba(5,150,105,0.25);">
-        <i class="bi bi-check-circle-fill"></i> Simulate Successful Payment (&#8377;500 Paid)
-      </button>
-      <button type="button" id="btn-simulate-pay-decline" class="btn btn-outline-navy" style="font-size:0.85rem; padding:10px; justify-content:center;">
-        <i class="bi bi-x-circle"></i> Simulate Gateway Decline / Cancel
-      </button>
-    </div>
+.reg-form-field {
+  display: flex;
+  flex-direction: column;
+}
 
-    <div style="font-size:0.72rem; color:#94a3b8; text-align:center; margin-top:14px;">
-      <i class="bi bi-lock-fill"></i> Secured by 256-bit SSL encryption. Institutional auditing logged.
-    </div>
+.reg-form-field .form-input,
+.reg-form-field .form-select-custom {
+  height: 46px;
+  box-sizing: border-box;
+  font-size: 0.92rem;
+}
 
-  </div>
-</div>
+.reg-form-field textarea.form-input {
+  height: auto !important;
+  min-height: 120px;
+}
+
+.reg-field-label {
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0f172a;
+  margin-bottom: 8px;
+  display: block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.reg-field-label .req {
+  color: #ef4444;
+}
+
+.form-helper-text {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-top: 6px;
+  line-height: 1.35;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.reg-footer-bar {
+  border-top: 1px solid #e2e8f0;
+  margin-top: 32px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.payment-method-card {
+  transition: all 0.2s ease;
+}
+
+.payment-method-card:hover {
+  border-color: #14378f !important;
+}
+
+.payment-method-card.active {
+  border-color: #0b1f51 !important;
+  background: #f8fafc !important;
+  box-shadow: 0 0 0 2px rgba(11, 31, 81, 0.12);
+}
+
+@media (max-width: 768px) {
+  .reg-main-card {
+    padding: 24px 20px;
+  }
+  .reg-form-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .upi-grid-wrap {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+  }
+  .reg-footer-bar {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .btn-step-next, .btn-step-prev {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
 
 {% endblock %}
 
