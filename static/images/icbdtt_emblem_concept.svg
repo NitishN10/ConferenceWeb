@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="goldGradEmblem" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf2d8"/>
+      <stop offset="35%" stop-color="#d4af78"/>
+      <stop offset="70%" stop-color="#c69e66"/>
+      <stop offset="100%" stop-color="#9a743a"/>
+    </linearGradient>
+    <linearGradient id="navyGradEmblem" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a2566"/>
+      <stop offset="60%" stop-color="#001040"/>
+      <stop offset="100%" stop-color="#00071c"/>
+    </linearGradient>
+    <linearGradient id="glowCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Base -->
+  <circle cx="80" cy="80" r="76" fill="url(#navyGradEmblem)" stroke="url(#goldGradEmblem)" stroke-width="3" />
+  <circle cx="80" cy="80" r="69" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.2" stroke-dasharray="4,3" />
+
+  <!-- Outer Ring Text (Circular Path) -->
+  <path id="textArcTop" d="M 24 80 A 56 56 0 0 1 136 80" fill="none" />
+  <text font-family="'Outfit', sans-serif" font-size="7.5" font-weight="800" fill="url(#goldGradEmblem)" letter-spacing="1.5">
+    <textPath href="#textArcTop" startOffset="50%" text-anchor="middle">
+      INTERNATIONAL CONFERENCE &bull; SNPSU
+    </textPath>
+  </text>
+
+  <!-- Data Mesh / Big Data Stack -->
+  <g transform="translate(0, 4)">
+    <!-- Top Cylinder -->
+    <ellipse cx="80" cy="56" rx="28" ry="8.5" fill="url(#goldGradEmblem)" />
+    <!-- Layers -->
+    <path d="M 52 56 V 70 C 52 75 108 75 108 70 V 56" fill="none" stroke="url(#goldGradEmblem)" stroke-width="2.5" />
+    <path d="M 52 70 V 84 C 52 89 108 89 108 84 V 70" fill="none" stroke="url(#goldGradEmblem)" stroke-width="2.5" />
+    <path d="M 52 84 V 98 C 52 103 108 103 108 98 V 84" fill="none" stroke="url(#goldGradEmblem)" stroke-width="2.5" />
+
+    <!-- Connecting Network Lines -->
+    <g stroke="url(#glowCyan)" stroke-width="1.8">
+      <line x1="80" y1="56" x2="48" y2="44" />
+      <line x1="80" y1="56" x2="112" y2="44" />
+      <line x1="80" y1="98" x2="46" y2="108" />
+      <line x1="80" y1="98" x2="114" y2="108" />
+      <line x1="52" y1="70" x2="38" y2="76" />
+      <line x1="108" y1="70" x2="122" y2="76" />
+    </g>
+
+    <!-- Glowing Nodes -->
+    <circle cx="80" cy="56" r="4" fill="#ffffff" stroke="#c69e66" stroke-width="1.5" />
+    <circle cx="48" cy="44" r="3.5" fill="#38bdf8" />
+    <circle cx="112" cy="44" r="3.5" fill="#38bdf8" />
+    <circle cx="38" cy="76" r="3.5" fill="#fdf2d8" />
+    <circle cx="122" cy="76" r="3.5" fill="#fdf2d8" />
+    <circle cx="46" cy="108" r="3.5" fill="#38bdf8" />
+    <circle cx="114" cy="108" r="3.5" fill="#38bdf8" />
+    <circle cx="80" cy="98" r="4" fill="#ffffff" stroke="#c69e66" stroke-width="1.5" />
+
+    <!-- Elliptical Orbit -->
+    <ellipse cx="80" cy="77" rx="46" ry="18" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" transform="rotate(-20 80 77)" />
+  </g>
+
+  <!-- Center Acronym Plaque -->
+  <g transform="translate(0, 118)">
+    <rect x="36" y="0" width="88" height="24" rx="4" fill="#001040" stroke="url(#goldGradEmblem)" stroke-width="1.5" />
+    <text x="80" y="17" font-family="'Outfit', sans-serif" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">
+      ICBDTT<tspan fill="#d4af78"> 2026</tspan>
+    </text>
+  </g>
+</svg>

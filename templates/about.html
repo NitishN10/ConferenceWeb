@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}About the Conference | {{ CONF_BRAND }} | Sapthagiri NPS University{% endblock %}
+{% block title %}About the Conference | {{ CONF_BRAND }} | Sapthagiri NPS University (SNPSU){% endblock %}
 
 {% block content %}
 
 <!-- Header Banner -->
 <section style="background: linear-gradient(135deg, #001040 0%, #000c30 100%); color: #ffffff; padding: 50px 0; border-bottom: 3px solid var(--accent-gold);">
   <div class="container">
-    <span class="badge badge-gold" style="margin-bottom: 12px;">About {{ CONF_BRAND }}</span>
+    <div style="display:inline-flex; align-items:center; gap:8px; margin-bottom:12px;">
+      <span class="badge badge-gold">About {{ CONF_BRAND }}</span>
+      <span class="badge" style="background:rgba(255,255,255,0.12); color:#ffffff; border:1px solid rgba(255,255,255,0.25);">International Conference</span>
+    </div>
     <h1 style="color:#ffffff; font-size:2.4rem; margin-bottom:8px; font-family:'Outfit',sans-serif;">{{ CONF_NAME }}</h1>
-    <p style="color:#cbd5e1; font-size:1.05rem; max-width:760px;">
-      Sapthagiri NPS University, Bangalore &bull; {{ CONF_DATE }}
+    <p style="color:#cbd5e1; font-size:1.05rem; max-width:820px;">
+      Sapthagiri NPS University (SNPSU), Bengaluru &bull; {{ CONF_DATE }} &bull; {{ CONF_TIMING }}
     </p>
   </div>
 </section>
@@ -18,52 +21,108 @@
 <!-- About Introduction & Purpose -->
 <section class="section">
   <div class="container">
+    
+    <!-- Proposed Conference Taglines Callout -->
+    <div style="background: #fdfaf3; border: 1px solid rgba(198, 158, 102, 0.4); border-left: 4px solid var(--accent-gold); border-radius: 8px; padding: 20px 24px; margin-bottom: 36px; box-shadow: 0 2px 8px rgba(0, 16, 64, 0.04);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+        <h4 style="margin:0; font-size: 0.92rem; color: var(--primary-navy); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; display:flex; align-items:center; gap:8px;">
+          <i class="bi bi-lightbulb-fill" style="color:var(--accent-gold);"></i> Proposed Conference Taglines
+          <span class="badge" style="background: rgba(198, 158, 102, 0.18); color: #9a743a; font-size: 0.72rem; border: 1px solid #c69e66;">Pending Official Approval</span>
+        </h4>
+        <span style="font-size: 0.78rem; color: #64748b; font-style: italic;">*Options presented for review before finalization</span>
+      </div>
+      <p style="font-size:0.88rem; color:#475569; margin-bottom:12px;">
+        The official conference tagline is currently under review. The organizing committee is evaluating the following options suitable for an international academic conference focused on Big Data, data-driven research, innovation, and intelligent solutions:
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 10px;">
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; font-size:0.86rem; color:#1e293b;">
+          <strong style="color:var(--accent-gold);">Option 1:</strong> "Pioneering Scalable Data Infrastructures, Intelligent Algorithms &amp; Distributed Computing Solutions"
+        </div>
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; font-size:0.86rem; color:#1e293b;">
+          <strong style="color:var(--accent-gold);">Option 2:</strong> "Advancing Next-Generation Big Data Engineering, Intelligent Analytics &amp; Autonomous Systems"
+        </div>
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; font-size:0.86rem; color:#1e293b;">
+          <strong style="color:var(--accent-gold);">Option 3:</strong> "Empowering Scalable Data Ecosystems Through Innovation, Intelligent Systems &amp; Global Research"
+        </div>
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; font-size:0.86rem; color:#1e293b;">
+          <strong style="color:var(--accent-gold);">Option 4:</strong> "Bridging Foundations and Frontiers in Big Data Architectures, Machine Intelligence &amp; Edge Analytics"
+        </div>
+      </div>
+    </div>
+
     <div class="about-grid">
       <div>
-        <span class="section-subtitle">Introduction</span>
-        <h2 class="section-title">Saptha DataZen 2.6</h2>
+        <span class="section-subtitle">Conference Overview</span>
+        <h2 class="section-title">{{ CONF_NAME }}</h2>
         <p>
-          The <strong>National Conference in Emerging Trends of Big Data Engineering 2.6 (Saptha DataZen 2.6)</strong> is an academic and research conference organized and hosted by <strong>Sapthagiri NPS University, Bangalore</strong>.
+          The <strong>International Conference on Big Data Tools and Techniques (ICBDTT-2026)</strong> is an international peer-reviewed conference hosted and organized by <strong>Sapthagiri NPS University (SNPSU), Bengaluru</strong> on <strong>{{ CONF_DATE }}</strong>.
         </p>
         <p>
-          The conference is focused on recent developments, tools, frameworks, and methodologies across Artificial Intelligence &amp; Machine Learning, Data Science &amp; Big Data, Computer Vision, Generative AI, Cloud and Distributed Technologies, IoT &amp; Edge Computing, and Cybersecurity.
+          The conference provides a premier interdisciplinary academic and research forum for scholars, faculty researchers, data engineers, software scientists, and industry leaders to present, deliberate, and publish original research contributions across the entire lifecycle of big data engineering, advanced computational analytics, and machine intelligence.
         </p>
 
-        <h3 style="font-size:1.4rem; color:var(--primary-navy); margin:28px 0 12px;">Purpose of the Conference</h3>
+        <h3 style="font-size:1.35rem; color:var(--primary-navy); margin:24px 0 10px;">Parallel Presentation Tracks Structure</h3>
         <p>
-          The primary purpose of the conference is to bring together researchers, academicians, students, data scientists, software engineers, and industry professionals from around the country to present and deliberate on original research contributions, state-of-the-art architectures, and innovative data-driven solutions.
+          To facilitate comprehensive technical evaluation and broad participant engagement, ICBDTT-2026 incorporates a simultaneous multi-venue architecture:
+        </p>
+        <ul style="margin:12px 0 20px 20px; font-size:0.95rem; color:#334155; display:flex; flex-direction:column; gap:8px;">
+          <li>
+            <strong>Auditorium Main Stage:</strong> Inauguration Ceremony (10:00 AM – 11:15 AM), Keynote Symposiums &amp; Plenary Lectures (11:15 AM – 1:00 PM), and the Grand Valedictory &amp; Prize Distribution (3:00 PM – 4:00 PM) at the Dr. APJ Abdul Kalam Auditorium.
+          </li>
+          <li>
+            <strong>University Student Presentations:</strong> 9:45 AM – 11:45 AM (2 hours total duration, 10 minutes per batch) conducted in respective classrooms across 42 sections distributed from the 2nd Floor to the 4th Floor. Allied branches present in dedicated classrooms on the 5th and 6th Floors.
+          </li>
+          <li>
+            <strong>Outside Participant Presentations:</strong> 12:00 PM – 1:00 PM on the 6th Floor, following a dedicated participant break (11:30 AM – 11:45 AM).
+          </li>
+        </ul>
+
+        <h3 style="font-size:1.35rem; color:var(--primary-navy); margin:24px 0 10px;">Purpose of the Conference</h3>
+        <p>
+          The primary purpose of ICBDTT-2026 is to bridge foundational data science theory and real-world industrial implementations, creating opportunities for academic-industry synergies, rigorous double-blind peer review, and publication in official conference proceedings.
         </p>
       </div>
 
       <div style="background:var(--bg-subtle); border:1px solid var(--border-light); border-radius:var(--radius-lg); padding:32px;">
         <h3 style="font-size:1.3rem; color:var(--primary-navy); margin-bottom:18px; border-bottom:2px solid var(--accent-gold); padding-bottom:8px;">
-          Conference Details
+          Conference Quick Facts
         </h3>
-        <ul style="list-style:none; display:flex; flex-direction:column; gap:14px; font-size:0.95rem;">
-          <li style="display:flex; justify-content:space-between;">
-            <span style="color:var(--text-muted);"><i class="bi bi-calendar-check"></i> Date:</span>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:14px; font-size:0.93rem;">
+          <li style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="color:var(--text-muted);"><i class="bi bi-calendar-check"></i> Dates:</span>
             <strong>{{ CONF_DATE }}</strong>
           </li>
-          <li style="display:flex; justify-content:space-between;">
-            <span style="color:var(--text-muted);"><i class="bi bi-building"></i> Venue:</span>
-            <strong>{{ CONF_VENUE }}</strong>
+          <li style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="color:var(--text-muted);"><i class="bi bi-clock-fill"></i> Timings:</span>
+            <strong>{{ CONF_TIMING }}</strong>
           </li>
-          <li style="display:flex; justify-content:space-between;">
+          <li style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="color:var(--text-muted);"><i class="bi bi-building"></i> Main Venue:</span>
+            <strong style="text-align:right;">Dr. APJ Abdul Kalam Auditorium</strong>
+          </li>
+          <li style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="color:var(--text-muted);"><i class="bi bi-person-workspace"></i> Classrooms:</span>
+            <strong style="text-align:right;">Floors 2–4 (42 Sections) &bull; Floors 5–6 (Allied/Outside)</strong>
+          </li>
+          <li style="display:flex; justify-content:space-between; gap:10px;">
+            <span style="color:var(--text-muted);"><i class="bi bi-mortarboard"></i> Host University:</span>
+            <strong style="text-align:right;">Sapthagiri NPS University (SNPSU)</strong>
+          </li>
+          <li style="display:flex; justify-content:space-between; gap:10px;">
             <span style="color:var(--text-muted);"><i class="bi bi-geo-alt"></i> Location:</span>
             <strong>Bengaluru, Karnataka, India</strong>
           </li>
-          <li style="display:flex; justify-content:space-between;">
-            <span style="color:var(--text-muted);"><i class="bi bi-mortarboard"></i> Host:</span>
-            <strong>Sapthagiri NPS University</strong>
-          </li>
-          <li style="display:flex; justify-content:space-between;">
+          <li style="display:flex; justify-content:space-between; gap:10px;">
             <span style="color:var(--text-muted);"><i class="bi bi-envelope"></i> Secretariat:</span>
             <strong>{{ CONF_EMAIL }}</strong>
           </li>
         </ul>
-        <div style="margin-top:24px;">
+        <div style="margin-top:24px; display:flex; flex-direction:column; gap:10px;">
           <a href="{{ url_for('submission.submit_paper') }}" class="btn btn-primary" style="width:100%;">
             <i class="bi bi-cloud-arrow-up"></i> Submit a Paper
+          </a>
+          <a href="{{ url_for('main.schedule') }}" class="btn btn-outline-gold" style="width:100%;">
+            <i class="bi bi-calendar3"></i> View Full Schedule
           </a>
         </div>
       </div>
@@ -320,37 +379,63 @@
   </div>
 </section>
 
-<!-- About SNPSU Section -->
+<!-- About SNPSU & Department Section -->
 <section class="section section-dark">
   <div class="container">
     <div class="about-grid">
       <div>
-        <span class="section-subtitle" style="color:var(--accent-gold);">Host University</span>
+        <span class="section-subtitle" style="color:var(--accent-gold);">Host University &amp; Academic Leadership</span>
         <h2 class="section-title" style="color:#ffffff;">Sapthagiri NPS University (SNPSU)</h2>
-        <p style="color:#cbd5e1; font-size:1.05rem;">
-          Sapthagiri NPS University (SNPSU) is an institution of higher education and research located in Bengaluru, Karnataka, India. The university provides quality education across engineering, computing, and emerging disciplines.
+        <p style="color:#cbd5e1; font-size:1.02rem; line-height:1.7; margin-bottom:16px;">
+          <strong>Sapthagiri NPS University (SNPSU)</strong>, Bengaluru, is a premier multidisciplinary university committed to academic distinction, innovative pedagogy, and impactful research. Located in Karnataka's capital and tech epicenter, the university is recognized for its comprehensive curriculum, distinguished faculty, and world-class educational infrastructure.
         </p>
-        <div style="margin-top:24px;">
+        <p style="color:#cbd5e1; font-size:0.98rem; line-height:1.7; margin-bottom:16px;">
+          The <strong>School of Engineering &amp; Technology (SOET)</strong> and the <strong>Department of Computer Science &amp; Engineering (CSE)</strong> spearhead advanced technical education across B.E., M.Tech, and doctoral programs, with focused specializations in Artificial Intelligence &amp; Machine Learning, Data Science, High-Performance Computing, and Cloud Analytics.
+        </p>
+        <p style="color:#cbd5e1; font-size:0.95rem; line-height:1.7;">
+          SNPSU actively promotes collaborative research through strategic industry partnerships and MoUs with global leaders such as Cisco, AWS, and Infosys Springboard, fostering high-impact student projects, peer-reviewed publications, and real-world technology solutions.
+        </p>
+        <div style="margin-top:24px; display:flex; gap:14px; flex-wrap:wrap;">
           <a href="https://snpsu.edu.in/" target="_blank" rel="noopener" class="btn btn-primary">
             Visit Official SNPSU Website <i class="bi bi-box-arrow-up-right"></i>
+          </a>
+          <a href="{{ url_for('main.venue') }}" class="btn btn-outline-white">
+            Campus Venue &amp; Facilities
           </a>
         </div>
       </div>
 
       <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(198,158,102,0.3); border-radius:var(--radius-xl); padding:32px;">
-        <h4 style="color:#ffffff; font-size:1.25rem; margin-bottom:14px;">Conference Venue Coordinates</h4>
-        <p style="color:#cbd5e1; font-size:0.95rem; margin-bottom:8px;">
-          <strong>Venue:</strong> {{ CONF_VENUE }}
-        </p>
-        <p style="color:#cbd5e1; font-size:0.95rem; margin-bottom:8px;">
-          <strong>University:</strong> Sapthagiri NPS University
-        </p>
-        <p style="color:#cbd5e1; font-size:0.95rem; margin-bottom:16px;">
-          <strong>Location:</strong> Bengaluru, Karnataka, India
-        </p>
-        <a href="{{ url_for('main.venue') }}" class="btn btn-outline-gold btn-sm">
-          Get Venue Directions
-        </a>
+        <h4 style="color:#ffffff; font-size:1.25rem; margin-bottom:16px; border-bottom:1px solid rgba(198,158,102,0.3); padding-bottom:8px;">
+          <i class="bi bi-geo-alt-fill" style="color:var(--accent-gold);"></i> Official Conference Campus
+        </h4>
+        <div style="display:flex; flex-direction:column; gap:12px; font-size:0.92rem; color:#cbd5e1;">
+          <div>
+            <strong style="color:#ffffff; display:block;">Institution:</strong>
+            Sapthagiri NPS University (SNPSU)
+          </div>
+          <div>
+            <strong style="color:#ffffff; display:block;">Inauguration &amp; Valedictory Venue:</strong>
+            Dr. APJ Abdul Kalam Auditorium
+          </div>
+          <div>
+            <strong style="color:#ffffff; display:block;">Student Presentations:</strong>
+            Floors 2 to 4 (42 Sections) &bull; Floors 5 &amp; 6 (Allied Branches)
+          </div>
+          <div>
+            <strong style="color:#ffffff; display:block;">Outside Participant Presentations:</strong>
+            6th Floor Classrooms (Allocation to be announced)
+          </div>
+          <div>
+            <strong style="color:#ffffff; display:block;">Campus Address:</strong>
+            {{ CONF_CAMPUS }}
+          </div>
+        </div>
+        <div style="margin-top:22px;">
+          <a href="https://maps.google.com/?q=Sapthagiri+NPS+University+Bengaluru" target="_blank" rel="noopener" class="btn btn-outline-gold btn-sm" style="width:100%;">
+            <i class="bi bi-pin-map-fill"></i> View on Google Maps
+          </a>
+        </div>
       </div>
     </div>
   </div>

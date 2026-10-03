@@ -13,19 +13,31 @@ from models.faq import FAQItem
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    os.makedirs(os.path.join(app.root_path, 'instance'), exist_ok=True)
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    os.makedirs(app.config['SPEAKER_UPLOAD_FOLDER'], exist_ok=True)
+    is_vercel = bool(
+        os.environ.get('VERCEL') == '1'
+        or os.environ.get('VERCEL_ENV')
+        or os.environ.get('AWS_LAMBDA_FUNCTION_NAME')
+    )
+    if not is_vercel:
+        try:
+            db_uri = app.config.get('SQLALCHEMY_DATABASE_URI', '')
+            if db_uri.startswith('sqlite:') and 'instance' in db_uri:
+                os.makedirs(os.path.join(app.root_path, 'instance'), exist_ok=True)
+            if app.config.get('UPLOAD_FOLDER'):
+                os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            if app.config.get('SPEAKER_UPLOAD_FOLDER'):
+                os.makedirs(app.config['SPEAKER_UPLOAD_FOLDER'], exist_ok=True)
+        except OSError:
+            pass
     db.init_app(app)
     return app
 
-def seed_database():
-    app = create_app()
-    with app.app_context():
-        # Clear existing data to remove unwanted invented information
-        db.drop_all()
-        db.create_all()
-
+def populate_seed_data(app=None):
+    """Populates conference reference data without dropping existing tables."""
+    ctx = app.app_context() if app else None
+    if ctx:
+        ctx.push()
+    try:
         # 1. Admin User
         admin = Admin(
             username='admin',
@@ -160,105 +172,97 @@ def seed_database():
             db.session.add(ConferenceTrack(**td))
         print(f"Seeded {len(tracks_data)} Conference Tracks.")
 
-        # 3. Important Dates
+        # 3. Important Dates (Only official confirmed dates; others pending)
         dates_data = [
             {
-                "title": "Paper Submission Opens",
-                "date_value": "June 1, 2026",
-                "description": "Official opening of portal for research paper submissions",
+                "title": "Conference Dates",
+                "date_value": "November 20–21, 2026",
+                "description": "Inauguration, Keynotes, Student Presentations & Valedictory (10:00 AM – 4:00 PM)",
                 "is_extended": False,
-                "status_badge": "Completed",
+                "status_badge": "Confirmed",
                 "display_order": 1
             },
             {
-                "title": "Paper Submission Deadline",
-                "date_value": "September 15, 2026",
-                "description": "Strict deadline for full manuscript submissions (6-8 pages)",
+                "title": "Full Paper Submission Deadline",
+                "date_value": "To be announced",
+                "description": "Manuscript submission deadline will be updated upon official brochure release",
                 "is_extended": False,
-                "status_badge": "Open",
+                "status_badge": "Pending Release",
                 "display_order": 2
             },
             {
                 "title": "Notification of Acceptance",
-                "date_value": "October 10, 2026",
-                "description": "Double-blind review feedback and acceptance notices issued",
+                "date_value": "To be announced",
+                "description": "Double-blind peer review feedback and acceptance notices",
                 "is_extended": False,
-                "status_badge": "Upcoming",
+                "status_badge": "Pending",
                 "display_order": 3
             },
             {
                 "title": "Camera Ready Paper & Copyright",
-                "date_value": "October 25, 2026",
-                "description": "Final formatted manuscript submission and copyright form",
+                "date_value": "To be announced",
+                "description": "Final formatted manuscript submission and copyright clearance",
                 "is_extended": False,
-                "status_badge": "Upcoming",
+                "status_badge": "Pending",
                 "display_order": 4
             },
             {
-                "title": "Author Registration Deadline",
-                "date_value": "October 30, 2026",
-                "description": "Mandatory deadline for at least one author per accepted paper",
+                "title": "Author / Delegate Registration Deadline",
+                "date_value": "To be announced",
+                "description": "Mandatory registration deadline for presenting authors and attendees",
                 "is_extended": False,
-                "status_badge": "Upcoming",
+                "status_badge": "Pending",
                 "display_order": 5
-            },
-            {
-                "title": "Conference Dates",
-                "date_value": "November 20–21, 2026",
-                "description": "Inauguration, Keynotes, Technical Presentations & Valedictory",
-                "is_extended": False,
-                "status_badge": "Upcoming",
-                "display_order": 6
             }
         ]
         for dd in dates_data:
             db.session.add(ImportantDate(**dd))
         print("Seeded Important Dates.")
 
-        # 4. Speakers (Distinguished Academics & Researchers)
+        # 4. Speakers & Guests (Schema-ready placeholders pending official release)
         speakers_data = [
             {
-                "name": "Dr. Anand Rajaraman",
-                "designation": "Visiting Professor & AI Fellow",
-                "institution": "Indian Institute of Science (IISc)",
-                "country": "India",
-                "biography": "Dr. Anand Rajaraman is a distinguished researcher in large-scale data systems and AI. Alumnus of Stanford University, he has authored foundational papers in distributed databases and mining massive datasets.",
-                "photo": "speaker1.svg",
-                "speaker_type": "Keynote",
-                "session_topic": "Scalable Lakehouse Architectures for Exabyte-Scale Real-Time Analytics",
+                "name": "Guest Speaker – Inaugural Session",
+                "designation": "Eminent Scholar / Industry Luminary",
+                "institution": "Profile Pending Official Announcement",
+                "country": "India / International",
+                "biography": "Official guest speaker details, designation, and inaugural address topic (~30 minutes) will be updated upon confirmation by the organizing committee.",
+                "photo": "speaker_placeholder.svg",
+                "speaker_type": "Inaugural Guest",
+                "session_topic": "Inaugural Address on Trends in Big Data Tools & Computing Systems",
                 "display_order": 1
             },
             {
-                "name": "Prof. Priya Sundaram",
-                "designation": "Professor & Chair of Data Engineering",
-                "institution": "National University of Singapore (NUS)",
-                "country": "Singapore",
-                "biography": "Prof. Priya Sundaram leads research in autonomous distributed systems, adaptive stream processing, and resilient edge intelligence with over 120 high-impact publications.",
-                "photo": "speaker2.svg",
+                "name": "Keynote Speaker 1",
+                "designation": "Distinguished Academician / Fellow",
+                "institution": "Profile Pending Official Announcement",
+                "country": "India / International",
+                "biography": "Keynote profile and plenary lecture abstract will be published once officially confirmed by the conference editorial board.",
+                "photo": "speaker_placeholder.svg",
                 "speaker_type": "Keynote",
-                "session_topic": "Autonomous Distributed Systems & Resilient Edge Data Pipelines",
+                "session_topic": "Scalable Big Data Architectures & Next-Generation Analytics",
                 "display_order": 2
             },
             {
-                "name": "Dr. Rajeshwar Rao",
-                "designation": "Chief Scientist & Fellow",
-                "institution": "Big Data Intelligence Labs",
-                "country": "India",
-                "biography": "Dr. Rajeshwar Rao specializes in multimodal foundation models, high-performance distributed computing frameworks, and accelerated graph analytics on cloud clusters.",
-                "photo": "speaker3.svg",
+                "name": "Keynote Speaker 2",
+                "designation": "Senior Research Scientist / Architect",
+                "institution": "Profile Pending Official Announcement",
+                "country": "India / International",
+                "biography": "Keynote profile, research contributions, and invited talk details will be posted upon official confirmation.",
+                "photo": "speaker_placeholder.svg",
                 "speaker_type": "Keynote",
-                "session_topic": "Foundation Models & Multimodal Big Data Processing: Paradigms and Benchmarks",
+                "session_topic": "Applied Machine Intelligence, Cloud Platforms & Scalable Systems",
                 "display_order": 3
             },
             {
-                "name": "Dr. Marcus Vance",
-                "designation": "Principal Data Architect",
-                "institution": "Distributed Cloud Systems",
-                "country": "United Kingdom",
-                "biography": "Dr. Marcus Vance is an industry authority on federated query optimization, differential privacy, and decentralized data mesh architectures for enterprise workloads.",
-                "photo": "speaker4.svg",
-                "speaker_type": "Invited",
-                "session_topic": "Privacy-Preserving Federated Query Engines on Heterogeneous Clouds",
+                "name": "Guest Speaker – Valedictory Session",
+                "designation": "Distinguished Guest of Honour",
+                "institution": "Profile Pending Official Announcement",
+                "country": "India / International",
+                "biography": "Valedictory address speaker profile (~15 minutes) and citation will be shared prior to the conference.",
+                "photo": "speaker_placeholder.svg",
+                "speaker_type": "Valedictory Guest",
+                "session_topic": "Valedictory Address & Future Frontiers in Big Data Engineering",
                 "display_order": 4
             }
         ]
@@ -318,117 +322,153 @@ def seed_database():
             db.session.add(RegistrationFee(**fd))
         print("Seeded Registration Fees.")
 
-        # 6. Schedule Items
+        # 6. Schedule Items (Strictly based on confirmed timings and parallel tracks)
         schedule_data = [
-            # Day 1
+            # Day 1 - November 20, 2026
             {
                 "day_number": 1,
                 "date_display": "Day 1 - November 20, 2026",
-                "start_time": "08:30 AM",
-                "end_time": "09:30 AM",
-                "session_type": "Registration",
-                "session_title": "Delegate Check-in & Kit Collection",
-                "speaker": "Organizing Secretariat",
-                "topic": "Welcome reception, delegate badge & conference kit distribution",
-                "venue": "Registration Desk, Auditorium Lobby",
+                "start_time": "09:45 AM",
+                "end_time": "11:45 AM",
+                "session_type": "Student Presentation",
+                "session_title": "University Student Project & Paper Presentations",
+                "speaker": "42 Sections (10 mins per batch)",
+                "topic": "Parallel presentations across respective existing classrooms on Floors 2–4. Allied branches on Floors 5–6 (Room allocations to be announced).",
+                "venue": "Floors 2–4 (Allied Branches: Floors 5–6)",
                 "display_order": 1
             },
             {
                 "day_number": 1,
                 "date_display": "Day 1 - November 20, 2026",
-                "start_time": "09:30 AM",
-                "end_time": "10:30 AM",
+                "start_time": "10:00 AM",
+                "end_time": "11:15 AM",
                 "session_type": "Inauguration",
-                "session_title": "Inauguration Ceremony & Welcome Address",
-                "speaker": "Honourable Chancellor & University Dignitaries",
-                "topic": "Lighting of the Lamp, Presidential Address & Release of Conference Souvenir",
+                "session_title": "Official Conference Inauguration Ceremony",
+                "speaker": "Guest Speaker (~30 min) & University Dignitaries (~10 min each)",
+                "topic": "Inaugural address, lighting of the lamp & conference launch (Speakers to be officially announced)",
                 "venue": "Dr. APJ Abdul Kalam Auditorium",
                 "display_order": 2
             },
             {
                 "day_number": 1,
                 "date_display": "Day 1 - November 20, 2026",
-                "start_time": "10:30 AM",
-                "end_time": "11:00 AM",
-                "session_type": "Break",
-                "session_title": "Tea & High Networking Break",
-                "speaker": None,
-                "topic": None,
-                "venue": "Convention Foyer",
+                "start_time": "11:15 AM",
+                "end_time": "01:00 PM",
+                "session_type": "Keynote",
+                "session_title": "Guest and Plenary Speaker Sessions",
+                "speaker": "Distinguished Guest Speakers (To be announced)",
+                "topic": "Plenary lectures on Big Data Tools, Next-Gen Architectures, and Intelligent Analytics",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
                 "display_order": 3
             },
             {
                 "day_number": 1,
                 "date_display": "Day 1 - November 20, 2026",
-                "start_time": "11:00 AM",
-                "end_time": "12:15 PM",
-                "session_type": "Keynote",
-                "session_title": "Keynote Address 1",
-                "speaker": "Dr. Anand Rajaraman",
-                "topic": "Scalable Lakehouse Architectures for Exabyte-Scale Real-Time Analytics",
-                "venue": "Dr. APJ Abdul Kalam Auditorium",
+                "start_time": "11:30 AM",
+                "end_time": "11:45 AM",
+                "session_type": "Break",
+                "session_title": "Break for Outside Participants",
+                "speaker": None,
+                "topic": "Dedicated morning refreshment break for external participants",
+                "venue": "6th Floor Delegate Area",
                 "display_order": 4
             },
             {
                 "day_number": 1,
                 "date_display": "Day 1 - November 20, 2026",
-                "start_time": "12:15 PM",
-                "end_time": "01:15 PM",
-                "session_type": "Break",
-                "session_title": "Conference Networking Lunch",
-                "speaker": None,
-                "topic": None,
-                "venue": "University Banquet Hall",
+                "start_time": "12:00 PM",
+                "end_time": "01:00 PM",
+                "session_type": "Technical Session",
+                "session_title": "Outside Participant Project & Paper Presentations",
+                "speaker": "External College & Institution Delegates",
+                "topic": "Oral paper and technical project presentations by registered outside participants",
+                "venue": "6th Floor Classrooms (Room allocation to be announced)",
                 "display_order": 5
             },
             {
                 "day_number": 1,
                 "date_display": "Day 1 - November 20, 2026",
-                "start_time": "01:15 PM",
-                "end_time": "03:30 PM",
-                "session_type": "Technical Session",
-                "session_title": "Technical Paper Presentations: Tracks 1 & 2",
-                "speaker": "Session Chairs: Dr. Ramachandra K. & Dr. Suresh Kumar",
-                "topic": "Oral presentations on Big Data Analytics and AI/ML",
-                "venue": "Seminar Halls A & B",
+                "start_time": "01:00 PM",
+                "end_time": "02:00 PM",
+                "session_type": "Break",
+                "session_title": "Conference Lunch Break",
+                "speaker": None,
+                "topic": "Buffet networking lunch for delegates, presenters, and guests",
+                "venue": "Campus Dining Area",
                 "display_order": 6
             },
             {
                 "day_number": 1,
                 "date_display": "Day 1 - November 20, 2026",
-                "start_time": "03:45 PM",
-                "end_time": "05:00 PM",
-                "session_type": "Keynote",
-                "session_title": "Keynote Address 2",
-                "speaker": "Prof. Priya Sundaram",
-                "topic": "Autonomous Distributed Systems & Resilient Edge Data Pipelines",
+                "start_time": "03:00 PM",
+                "end_time": "04:00 PM",
+                "session_type": "Valedictory",
+                "session_title": "Valedictory Ceremony & Prize Distribution",
+                "speaker": "Guest Speaker (15 min) & Dignitaries",
+                "topic": "Guest Speaker Address (15 mins), Best Presentation Prize Distribution (30 mins), and Conference Report Reading (10 mins)",
                 "venue": "Dr. APJ Abdul Kalam Auditorium",
                 "display_order": 7
             },
-            # Day 2
+            {
+                "day_number": 1,
+                "date_display": "Day 1 - November 20, 2026",
+                "start_time": "04:00 PM",
+                "end_time": "04:00 PM",
+                "session_type": "Conclusion",
+                "session_title": "Conference Concludes",
+                "speaker": "Secretariat",
+                "topic": "Adjournment of Day 1 proceedings",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
+                "display_order": 8
+            },
+            # Day 2 - November 21, 2026
             {
                 "day_number": 2,
                 "date_display": "Day 2 - November 21, 2026",
-                "start_time": "09:30 AM",
-                "end_time": "10:45 AM",
-                "session_type": "Keynote",
-                "session_title": "Keynote Address 3",
-                "speaker": "Dr. Rajeshwar Rao",
-                "topic": "Foundation Models & Multimodal Big Data Processing: Paradigms and Benchmarks",
-                "venue": "Dr. APJ Abdul Kalam Auditorium",
-                "display_order": 8
+                "start_time": "09:45 AM",
+                "end_time": "11:45 AM",
+                "session_type": "Student Presentation",
+                "session_title": "University Student Presentations (Advanced Tracks)",
+                "speaker": "Student Batches (10 mins per batch)",
+                "topic": "Evaluations in respective classrooms across Floors 2–4. Allied branches on Floors 5–6.",
+                "venue": "Floors 2–4 (Allied Branches: Floors 5–6)",
+                "display_order": 9
             },
             {
                 "day_number": 2,
                 "date_display": "Day 2 - November 21, 2026",
-                "start_time": "11:00 AM",
+                "start_time": "10:00 AM",
+                "end_time": "11:15 AM",
+                "session_type": "Keynote",
+                "session_title": "Plenary Research Address",
+                "speaker": "Invited Scholar (To be announced)",
+                "topic": "Emerging Frontiers in Distributed Computing & Scalable Intelligent Systems",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
+                "display_order": 10
+            },
+            {
+                "day_number": 2,
+                "date_display": "Day 2 - November 21, 2026",
+                "start_time": "11:30 AM",
+                "end_time": "11:45 AM",
+                "session_type": "Break",
+                "session_title": "Break for Outside Participants",
+                "speaker": None,
+                "topic": "Refreshment break for external attendees",
+                "venue": "6th Floor Delegate Area",
+                "display_order": 11
+            },
+            {
+                "day_number": 2,
+                "date_display": "Day 2 - November 21, 2026",
+                "start_time": "12:00 PM",
                 "end_time": "01:00 PM",
                 "session_type": "Technical Session",
-                "session_title": "Technical Paper Presentations: Tracks 3, 4, 5 & 6",
-                "speaker": "Session Chairs: Dr. Kavitha Srinivas & Dr. Poornima M.",
-                "topic": "Oral presentations on Big Data Technologies, Data Science, IoT & Security",
-                "venue": "Seminar Halls A & C",
-                "display_order": 9
+                "session_title": "Outside Participant Technical Presentations (Track B)",
+                "speaker": "External College & Institution Presenters",
+                "topic": "Presentations of big data and AI research by outside delegates",
+                "venue": "6th Floor Classrooms (Room allocation to be announced)",
+                "display_order": 12
             },
             {
                 "day_number": 2,
@@ -436,35 +476,35 @@ def seed_database():
                 "start_time": "01:00 PM",
                 "end_time": "02:00 PM",
                 "session_type": "Break",
-                "session_title": "Conference Lunch",
+                "session_title": "Conference Lunch Break",
                 "speaker": None,
-                "topic": None,
-                "venue": "University Banquet Hall",
-                "display_order": 10
+                "topic": "Buffet networking lunch",
+                "venue": "Campus Dining Area",
+                "display_order": 13
             },
             {
                 "day_number": 2,
                 "date_display": "Day 2 - November 21, 2026",
-                "start_time": "02:00 PM",
-                "end_time": "03:30 PM",
-                "session_type": "Panel",
-                "session_title": "Industry-Academia Panel Discussion",
-                "speaker": "Dr. Marcus Vance & Distinguished Panelists",
-                "topic": "Future of Enterprise Data Platforms, LLM Integrations and Scalability",
-                "venue": "Dr. APJ Abdul Kalam Auditorium",
-                "display_order": 11
-            },
-            {
-                "day_number": 2,
-                "date_display": "Day 2 - November 21, 2026",
-                "start_time": "03:45 PM",
-                "end_time": "05:00 PM",
+                "start_time": "03:00 PM",
+                "end_time": "04:00 PM",
                 "session_type": "Valedictory",
-                "session_title": "Valedictory & Awards Ceremony",
-                "speaker": "General Chairs & Executive Committee",
-                "topic": "Best Research Paper Awards, Distribution of Certificates & Vote of Thanks",
+                "session_title": "Grand Valedictory Ceremony & Best Paper Awards",
+                "speaker": "Valedictory Guest Speaker (15 min) & Dignitaries",
+                "topic": "Guest Speaker Address (15 mins), Best Paper & Project Awards (30 mins), and Comprehensive Conference Report Reading (10 mins)",
                 "venue": "Dr. APJ Abdul Kalam Auditorium",
-                "display_order": 12
+                "display_order": 14
+            },
+            {
+                "day_number": 2,
+                "date_display": "Day 2 - November 21, 2026",
+                "start_time": "04:00 PM",
+                "end_time": "04:00 PM",
+                "session_type": "Conclusion",
+                "session_title": "Conference Concludes",
+                "speaker": "Secretariat",
+                "topic": "Official adjournment of ICBDTT-2026",
+                "venue": "Dr. APJ Abdul Kalam Auditorium",
+                "display_order": 15
             }
         ]
         for s in schedule_data:
@@ -528,6 +568,30 @@ def seed_database():
 
         db.session.commit()
         print("Clean database seeding completed successfully.")
+    finally:
+        if ctx:
+            ctx.pop()
+
+def seed_database():
+    app = create_app()
+    with app.app_context():
+        # Clear existing data to remove unwanted invented information
+        db.drop_all()
+        db.create_all()
+        populate_seed_data()
+
+def init_db_and_seed(app):
+    """
+    Initializes database tables and populates default conference data if tables are empty.
+    Safe for production startup (does not drop any existing data).
+    """
+    try:
+        with app.app_context():
+            db.create_all()
+            if ConferenceTrack.query.first() is None:
+                populate_seed_data()
+    except Exception as e:
+        app.logger.warning(f"Database auto-initialization skipped or deferred: {e}")
 
 if __name__ == '__main__':
     seed_database()

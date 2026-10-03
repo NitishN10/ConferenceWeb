@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Saptha DataZen 2.6 | National Conference in Emerging Trends of Big Data Engineering 2.6 | Sapthagiri NPS University{% endblock %}
+{% block title %}{{ CONF_BRAND }} | {{ CONF_NAME }} | Sapthagiri NPS University (SNPSU){% endblock %}
 
 {% block content %}
 
@@ -11,8 +11,8 @@
       
       <!-- Institutional Affiliation Badge -->
       <div class="hero-affiliation">
-        <span class="affil-inst">Sapthagiri NPS University, Bangalore</span>
-        <span class="affil-dept">Department of Computer Science &amp; Engineering</span>
+        <span class="affil-inst">Sapthagiri NPS University (SNPSU), Bengaluru</span>
+        <span class="affil-dept">School of Engineering &amp; Technology &bull; Department of Computer Science &amp; Engineering</span>
       </div>
 
       <!-- Main Conference Heading -->
@@ -21,47 +21,74 @@
           <i class="bi bi-stars"></i> {{ CONF_BRAND }}
         </span>
       </div>
-      <h1 class="hero-title" style="margin-bottom: 16px;">
-        <span class="hero-conf-main" style="font-size: 2.85rem; font-weight: 800; line-height: 1.2; text-transform: uppercase;">
+      <h1 class="hero-title" style="margin-bottom: 14px;">
+        <span class="hero-conf-main" style="font-size: 2.75rem; font-weight: 800; line-height: 1.2; text-transform: uppercase;">
           {{ CONF_NAME }}
         </span>
       </h1>
 
-      <!-- Conference Theme -->
-      <p class="hero-theme">
-        "Emerging Trends in Big Data Engineering &amp; Intelligent Computing Systems"
-      </p>
+      <!-- Proposed Conference Taglines Box (Pending Official Approval) -->
+      <div class="hero-tagline-review-box" style="background: rgba(0, 16, 64, 0.65); border: 1px solid rgba(198, 158, 102, 0.4); border-radius: 8px; padding: 14px 18px; max-width: 860px; margin: 16px auto 26px; text-align: left; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-gold); display: flex; align-items: center; gap: 6px;">
+            <i class="bi bi-lightbulb-fill"></i> Proposed Conference Tagline Options <span class="badge" style="background: rgba(198, 158, 102, 0.2); color: #f5d79e; font-size: 0.68rem; border: 1px solid #c69e66;">Under Review</span>
+          </span>
+          <span style="font-size: 0.72rem; color: #cbd5e1; font-style: italic;">*Tagline options prepared for committee selection prior to finalization</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 8px;">
+          <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 8px 12px; border-radius: 6px; font-size: 0.83rem; color: #f1f5f9;">
+            <strong style="color:var(--accent-gold);">Option 1:</strong> "Pioneering Scalable Data Infrastructures, Intelligent Algorithms &amp; Distributed Computing Solutions"
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 8px 12px; border-radius: 6px; font-size: 0.83rem; color: #f1f5f9;">
+            <strong style="color:var(--accent-gold);">Option 2:</strong> "Advancing Next-Generation Big Data Engineering, Intelligent Analytics &amp; Autonomous Systems"
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 8px 12px; border-radius: 6px; font-size: 0.83rem; color: #f1f5f9;">
+            <strong style="color:var(--accent-gold);">Option 3:</strong> "Empowering Scalable Data Ecosystems Through Innovation, Intelligent Systems &amp; Global Research"
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 8px 12px; border-radius: 6px; font-size: 0.83rem; color: #f1f5f9;">
+            <strong style="color:var(--accent-gold);">Option 4:</strong> "Bridging Foundations and Frontiers in Big Data Architectures, Machine Intelligence &amp; Edge Analytics"
+          </div>
+        </div>
+      </div>
 
       <!-- Key Conference Parameters Grid -->
       <div class="hero-meta-panel">
         <div class="meta-panel-item">
           <i class="bi bi-calendar3"></i>
           <div>
-            <span class="meta-label">Conference Date</span>
+            <span class="meta-label">Conference Dates</span>
             <span class="meta-val">{{ CONF_DATE }}</span>
+          </div>
+        </div>
+        <div class="meta-panel-item">
+          <i class="bi bi-clock-fill"></i>
+          <div>
+            <span class="meta-label">Conference Timing</span>
+            <span class="meta-val">{{ CONF_TIMING }}</span>
           </div>
         </div>
         <div class="meta-panel-item">
           <i class="bi bi-building"></i>
           <div>
-            <span class="meta-label">Inauguration Venue</span>
-            <span class="meta-val">C Block Auditorium, SNPSU</span>
+            <span class="meta-label">Main Venue</span>
+            <span class="meta-val">Dr. APJ Abdul Kalam Auditorium</span>
           </div>
         </div>
         <div class="meta-panel-item">
           <i class="bi bi-geo-alt-fill"></i>
           <div>
-            <span class="meta-label">Location</span>
-            <span class="meta-val">Bangalore, Karnataka, India</span>
+            <span class="meta-label">Campus Location</span>
+            <span class="meta-val">SNPSU Campus, Bengaluru</span>
           </div>
         </div>
-        <div class="meta-panel-item">
-          <i class="bi bi-broadcast-pin"></i>
-          <div>
-            <span class="meta-label">Event Format</span>
-            <span class="meta-val">Hybrid (In-Person &amp; Online)</span>
-          </div>
-        </div>
+      </div>
+
+      <!-- Parallel Tracks Notification Banner -->
+      <div style="background: rgba(198, 158, 102, 0.12); border: 1px solid rgba(198, 158, 102, 0.35); border-radius: 6px; padding: 10px 18px; margin: 18px 0 28px; display: inline-flex; align-items: center; gap: 10px; font-size: 0.88rem; color: #e2e8f0; text-align: left;">
+        <i class="bi bi-info-circle-fill" style="color: var(--accent-gold); font-size: 1.2rem; flex-shrink: 0;"></i>
+        <span>
+          <strong>Parallel Sessions Structure:</strong> Student presentations begin at <strong>9:45 AM</strong> in classroom blocks (Floors 2–6), alongside the Inauguration at <strong>10:00 AM</strong> in the Auditorium.
+        </span>
       </div>
 
       <!-- CTAs: Registration & Paper Submission -->
@@ -72,8 +99,8 @@
         <a href="{{ url_for('registration.register') }}" class="btn btn-outline-white btn-lg">
           <i class="bi bi-ticket-perforated-fill"></i> Register for Conference
         </a>
-        <a href="{{ url_for('main.download_template') }}" class="btn btn-outline-gold btn-lg">
-          <i class="bi bi-file-earmark-word"></i> Paper Template (.docx)
+        <a href="{{ url_for('main.schedule') }}" class="btn btn-outline-gold btn-lg">
+          <i class="bi bi-calendar3"></i> View Programme Schedule
         </a>
         <a href="{{ url_for('main.call_for_papers') }}" class="btn btn-navy btn-lg">
           <i class="bi bi-journal-text"></i> Call for Papers
@@ -85,47 +112,47 @@
 </section>
 
 <!-- Conference Highlights & Metrics Strip -->
-<section style="background:#ffffff; border-bottom:1px solid var(--border-light); padding:32px 0; box-shadow:0 2px 10px rgba(0,16,64,0.03);">
+<section style="background:#ffffff; border-bottom:1px solid var(--border-light); padding:28px 0; box-shadow:0 2px 10px rgba(0,16,64,0.03);">
   <div class="container">
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
       
       <div style="display:flex; align-items:center; gap:16px; padding:12px; border-right:1px solid #f1f5f9;">
         <div style="width:48px; height:48px; border-radius:10px; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;">
-          <i class="bi bi-diagram-3-fill"></i>
+          <i class="bi bi-building"></i>
         </div>
         <div>
-          <strong style="color:var(--primary-navy); font-size:1.05rem; display:block;">6 Technical Tracks</strong>
-          <span style="font-size:0.8rem; color:#64748b;">AI/ML, Cloud, IoT, Security &amp; Analytics</span>
+          <strong style="color:var(--primary-navy); font-size:1.02rem; display:block;">Auditorium Main Stage</strong>
+          <span style="font-size:0.8rem; color:#64748b;">Inauguration, Keynotes &amp; Valedictory</span>
         </div>
       </div>
 
       <div style="display:flex; align-items:center; gap:16px; padding:12px; border-right:1px solid #f1f5f9;">
         <div style="width:48px; height:48px; border-radius:10px; background:rgba(0,16,64,0.06); color:var(--primary-navy); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;">
-          <i class="bi bi-patch-check-fill"></i>
+          <i class="bi bi-person-workspace"></i>
         </div>
         <div>
-          <strong style="color:var(--primary-navy); font-size:1.05rem; display:block;">Double-Blind Review</strong>
-          <span style="font-size:0.8rem; color:#64748b;">Rigorous evaluation by expert reviewers</span>
+          <strong style="color:var(--primary-navy); font-size:1.02rem; display:block;">42 Student Sections</strong>
+          <span style="font-size:0.8rem; color:#64748b;">Floors 2–4 &bull; 10 mins per batch</span>
         </div>
       </div>
 
       <div style="display:flex; align-items:center; gap:16px; padding:12px; border-right:1px solid #f1f5f9;">
         <div style="width:48px; height:48px; border-radius:10px; background:var(--accent-gold-light); color:var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;">
-          <i class="bi bi-journal-bookmark-fill"></i>
+          <i class="bi bi-globe2"></i>
         </div>
         <div>
-          <strong style="color:var(--primary-navy); font-size:1.05rem; display:block;">Proceedings Publication</strong>
-          <span style="font-size:0.8rem; color:#64748b;">All presented papers included in proceedings</span>
+          <strong style="color:var(--primary-navy); font-size:1.02rem; display:block;">Outside Participants</strong>
+          <span style="font-size:0.8rem; color:#64748b;">6th Floor &bull; 12:00 PM – 1:00 PM</span>
         </div>
       </div>
 
       <div style="display:flex; align-items:center; gap:16px; padding:12px;">
         <div style="width:48px; height:48px; border-radius:10px; background:rgba(0,16,64,0.06); color:var(--primary-navy); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;">
-          <i class="bi bi-people-fill"></i>
+          <i class="bi bi-award-fill"></i>
         </div>
         <div>
-          <strong style="color:var(--primary-navy); font-size:1.05rem; display:block;">Keynote Lectures</strong>
-          <span style="font-size:0.8rem; color:#64748b;">Plenaries by renowned global researchers</span>
+          <strong style="color:var(--primary-navy); font-size:1.02rem; display:block;">Awards &amp; Valedictory</strong>
+          <span style="font-size:0.8rem; color:#64748b;">3:00 PM &bull; Prize Distribution</span>
         </div>
       </div>
 
@@ -142,15 +169,15 @@
       <div>
         <div class="section-title-wrap">
           <span class="section-subheading">Conference Overview</span>
-          <h2 class="academic-heading">Welcome to Saptha DataZen 2.6</h2>
+          <h2 class="academic-heading">Welcome to {{ CONF_BRAND }}</h2>
         </div>
 
         <p class="academic-lead-text">
-          The <strong>National Conference in Emerging Trends of Big Data Engineering 2.6 (Saptha DataZen 2.6)</strong> is organized and hosted by <strong>Sapthagiri NPS University, Bangalore</strong>. The conference serves as a premier national academic forum for scholars, faculty members, researchers, and technical specialists to present and deliberate on foundational and applied innovations in large-scale data engineering.
+          The <strong>{{ CONF_NAME }}</strong> is hosted and organized by <strong>Sapthagiri NPS University (SNPSU), Bengaluru</strong> on <strong>{{ CONF_DATE }}</strong>. The conference serves as a premier international academic and research forum for scholars, faculty members, researchers, and technical specialists to present and deliberate on foundational and applied innovations in large-scale data engineering.
         </p>
 
         <p class="academic-text">
-          With the exponential expansion of digital datasets across healthcare, scientific computing, enterprise platforms, and IoT networks, developing reliable, scalable, and secure data tools is paramount. Saptha DataZen 2.6 brings together original contributions spanning <strong>Artificial Intelligence &amp; Machine Learning</strong>, <strong>Data Science &amp; Big Data</strong>, <strong>Computer Vision</strong>, <strong>NLP &amp; Generative AI</strong>, <strong>Cybersecurity</strong>, <strong>Cloud &amp; Distributed Systems</strong>, and <strong>Robotics &amp; Automation</strong>.
+          With the exponential expansion of digital datasets across healthcare, scientific computing, enterprise platforms, and IoT networks, developing reliable, scalable, and secure data tools is paramount. {{ CONF_BRAND }} brings together original contributions spanning <strong>Big Data Architectures</strong>, <strong>Artificial Intelligence &amp; Machine Learning</strong>, <strong>Data Science &amp; Big Data</strong>, <strong>Computer Vision</strong>, <strong>Cloud &amp; Distributed Systems</strong>, and <strong>Intelligent Solutions</strong>.
         </p>
 
         <!-- Feature Points -->
@@ -165,7 +192,7 @@
           </div>
           <div style="display:flex; align-items:flex-start; gap:10px; font-size:0.92rem; color:#334155;">
             <i class="bi bi-check-circle-fill" style="color:var(--accent-gold); font-size:1.1rem; margin-top:2px;"></i>
-            <span><strong>Recognition &amp; Awards:</strong> Best Research Paper and Outstanding Student Innovation awards presented in every technical track.</span>
+            <span><strong>Recognition &amp; Awards:</strong> Best Research Paper and Outstanding Student Innovation awards presented during the Valedictory session.</span>
           </div>
         </div>
 
@@ -173,8 +200,8 @@
           <a href="{{ url_for('main.about') }}" class="btn btn-navy">
             Detailed About Conference <i class="bi bi-arrow-right"></i>
           </a>
-          <a href="{{ url_for('main.call_for_papers') }}" class="btn btn-outline-gold">
-            Call for Papers &amp; Scope
+          <a href="{{ url_for('main.schedule') }}" class="btn btn-outline-gold">
+            Conference Programme Schedule
           </a>
         </div>
       </div>
@@ -245,19 +272,14 @@
 
     <div class="dates-grid">
       {% for d in dates %}
-      <div class="date-card {% if d.status_badge == 'Open' %}active-date{% endif %}">
+      <div class="date-card {% if d.status_badge == 'Confirmed' %}active-date{% endif %}" style="{% if d.status_badge == 'Confirmed' %}border-top: 4px solid var(--accent-gold); box-shadow: 0 4px 14px rgba(198,158,102,0.2);{% endif %}">
         <div class="date-status" style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="badge {% if d.status_badge == 'Open' %}badge-gold{% elif d.status_badge == 'Completed' %}badge-navy{% else %}badge-gold{% endif %}">
-            Milestone 0{{ loop.index }}
+          <span class="badge" style="{% if d.status_badge == 'Confirmed' %}background:#10b981; color:#ffffff; font-weight:700;{% else %}background:#e2e8f0; color:#475569; font-weight:600;{% endif %}">
+            {% if d.status_badge == 'Confirmed' %}<i class="bi bi-check-circle-fill"></i> Confirmed{% else %}<i class="bi bi-clock-history"></i> Pending Announcement{% endif %}
           </span>
-          {% if d.status_badge == 'Open' %}
-            <span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:700; color:#059669;">
-              <span style="width:8px; height:8px; border-radius:50%; background:#10b981; display:inline-block; animation:pulse 1.5s infinite;"></span>
-              Active
-            </span>
-          {% endif %}
+          <span style="font-size:0.72rem; color:#94a3b8; font-weight:700; text-transform:uppercase;">Milestone 0{{ loop.index }}</span>
         </div>
-        <div class="date-val">{{ d.date_value }}</div>
+        <div class="date-val" style="{% if d.date_value == 'To be announced' %}color:#64748b; font-size:1.15rem; font-style:italic;{% else %}color:var(--primary-navy); font-weight:800;{% endif %}">{{ d.date_value }}</div>
         <div class="date-title">{{ d.title }}</div>
         <div class="date-desc">{{ d.description }}</div>
       </div>
@@ -324,10 +346,10 @@
   <div class="container">
     
     <div class="section-header">
-      <span class="section-subtitle">Distinguished Academics</span>
+      <span class="section-subtitle">Distinguished Plenary &amp; Guest Sessions</span>
       <h2 class="section-title">Keynote &amp; Invited Speakers</h2>
       <p class="section-description">
-        Keynote lectures and plenary sessions delivered by recognized researchers and scholars.
+        Keynote lectures and plenary sessions will be delivered by recognized researchers and industry luminaries. Official speaker announcements will be released shortly.
       </p>
     </div>
 
@@ -376,19 +398,23 @@
         <div style="margin:24px 0; display:flex; flex-direction:column; gap:12px;">
           <div style="display:flex; align-items:center; gap:12px; color:#ffffff;">
             <i class="bi bi-building" style="color:var(--accent-gold); font-size:1.2rem;"></i>
-            <span><strong>Venue:</strong> {{ CONF_VENUE }}</span>
+            <span><strong>Main Auditorium:</strong> {{ CONF_VENUE }}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; color:#ffffff;">
+            <i class="bi bi-person-workspace" style="color:var(--accent-gold); font-size:1.2rem;"></i>
+            <span><strong>Presentation Classrooms:</strong> Floors 2–4 (42 Sections) &bull; Floors 5–6 (Allied &amp; Outside Delegates)</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; color:#ffffff;">
+            <i class="bi bi-clock-fill" style="color:var(--accent-gold); font-size:1.2rem;"></i>
+            <span><strong>Conference Timings:</strong> {{ CONF_TIMING }} ({{ CONF_DATE }})</span>
           </div>
           <div style="display:flex; align-items:center; gap:12px; color:#ffffff;">
             <i class="bi bi-geo-alt-fill" style="color:var(--accent-gold); font-size:1.2rem;"></i>
-            <span><strong>Address:</strong> {{ CONF_CAMPUS }}</span>
+            <span><strong>Campus Address:</strong> {{ CONF_CAMPUS }}</span>
           </div>
           <div style="display:flex; align-items:center; gap:12px; color:#ffffff;">
             <i class="bi bi-envelope-fill" style="color:var(--accent-gold); font-size:1.2rem;"></i>
-            <span><strong>Secretariat:</strong> {{ CONF_EMAIL }}</span>
-          </div>
-          <div style="display:flex; align-items:center; gap:12px; color:#ffffff;">
-            <i class="bi bi-telephone-fill" style="color:var(--accent-gold); font-size:1.2rem;"></i>
-            <span><strong>Phone:</strong> {{ CONF_PHONE }}</span>
+            <span><strong>Secretariat Email:</strong> {{ CONF_EMAIL }}</span>
           </div>
         </div>
         <div style="display:flex; gap:14px; flex-wrap:wrap;">

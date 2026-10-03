@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 120" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5d79e"/>
+      <stop offset="50%" stop-color="#c69e66"/>
+      <stop offset="100%" stop-color="#9a743a"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="60%" stop-color="#14378f"/>
+      <stop offset="100%" stop-color="#001040"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Group: Emblem Icon (Left, 100x100 box centered at x=60, y=60) -->
+  <g transform="translate(10, 10)">
+    <!-- Outer Shield / Circle Base -->
+    <circle cx="50" cy="50" r="48" fill="url(#blueGrad)" stroke="url(#goldGrad)" stroke-width="2.5" />
+    <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.12)" stroke-dasharray="3,3" stroke-width="1.5" />
+    
+    <!-- Big Data Cylinder / Data Mesh Stack -->
+    <!-- Top Disc -->
+    <ellipse cx="50" cy="34" rx="22" ry="7" fill="url(#goldGrad)" opacity="0.95" />
+    
+    <!-- Middle Cylinder Layer -->
+    <path d="M 28 34 V 46 C 28 50 72 50 72 46 V 34" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+    <!-- Lower Cylinder Layer -->
+    <path d="M 28 46 V 58 C 28 62 72 62 72 58 V 46" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+    <!-- Bottom Base Cylinder -->
+    <path d="M 28 58 V 70 C 28 74 72 74 72 70 V 58" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+
+    <!-- Neural / Data Network Lines & Interconnected Nodes -->
+    <g stroke="url(#cyanGrad)" stroke-width="1.5">
+      <line x1="50" y1="34" x2="25" y2="24" />
+      <line x1="50" y1="34" x2="75" y2="24" />
+      <line x1="50" y1="70" x2="26" y2="78" />
+      <line x1="50" y1="70" x2="74" y2="78" />
+      <line x1="28" y1="46" x2="16" y2="50" />
+      <line x1="72" y1="46" x2="84" y2="50" />
+    </g>
+
+    <!-- Glowing Data Nodes -->
+    <circle cx="50" cy="34" r="3.5" fill="#ffffff" stroke="#c69e66" stroke-width="1.5" />
+    <circle cx="25" cy="24" r="3" fill="#38bdf8" />
+    <circle cx="75" cy="24" r="3" fill="#38bdf8" />
+    <circle cx="16" cy="50" r="3" fill="#f5d79e" />
+    <circle cx="84" cy="50" r="3" fill="#f5d79e" />
+    <circle cx="26" cy="78" r="3" fill="#38bdf8" />
+    <circle cx="74" cy="78" r="3" fill="#38bdf8" />
+    <circle cx="50" cy="70" r="3.5" fill="#ffffff" stroke="#c69e66" stroke-width="1.5" />
+
+    <!-- Subtle Orbit Arc -->
+    <ellipse cx="50" cy="50" rx="36" ry="14" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" transform="rotate(-25 50 50)" />
+  </g>
+
+  <!-- Typography Block (Right side) -->
+  <g transform="translate(130, 20)">
+    <!-- Sub-heading / Affiliation -->
+    <text x="0" y="16" font-family="'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" font-size="11.5" font-weight="700" fill="#c69e66" letter-spacing="2" text-transform="uppercase">
+      SAPTHAGIRI NPS UNIVERSITY &bull; BENGALURU
+    </text>
+
+    <!-- Main Conference Acronym -->
+    <text x="0" y="52" font-family="'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" font-size="34" font-weight="900" fill="#001040" letter-spacing="-0.5">
+      ICBDTT<tspan fill="#c69e66">-2026</tspan>
+    </text>
+
+    <!-- Badge: Design Concept -->
+    <g transform="translate(245, 30)">
+      <rect x="0" y="0" width="138" height="20" rx="4" fill="rgba(198,158,102,0.15)" stroke="#c69e66" stroke-width="1" />
+      <text x="69" y="14" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#9a743a" text-anchor="middle" letter-spacing="1">
+        LOGO DESIGN CONCEPT
+      </text>
+    </g>
+
+    <!-- Conference Full Name Subtitle -->
+    <text x="0" y="74" font-family="'Plus Jakarta Sans', -apple-system, sans-serif" font-size="12" font-weight="700" fill="#1e293b" letter-spacing="0.2">
+      International Conference on Big Data Tools and Techniques
+    </text>
+
+    <!-- Date & Location Micro-bar -->
+    <text x="0" y="91" font-family="'Plus Jakarta Sans', -apple-system, sans-serif" font-size="10.5" font-weight="600" fill="#64748b" letter-spacing="0.4">
+      20–21 November 2026 &bull; Dr. APJ Abdul Kalam Auditorium, SNPSU Campus
+    </text>
+  </g>
+</svg>

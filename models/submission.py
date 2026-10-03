@@ -1,5 +1,6 @@
 from datetime import datetime
 from models.db import db
+from sqlalchemy.orm import deferred
 
 class PaperSubmission(db.Model):
     __tablename__ = 'paper_submissions'
@@ -21,10 +22,11 @@ class PaperSubmission(db.Model):
     author_count = db.Column(db.Integer, default=1)
     co_authors_info = db.Column(db.Text, nullable=True) # JSON or newline string of coauthors
     
-    # File details
-    file_path = db.Column(db.String(350), nullable=False)
+    # File details: supports both disk path and persistent binary data for serverless runtimes
+    file_path = db.Column(db.String(350), nullable=True)
     original_filename = db.Column(db.String(255), nullable=False)
     file_size_bytes = db.Column(db.Integer, nullable=True)
+    file_data = deferred(db.Column(db.LargeBinary, nullable=True))
     
     # Submission Status: Submitted, Under Review, Accepted, Rejected, Camera Ready
     status = db.Column(db.String(40), default='Submitted', nullable=False)

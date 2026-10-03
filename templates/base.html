@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{{ CONF_BRAND }} | {{ CONF_NAME }} | Sapthagiri NPS University{% endblock %}</title>
+  <title>{% block title %}{{ CONF_BRAND }} | {{ CONF_NAME }} | Sapthagiri NPS University (SNPSU){% endblock %}</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="{% block meta_description %}Official website for the National Conference in Emerging Trends of Big Data Engineering 2.6 (Saptha DataZen 2.6), hosted by Sapthagiri NPS University, Bangalore. Advancing data-driven research, AI, and intelligent computing systems.{% endblock %}">
-  <meta name="keywords" content="Big Data Conference, Saptha DataZen 2.6, Sapthagiri NPS University, SNPSU, Artificial Intelligence, Machine Learning, Big Data Engineering, Bangalore Conference">
+  <meta name="description" content="{% block meta_description %}Official website for the International Conference on Big Data Tools and Techniques (ICBDTT-2026), hosted by Sapthagiri NPS University (SNPSU), Bengaluru. 20–21 November 2026 at Dr. APJ Abdul Kalam Auditorium.{% endblock %}">
+  <meta name="keywords" content="Big Data Conference, ICBDTT-2026, Sapthagiri NPS University, SNPSU Bengaluru, Big Data Tools and Techniques, Artificial Intelligence, Machine Learning, Data Engineering">
   <meta name="author" content="Sapthagiri NPS University">
-  <meta property="og:title" content="{{ CONF_BRAND }} | {{ CONF_NAME }} | SNPSU">
-  <meta property="og:description" content="National Conference in Emerging Trends of Big Data Engineering 2.6 - Sapthagiri NPS University, Bangalore">
+  <meta property="og:title" content="{{ CONF_BRAND }} | {{ CONF_NAME }} | SNPSU Bengaluru">
+  <meta property="og:description" content="International Conference on Big Data Tools and Techniques (ICBDTT-2026) - 20–21 November 2026, Dr. APJ Abdul Kalam Auditorium, SNPSU Campus, Bengaluru">
   <meta property="og:type" content="website">
   
   <!-- Favicon -->
@@ -53,24 +53,22 @@
     <div class="container">
       <div class="banner-layout">
         
-        <!-- Left: Official University Logo -->
-        <a href="{{ url_for('main.index') }}" class="banner-logo-link" title="Sapthagiri NPS University">
+        <!-- Left: Official University Logo & Concept Emblem -->
+        <a href="{{ url_for('main.index') }}" class="banner-logo-link" title="Sapthagiri NPS University & ICBDTT-2026">
           <img src="{{ url_for('static', filename='images/snpsu_logo.webp') }}" alt="Sapthagiri NPS University (SNPSU) Logo" class="banner-university-logo">
+          <img src="{{ url_for('static', filename='images/icbdtt_emblem_concept.svg') }}" alt="ICBDTT-2026 Concept Logo" style="height: 48px; width: 48px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.15);" title="ICBDTT-2026 Logo Concept">
         </a>
 
         <!-- Center: University & Conference Identity -->
         <div class="banner-title-block">
           <div class="banner-uni-name">
             <span class="uni-main">SAPTHAGIRI NPS UNIVERSITY</span>
-            <span class="uni-loc">Bangalore, Karnataka, India</span>
+            <span class="uni-loc">Bengaluru, Karnataka, India</span>
           </div>
           <div class="banner-conf-title-wrap">
-            <div class="banner-brand-callout" style="margin-bottom: 4px;">
-              <span class="conf-badge-acronym" style="font-size: 0.95rem; padding: 3px 14px; letter-spacing: 0.06em; font-weight: 800; background: var(--primary-navy); color: var(--accent-gold); border: 1.5px solid var(--accent-gold); border-radius: 4px; display: inline-block;">{{ CONF_BRAND }}</span>
-            </div>
-            <div class="banner-conf-heading" style="font-size: 1.4rem; font-weight: 800; line-height: 1.25; color: var(--primary-navy); text-transform: uppercase;">{{ CONF_NAME }}</div>
+            <div class="banner-conf-heading" style="font-size: 1.35rem; font-weight: 800; line-height: 1.25; color: var(--primary-navy); text-transform: uppercase;">{{ CONF_NAME }}</div>
             <div class="banner-conf-subline">
-              <span class="conf-subline-theme">Sapthagiri NPS University &bull; {{ CONF_DATE }} &bull; Bangalore</span>
+              <span class="conf-subline-theme">School of Engineering &amp; Technology &bull; Department of Computer Science &amp; Engineering &bull; {{ CONF_DATE }}</span>
             </div>
           </div>
         </div>
@@ -80,15 +78,22 @@
           <div class="banner-meta-pill">
             <i class="bi bi-calendar-event-fill"></i>
             <div>
-              <span class="meta-label">Conference Date</span>
+              <span class="meta-label">Conference Dates</span>
               <span class="meta-value">{{ CONF_DATE }}</span>
+            </div>
+          </div>
+          <div class="banner-meta-pill">
+            <i class="bi bi-clock-fill"></i>
+            <div>
+              <span class="meta-label">Conference Timing</span>
+              <span class="meta-value">{{ CONF_TIMING }}</span>
             </div>
           </div>
           <div class="banner-meta-pill">
             <i class="bi bi-geo-alt-fill"></i>
             <div>
-              <span class="meta-label">Inauguration Venue</span>
-              <span class="meta-value">C Block, 1st Floor, Auditorium</span>
+              <span class="meta-label">Auditorium Venue</span>
+              <span class="meta-value">Dr. APJ Abdul Kalam Auditorium</span>
             </div>
           </div>
         </div>
@@ -109,7 +114,7 @@
           </div>
           <div class="conf-brand-text">
             <span class="conf-acronym">{{ CONF_BRAND }}</span>
-            <span class="conf-year-tag">National Conference</span>
+            <span class="conf-year-tag">International Conference</span>
           </div>
         </a>
 
@@ -124,12 +129,16 @@
           <li class="nav-item {% if request.path == '/call-for-papers' %}active{% endif %}">
             <a href="{{ url_for('main.call_for_papers') }}">Call for Papers</a>
           </li>
+          <li class="nav-item {% if request.path == '/schedule' %}active{% endif %}">
+            <a href="{{ url_for('main.schedule') }}">Schedule &amp; Presentations</a>
+          </li>
+          <li class="nav-item {% if request.path == '/committee' %}active{% endif %}">
+            <a href="{{ url_for('main.committee') }}">Committee</a>
+          </li>
           <li class="nav-item {% if request.path == '/speakers' %}active{% endif %}">
             <a href="{{ url_for('main.speakers') }}">Speakers</a>
           </li>
-          <li class="nav-item {% if request.path == '/schedule' %}active{% endif %}">
-            <a href="{{ url_for('main.schedule') }}">Schedule</a>
-          </li>
+
           <li class="nav-item {% if request.path == '/venue' %}active{% endif %}">
             <a href="{{ url_for('main.venue') }}">Venue</a>
           </li>
@@ -168,7 +177,6 @@
       <li><a href="{{ url_for('main.speakers') }}"><i class="bi bi-person-video3"></i> Speakers</a></li>
       <li><a href="{{ url_for('main.committee') }}"><i class="bi bi-people"></i> Committee</a></li>
       <li><a href="{{ url_for('main.schedule') }}"><i class="bi bi-calendar3"></i> Programme Schedule</a></li>
-      <li><a href="{{ url_for('main.fees') }}"><i class="bi bi-credit-card"></i> Registration Fees</a></li>
       <li><a href="{{ url_for('main.venue') }}"><i class="bi bi-geo-alt"></i> Venue &amp; Travel</a></li>
       <li><a href="{{ url_for('contact.contact') }}"><i class="bi bi-envelope"></i> Contact Us</a></li>
       <li><a href="{{ url_for('main.faq') }}"><i class="bi bi-question-circle"></i> FAQ</a></li>
@@ -239,7 +247,6 @@
           <ul class="footer-links">
             <li><a href="{{ url_for('main.speakers') }}"><i class="bi bi-chevron-right"></i> Keynote Speakers</a></li>
             <li><a href="{{ url_for('main.schedule') }}"><i class="bi bi-chevron-right"></i> Programme Schedule</a></li>
-            <li><a href="{{ url_for('main.fees') }}"><i class="bi bi-chevron-right"></i> Registration Fees</a></li>
             <li><a href="{{ url_for('main.committee') }}"><i class="bi bi-chevron-right"></i> Organizing Committee</a></li>
             <li><a href="{{ url_for('main.venue') }}"><i class="bi bi-chevron-right"></i> Venue &amp; Location</a></li>
             <li><a href="{{ url_for('main.faq') }}"><i class="bi bi-chevron-right"></i> FAQ</a></li>
@@ -265,7 +272,7 @@
             </li>
             <li>
               <i class="bi bi-clock-fill"></i>
-              <span>Conference Date: {{ CONF_DATE }}</span>
+              <span>Dates: {{ CONF_DATE }} &bull; {{ CONF_TIMING }}</span>
             </li>
           </ul>
           <div style="margin-top:16px;">

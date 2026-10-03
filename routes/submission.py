@@ -70,10 +70,10 @@ def submit_paper():
             while PaperSubmission.query.filter_by(paper_id=paper_id).first():
                 paper_id = generate_paper_id()
 
-            # Save file to uploads folder
+            # Save file to uploads folder / persist bytes in database
             file = request.files['paper_file']
             upload_dir = current_app.config['UPLOAD_FOLDER']
-            full_path, original_filename, file_size = save_paper_file(file, upload_dir, paper_id)
+            full_path, original_filename, file_size, file_bytes = save_paper_file(file, upload_dir, paper_id)
 
             # Convert author count
             try:
@@ -99,6 +99,7 @@ def submit_paper():
                 file_path=full_path,
                 original_filename=original_filename,
                 file_size_bytes=file_size,
+                file_data=file_bytes,
                 status='Submitted'
             )
 

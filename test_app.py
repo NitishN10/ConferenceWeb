@@ -1,7 +1,11 @@
 import io
+import os
 import unittest
+from unittest.mock import patch
 from app import create_app
+from config import get_database_uri, Config
 from models import db, Registration, PaperSubmission, ContactMessage, Admin
+from utils.file_handler import save_paper_file
 
 class ConferenceAppTestCase(unittest.TestCase):
     def setUp(self):
@@ -207,6 +211,94 @@ class ConferenceAppTestCase(unittest.TestCase):
             dl_resp = self.client.get(f'/admin/submissions/{paper.id}/download')
             self.assertEqual(dl_resp.status_code, 200)
             print("Verified admin paper download")
+
+    def test_07_database_configuration_and_vercel_compatibility(self):
+        # 1. Test postgres:// scheme normalization to postgresql:// for SQLAlchemy 2.0
+        with patch.dict(os.environ, {'DATABASE_URL': 'postgres://user:secret@ep-neon.us-east-2.aws.neon.tech/neondb'}, clear=False):
+            uri = get_database_uri()
+            self.assertTrue(uri.startswith('postgresql://'))
+            self.assertIn('ep-neon.us-east-2.aws.neon.tech', uri)
+
+        # 2. Test standard postgresql:// URL preserved
+        with patch.dict(os.environ, {'DATABASE_URL': 'postgresql://user:secret@host:5432/dbname'}, clear=False):
+            uri = get_database_uri()
+            self.assertEqual(uri, 'postgresql://user:secret@host:5432/dbname')
+
+        # 3. Test Vercel environment without DATABASE_URL raises RuntimeError
+        # (refusing ephemeral /tmp to guarantee database persistence)
+        clean_env = {k: v for k, v in os.environ.items() if k not in ('DATABASE_URL', 'POSTGRES_URL', 'SQLALCHEMY_DATABASE_URI')}
+        clean_env['VERCEL'] = '1'
+        with patch.dict(os.environ, clean_env, clear=True):
+            with self.assertRaises(RuntimeError) as ctx:
+                get_database_uri()
+            self.assertIn('DATABASE_URL environment variable is required on Vercel', str(ctx.exception))
+
+        # 4. Test local development falls back to instance/conference.db when VERCEL is not set
+        clean_local_env = {k: v for k, v in os.environ.items() if k not in ('DATABASE_URL', 'POSTGRES_URL', 'SQLALCHEMY_DATABASE_URI', 'VERCEL', 'VERCEL_ENV', 'AWS_LAMBDA_FUNCTION_NAME')}
+        with patch.dict(os.environ, clean_local_env, clear=True):
+            local_uri = get_database_uri()
+            self.assertTrue(local_uri.startswith('sqlite:///'))
+            self.assertIn('instance/conference.db', local_uri)
+
+        print("Verified database configuration logic (PostgreSQL normalization, Vercel detection, SQLite local fallback)")
+
+    def test_08_upload_persistence_without_disk_dependency(self):
+        # Verify that upload handling persists file_data in the database
+        # and that download serves from file_data even if file does not exist on disk
+        test_payload = b"%PDF-1.5 Serverless persistent in-memory paper manuscript test content."
+        file_obj = (io.BytesIO(test_payload), "serverless_lakehouse_paper.pdf")
+        
+        response = self.client.post('/submission', data={
+            'corresponding_author': 'Dr. Meera Nambiar',
+            'email': 'meera.nambiar@iisc.ac.in',
+            'phone': '+91 98450 77889',
+            'institution': 'Indian Institute of Science',
+            'department': 'Supercomputer Education and Research Centre',
+            'country': 'India',
+            'title': 'Autonomous Tiered Storage in Cloud Data Lakes',
+            'track': 'Big Data Technologies & Distributed Infrastructure',
+            'abstract': 'Cloud data lakehouse systems require automated tiering of cold and hot data partitions. This work introduces an adaptive cost-aware scheduling policy based on streaming access telemetry. Real-world traces on an object storage testbed demonstrate improved query cost-efficiency.',
+            'keywords': 'Cloud Lakes, Tiered Storage, Data Lakehouse, Telemetry, Cost Efficiency',
+            'declaration': 'on',
+            'paper_file': file_obj
+        }, content_type='multipart/form-data', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+        paper = PaperSubmission.query.filter_by(email='meera.nambiar@iisc.ac.in').order_by(PaperSubmission.id.desc()).first()
+        self.assertIsNotNone(paper)
+        self.assertIsNotNone(paper.file_data)
+        self.assertEqual(paper.file_data, test_payload)
+
+        # Simulate missing disk file (as occurs across serverless invocations)
+        paper.file_path = "/nonexistent/path/on/serverless/instance.pdf"
+        db.session.commit()
+
+        # Admin login
+        self.client.post('/admin/login', data={'username': 'admin', 'password': 'Admin@SNPSU2026!'}, follow_redirects=True)
+        dl_resp = self.client.get(f'/admin/submissions/{paper.id}/download')
+        self.assertEqual(dl_resp.status_code, 200)
+        self.assertEqual(dl_resp.data, test_payload)
+        self.assertEqual(dl_resp.content_type, 'application/pdf')
+        print("Verified upload persistence in database & download without disk dependency")
+
+    def test_09_read_only_filesystem_handling(self):
+        # Simulate read-only filesystem where os.makedirs or file.save raises OSError(30)
+        from werkzeug.datastructures import FileStorage
+        mock_file = FileStorage(stream=io.BytesIO(b"Test content"), filename="readonly_test.pdf")
+        
+        with patch('os.makedirs', side_effect=OSError(30, "Read-only file system: '/var/task/uploads'")):
+            full_path, orig_name, file_size, file_bytes = save_paper_file(mock_file, "/var/task/uploads/papers", "SNPSU-BDTT-P-TEST")
+            self.assertEqual(orig_name, "readonly_test.pdf")
+            self.assertEqual(file_bytes, b"Test content")
+            self.assertEqual(file_size, len(b"Test content"))
+
+        # Verify create_app in Vercel environment does not attempt to create /var/task/instance
+        with patch.dict(os.environ, {'VERCEL': '1', 'DATABASE_URL': 'sqlite:///:memory:'}):
+            with patch('os.makedirs') as mock_makedirs:
+                test_app = create_app()
+                mock_makedirs.assert_not_called()
+
+        print("Verified application handles read-only filesystem on Vercel without throwing OSError")
 
 if __name__ == '__main__':
     unittest.main()

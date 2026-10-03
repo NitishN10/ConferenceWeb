@@ -206,22 +206,35 @@ def update_submission_status(id):
 @admin_required
 def download_paper(id):
     paper = PaperSubmission.query.get_or_404(id)
-    if not os.path.exists(paper.file_path):
-        flash('Uploaded file not found on disk storage.', 'danger')
-        return redirect(url_for('admin.submissions'))
     
-    return send_file(
-        paper.file_path,
-        as_attachment=True,
-        download_name=f"{paper.paper_id}_{paper.original_filename}"
-    )
+    # 1. Prefer database binary data (persistent across serverless instances like Vercel)
+    if paper.file_data:
+        import mimetypes
+        mimetype, _ = mimetypes.guess_type(paper.original_filename)
+        return send_file(
+            io.BytesIO(paper.file_data),
+            as_attachment=True,
+            download_name=f"{paper.paper_id}_{paper.original_filename}",
+            mimetype=mimetype or 'application/octet-stream'
+        )
+
+    # 2. Fallback to local disk file if available (local development)
+    if paper.file_path and os.path.exists(paper.file_path):
+        return send_file(
+            paper.file_path,
+            as_attachment=True,
+            download_name=f"{paper.paper_id}_{paper.original_filename}"
+        )
+    
+    flash('Uploaded file not found in database or disk storage.', 'danger')
+    return redirect(url_for('admin.submissions'))
 
 @admin_bp.route('/submissions/<int:id>/delete', methods=['POST'])
 @admin_required
 def delete_submission(id):
     paper = PaperSubmission.query.get_or_404(id)
     paper_id_str = paper.paper_id
-    if os.path.exists(paper.file_path):
+    if paper.file_path and os.path.exists(paper.file_path):
         try:
             os.remove(paper.file_path)
         except OSError:
