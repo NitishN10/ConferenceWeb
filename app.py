@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template
-from config import Config
+from config import Config, get_database_uri
 from models import db
 from routes import main_bp, submission_bp, registration_bp, contact_bp, admin_bp
 from seed_data import init_db_and_seed
@@ -8,6 +8,8 @@ from seed_data import init_db_and_seed
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    if config_class is Config:
+        app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
 
     # In local development, ensure required directories exist if filesystem is writable.
     # Never attempt to write to /var/task/instance or assume filesystem is writable on Vercel.
