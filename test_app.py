@@ -300,5 +300,110 @@ class ConferenceAppTestCase(unittest.TestCase):
 
         print("Verified application handles read-only filesystem on Vercel without throwing OSError")
 
+    def test_10_payment_proceed_flow(self):
+        import json
+        import random
+        # 1. Simulate the exact demo payment generation flow:
+        # User fills form, clicks 'Fill Demo Ref ID' which generates mock UPI ID:
+        demo_upi_id = 'UPI' + str(random.randint(100000000000, 999999999999))
+
+        payload = {
+            'name': 'Rahul Sharma',
+            'srn': '1RV23CS101',
+            'email': 'rahul12@gmail.com',
+            'phone': '9845112233',
+            'department': 'Computer Science & Engineering',
+            'semester': '6th Semester',
+            'participant_type': 'Project Team Entry (2-5 Students)',
+            'institution': 'Sapthagiri NPS University (SNPSU)',
+            'designation': 'Student Team Leader',
+            'country': 'India',
+            'project_title': 'Decentralized Edge Telemetry Aggregator for Smart Mobility',
+            'project_category': 'Data Science, Big Data and Data Analytics',
+            'technologies': 'Python, PyTorch, Apache Kafka, PostgreSQL, Docker',
+            'project_abstract': 'A distributed telemetry broker collecting real-time sensor streams from vehicular edge units with low latency and provable data integrity.',
+            'mentor_name': 'Dr. Suresh Kumar, Associate Professor',
+            'team_members': json.dumps([
+                {'id': 2, 'name': 'Pooja Hegde', 'srn': '1RV23CS102', 'email': 'pooja12@gmail.com'}
+            ]),
+            'amount_paid': '₹ 500',
+            'payment_mode': 'UPI / QR Code',
+            'transaction_ref': demo_upi_id,
+            'payment_status': 'Confirmed',
+            'payment_date': '2026-10-04'
+        }
+
+        # 2. Proceed request (simulating the user clicking Proceed / Submit)
+        response = self.client.post('/registration', data=payload, follow_redirects=False)
+        self.assertEqual(response.status_code, 302, "Proceed request must return 302 redirect on success")
+        redirect_url = response.headers.get('Location', '')
+        self.assertIn('/registration/success/', redirect_url)
+
+        # Extract registration ID from redirect URL
+        reg_id = redirect_url.split('/registration/success/')[-1]
+        self.assertTrue(reg_id.startswith('SNPSU-BDTT-REG-'))
+
+        # 3. Follow redirect to confirmation page (ensure no 500 error occurs on render)
+        success_response = self.client.get(redirect_url)
+        self.assertEqual(success_response.status_code, 200)
+        self.assertIn(b'Registration Confirmed!', success_response.data)
+        self.assertIn(demo_upi_id.encode('utf-8'), success_response.data)
+        self.assertIn(b'Confirmed &bull; Paid', success_response.data)
+        self.assertIn(b'500', success_response.data)
+
+        # 4. Verify database update and column persistence
+        reg_in_db = Registration.query.filter_by(registration_id=reg_id).first()
+        self.assertIsNotNone(reg_in_db)
+        self.assertEqual(reg_in_db.payment_status, 'Confirmed')
+        self.assertEqual(reg_in_db.transaction_ref, demo_upi_id)
+        self.assertEqual(reg_in_db.payment_mode, 'UPI / QR Code')
+        self.assertEqual(reg_in_db.amount_paid, '₹ 500')
+        self.assertIsNotNone(reg_in_db.created_at)
+        print(f"Verified payment proceed flow with demo UPI ID {demo_upi_id} -> Success pass for {reg_id}")
+
+    def test_11_payment_update_existing_registration(self):
+        import random
+        # Verify updating payment on an existing pending registration
+        unique_suffix = str(random.randint(100000, 999999))
+        target_reg_id = f"SNPSU-BDTT-REG-{unique_suffix}"
+        pending_reg = Registration(
+            registration_id=target_reg_id,
+            name='Vikram Adithya',
+            email=f'vikram_{unique_suffix}@gmail.com',
+            phone='9845223344',
+            institution='SNPSU',
+            department='Computer Science & Engineering',
+            designation='Student Team Leader',
+            participant_type='Project Team Entry (2-5 Students)',
+            country='India',
+            payment_status='Pending',
+            transaction_ref=None,
+            amount_paid='₹ 500',
+            created_at=None  # Verify handling when created_at is initially None
+        )
+        db.session.add(pending_reg)
+        db.session.commit()
+
+        # Update payment using demo UPI ID
+        demo_ref = f'UPI{random.randint(100000000000, 999999999999)}'
+        response = self.client.post('/registration', data={
+            'registration_id': target_reg_id,
+            'payment_mode': 'UPI / QR Code',
+            'transaction_ref': demo_ref,
+            'payment_status': 'Confirmed',
+            'amount_paid': '₹ 500'
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Registration Confirmed!', response.data)
+        self.assertIn(target_reg_id.encode('utf-8'), response.data)
+        self.assertIn(demo_ref.encode('utf-8'), response.data)
+
+        updated_reg = Registration.query.filter_by(registration_id=target_reg_id).first()
+        self.assertEqual(updated_reg.payment_status, 'Confirmed')
+        self.assertEqual(updated_reg.transaction_ref, demo_ref)
+        self.assertIsNotNone(updated_reg.created_at)
+        print("Verified payment update on existing registration with demo UPI ID -> Confirmed")
+
 if __name__ == '__main__':
     unittest.main()

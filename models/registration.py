@@ -16,21 +16,21 @@ class Registration(db.Model):
     country = db.Column(db.String(80), nullable=False)
     paper_id = db.Column(db.String(32), nullable=True, index=True) # Linked Paper ID if presenting
     accompanying_person = db.Column(db.Boolean, default=False)
-    payment_mode = db.Column(db.String(50), default='NEFT/UPI/Wire Transfer')
+    payment_mode = db.Column(db.String(100), default='NEFT/UPI/Wire Transfer')
     transaction_ref = db.Column(db.String(100), nullable=True)
-    payment_status = db.Column(db.String(30), default='Confirmed') # Confirmed, Pending
+    payment_status = db.Column(db.String(50), default='Confirmed') # Confirmed, Pending
     amount_paid = db.Column(db.String(50), nullable=True)
     dietary_pref = db.Column(db.String(50), default='Standard')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, server_default=db.func.now())
     # Project & Student Team Fields
     srn = db.Column(db.String(50), nullable=True) # Leader SRN / USN
-    semester = db.Column(db.String(20), nullable=True) # Leader Semester
-    project_title = db.Column(db.String(255), nullable=True)
-    project_category = db.Column(db.String(120), nullable=True)
+    semester = db.Column(db.String(50), nullable=True) # Leader Semester
+    project_title = db.Column(db.Text, nullable=True)
+    project_category = db.Column(db.String(255), nullable=True)
     project_abstract = db.Column(db.Text, nullable=True)
-    technologies = db.Column(db.String(255), nullable=True)
-    mentor_name = db.Column(db.String(150), nullable=True)
-    desk_number = db.Column(db.String(50), nullable=True, default='Allocated on Event Day')
+    technologies = db.Column(db.Text, nullable=True)
+    mentor_name = db.Column(db.String(255), nullable=True)
+    desk_number = db.Column(db.String(100), nullable=True, default='Allocated on Event Day')
     team_members_json = db.Column(db.Text, nullable=True) # JSON array of team members
 
     @property

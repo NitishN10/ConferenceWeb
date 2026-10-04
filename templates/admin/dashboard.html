@@ -152,7 +152,7 @@
               <div style="font-size:0.78rem; color:var(--text-muted);">{{ r.institution[:25] }}</div>
             </td>
             <td><span class="badge badge-navy" style="font-size:0.72rem;">{{ r.participant_type }}</span></td>
-            <td style="font-size:0.82rem; color:var(--text-muted);">{{ r.created_at.strftime('%d %b %H:%M') }}</td>
+            <td style="font-size:0.82rem; color:var(--text-muted);">{{ r.created_at.strftime('%d %b %H:%M') if r.created_at and r.created_at.strftime else 'N/A' }}</td>
           </tr>
           {% endfor %}
         </tbody>

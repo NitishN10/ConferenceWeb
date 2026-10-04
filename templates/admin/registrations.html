@@ -73,7 +73,7 @@
             </td>
             <td><strong style="color:var(--primary-navy);">{{ r.amount_paid or '₹ 3,500' }}</strong></td>
             <td><span class="status-badge status-accepted">{{ r.payment_status }}</span></td>
-            <td style="font-size:0.82rem; color:var(--text-muted);">{{ r.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td style="font-size:0.82rem; color:var(--text-muted);">{{ r.created_at.strftime('%Y-%m-%d %H:%M') if r.created_at and r.created_at.strftime else 'N/A' }}</td>
             <td>
               <form action="{{ url_for('admin.delete_registration', id=r.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this registration record?');" style="display:inline;">
                 <button type="submit" class="btn btn-sm" style="background:#fee2e2; color:#dc2626; border:none; padding:5px 8px;" title="Delete Record">

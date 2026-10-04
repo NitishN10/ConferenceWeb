@@ -127,7 +127,7 @@ def export_registrations():
             r.registration_id, r.name, r.email, r.phone, r.institution,
             r.department, r.designation, r.participant_type, r.country,
             r.paper_id or 'N/A', r.amount_paid or 'N/A', r.payment_mode,
-            r.payment_status, r.created_at.strftime('%Y-%m-%d %H:%M')
+            r.payment_status, (r.created_at.strftime('%Y-%m-%d %H:%M') if (r.created_at and hasattr(r.created_at, 'strftime')) else 'N/A')
         ])
 
     output.seek(0)

@@ -582,12 +582,65 @@ def seed_database():
 
 def init_db_and_seed(app):
     """
-    Initializes database tables and populates default conference data if tables are empty.
+    Initializes database tables, synchronizes column schema for PostgreSQL/SQLite,
+    and populates default conference data if tables are empty.
     Safe for production startup (does not drop any existing data).
     """
     try:
         with app.app_context():
             db.create_all()
+
+            # Dynamic schema synchronization for PostgreSQL & SQLite:
+            # Ensures columns added in models exist on existing tables without requiring external migration tooling.
+            try:
+                from sqlalchemy import inspect, text
+                inspector = inspect(db.engine)
+                table_names = inspector.get_table_names()
+
+                # Ensure registrations columns exist
+                if 'registrations' in table_names:
+                    existing_cols = {col['name'] for col in inspector.get_columns('registrations')}
+                    col_defs = {
+                        'srn': 'VARCHAR(50)',
+                        'semester': 'VARCHAR(50)',
+                        'project_title': 'TEXT',
+                        'project_category': 'VARCHAR(255)',
+                        'project_abstract': 'TEXT',
+                        'technologies': 'TEXT',
+                        'mentor_name': 'VARCHAR(255)',
+                        'desk_number': 'VARCHAR(100)',
+                        'team_members_json': 'TEXT',
+                        'payment_mode': 'VARCHAR(100)',
+                        'transaction_ref': 'VARCHAR(100)',
+                        'payment_status': 'VARCHAR(50)',
+                        'amount_paid': 'VARCHAR(50)',
+                        'dietary_pref': 'VARCHAR(50)',
+                        'created_at': 'TIMESTAMP'
+                    }
+                    for col_name, col_type in col_defs.items():
+                        if col_name not in existing_cols:
+                            try:
+                                db.session.execute(text(f"ALTER TABLE registrations ADD COLUMN {col_name} {col_type}"))
+                                db.session.commit()
+                            except Exception as ce:
+                                db.session.rollback()
+                                app.logger.warning(f"Could not add column {col_name} to registrations: {ce}")
+
+                # Ensure paper_submissions file_data column exists
+                if 'paper_submissions' in table_names:
+                    sub_cols = {col['name'] for col in inspector.get_columns('paper_submissions')}
+                    if 'file_data' not in sub_cols:
+                        try:
+                            is_postgres = db.engine.dialect.name == 'postgresql'
+                            col_type = 'BYTEA' if is_postgres else 'BLOB'
+                            db.session.execute(text(f"ALTER TABLE paper_submissions ADD COLUMN file_data {col_type}"))
+                            db.session.commit()
+                        except Exception as ce:
+                            db.session.rollback()
+                            app.logger.warning(f"Could not add column file_data to paper_submissions: {ce}")
+            except Exception as se:
+                app.logger.warning(f"Schema synchronization skipped: {se}")
+
             if ConferenceTrack.query.first() is None:
                 populate_seed_data()
     except Exception as e:

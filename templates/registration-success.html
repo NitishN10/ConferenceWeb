@@ -234,7 +234,7 @@
             Confirmed &bull; Paid
           </span>
           <div style="font-size:0.75rem; color:#64748b; margin-top:4px;">
-            Date: {{ registration.created_at.strftime('%d %B %Y') }}
+            Date: {% if registration.created_at and registration.created_at.strftime %}{{ registration.created_at.strftime('%d %B %Y') }}{% else %}Confirmed{% endif %}
           </div>
         </div>
       </div>
