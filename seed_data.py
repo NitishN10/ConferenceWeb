@@ -643,6 +643,19 @@ def init_db_and_seed(app):
 
             if ConferenceTrack.query.first() is None:
                 populate_seed_data()
+            elif Admin.query.filter_by(username='admin').first() is None:
+                try:
+                    default_admin = Admin(
+                        username='admin',
+                        full_name='Conference Administrator',
+                        email='icbdtt@snpsu.edu.in'
+                    )
+                    default_admin.set_password('Admin@SNPSU2026!')
+                    db.session.add(default_admin)
+                    db.session.commit()
+                except Exception as ae:
+                    db.session.rollback()
+                    app.logger.warning(f"Could not auto-create default admin: {ae}")
     except Exception as e:
         app.logger.warning(f"Database auto-initialization skipped or deferred: {e}")
 
