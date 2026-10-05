@@ -405,5 +405,38 @@ class ConferenceAppTestCase(unittest.TestCase):
         self.assertIsNotNone(updated_reg.created_at)
         print("Verified payment update on existing registration with demo UPI ID -> Confirmed")
 
+    def test_14_ui_updates_and_pdf_pass(self):
+        # 1. Verify Homepage: no emoji in ICBDT badge, no proposed tagline review box
+        res_home = self.client.get('/')
+        self.assertEqual(res_home.status_code, 200)
+        html_home = res_home.data.decode('utf-8')
+        self.assertNotIn('Proposed Conference Tagline Options', html_home)
+        self.assertNotIn('Option 1: "Pioneering', html_home)
+        self.assertNotIn('bi-stars', html_home)
+        self.assertIn('ICBDTT-2026', html_home)
+        print("Verified homepage UI: emoji removed from badge, tagline options removed, ICBDTT-2026 styled")
+
+        # 2. Verify About page: no proposed tagline options
+        res_about = self.client.get('/about')
+        self.assertEqual(res_about.status_code, 200)
+        html_about = res_about.data.decode('utf-8')
+        self.assertNotIn('Proposed Conference Tagline', html_about)
+        self.assertNotIn('Option 1: "Pioneering', html_about)
+        print("Verified about page UI: tagline review box removed")
+
+        # 3. Verify Registration Success page: PDF download buttons and non-empty print styles
+        reg = Registration.query.filter_by(payment_status='Confirmed').first()
+        self.assertIsNotNone(reg)
+        res_success = self.client.get(f'/registration/success/{reg.registration_id}')
+        self.assertEqual(res_success.status_code, 200)
+        html_success = res_success.data.decode('utf-8')
+        self.assertIn('btn-quick-download-pdf', html_success)
+        self.assertIn('btn-download-pdf', html_success)
+        self.assertIn('btn-print-receipt', html_success)
+        self.assertIn('html2pdf.bundle.min.js', html_success)
+        self.assertNotIn('visibility: hidden', html_success)
+        self.assertIn('@media print', html_success)
+        print(f"Verified registration success page for {reg.registration_id}: PDF pass & print stylesheet ready")
+
 if __name__ == '__main__':
     unittest.main()

@@ -47,7 +47,7 @@
             Suggested Topic Areas (Included but not limited to):
           </h4>
 
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:12px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap:12px;">
             {% for topic in track.get_topic_list() %}
             <div style="background:var(--bg-subtle); border-radius:var(--radius-sm); padding:10px 14px; border:1px solid var(--border-light); font-size:0.92rem; color:var(--text-primary); display:flex; align-items:center; gap:10px;">
               <i class="bi bi-check2-circle" style="color:var(--accent-gold); font-size:1.1rem; flex-shrink:0;"></i>

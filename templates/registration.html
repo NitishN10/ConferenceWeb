@@ -645,7 +645,7 @@
           <!-- Payment Options Selection Tabs -->
           <div style="margin-bottom:24px;">
             <label class="reg-field-label">SELECT PAYMENT CHANNEL</label>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;">
+            <div class="payment-cards-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;">
               
               <!-- Tab 1: UPI / QR -->
               <label class="payment-method-card active" id="pay-card-upi" style="border:1.5px solid #0b1f51; border-radius:8px; padding:16px; cursor:pointer; background:#f8fafc; display:block;">
@@ -897,6 +897,9 @@
   .upi-grid-wrap {
     grid-template-columns: 1fr !important;
     text-align: center;
+  }
+  .payment-cards-grid {
+    grid-template-columns: 1fr !important;
   }
   .reg-footer-bar {
     flex-direction: column-reverse;

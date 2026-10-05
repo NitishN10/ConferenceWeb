@@ -8,7 +8,7 @@
   <div class="container container-narrow" style="max-width: 760px;">
 
     <!-- Registration Success Card -->
-    <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; box-shadow:0 6px 24px rgba(0,16,64,0.06); padding:40px 36px; text-align:center;">
+    <div class="reg-main-success-view" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; box-shadow:0 6px 24px rgba(0,16,64,0.06); padding:40px 36px; text-align:center;">
       
       <!-- Large Emerald Check Icon -->
       <div style="width:72px; height:72px; border-radius:50%; background:#ecfdf5; border:2px solid #a7f3d0; color:#059669; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; box-shadow:0 2px 8px rgba(5,150,105,0.15);">
@@ -170,8 +170,11 @@
 
       <!-- Action Buttons -->
       <div style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
-        <button type="button" id="btn-open-receipt-modal" class="btn btn-primary" style="padding:12px 24px; font-weight:700; display:inline-flex; align-items:center; gap:8px;">
-          <i class="bi bi-printer"></i> View &amp; Print Delegate Pass
+        <button type="button" id="btn-quick-download-pdf" class="btn btn-primary" style="padding:12px 22px; font-weight:700; display:inline-flex; align-items:center; gap:8px;">
+          <i class="bi bi-file-earmark-pdf-fill"></i> Download Pass (PDF)
+        </button>
+        <button type="button" id="btn-open-receipt-modal" class="btn btn-navy" style="padding:12px 20px; font-weight:700; display:inline-flex; align-items:center; gap:8px;">
+          <i class="bi bi-printer"></i> View &amp; Print Pass
         </button>
         <a href="{{ url_for('main.index') }}" class="btn btn-outline-navy" style="padding:12px 20px; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
           <i class="bi bi-house"></i> Back to Home
@@ -337,9 +340,12 @@
     </div>
 
     <!-- Modal Footer Actions -->
-    <div style="background:#f8fafc; border-top:1px solid #e2e8f0; padding:16px 24px; display:flex; justify-content:flex-end; gap:12px;">
-      <button type="button" id="btn-print-receipt" class="btn btn-primary" style="padding:9px 18px; font-size:0.9rem; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
-        <i class="bi bi-printer"></i> Print / Save PDF
+    <div style="background:#f8fafc; border-top:1px solid #e2e8f0; padding:16px 24px; display:flex; justify-content:flex-end; align-items:center; gap:12px; flex-wrap:wrap;">
+      <button type="button" id="btn-download-pdf" class="btn btn-primary" style="padding:9px 18px; font-size:0.9rem; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+        <i class="bi bi-file-earmark-pdf-fill"></i> Download PDF Pass
+      </button>
+      <button type="button" id="btn-print-receipt" class="btn btn-navy" style="padding:9px 18px; font-size:0.9rem; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+        <i class="bi bi-printer"></i> Print Pass
       </button>
       <button type="button" id="btn-dismiss-receipt-modal" class="btn btn-outline-navy" style="padding:9px 16px; font-size:0.9rem;">
         Close
@@ -349,6 +355,7 @@
   </div>
 </div>
 
+<script src="{{ url_for('static', filename='js/html2pdf.bundle.min.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   // Copy ID button
@@ -375,6 +382,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const closeBtn = document.getElementById('btn-close-receipt-modal');
   const dismissBtn = document.getElementById('btn-dismiss-receipt-modal');
   const printBtn = document.getElementById('btn-print-receipt');
+  const downloadBtn = document.getElementById('btn-download-pdf');
+  const quickDownloadBtn = document.getElementById('btn-quick-download-pdf');
 
   function openModal() {
     if (modal) modal.style.display = 'flex';
@@ -387,16 +396,39 @@ document.addEventListener('DOMContentLoaded', function () {
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
   if (dismissBtn) dismissBtn.addEventListener('click', closeModal);
 
-  if (printBtn) {
-    printBtn.addEventListener('click', function () {
-      window.print();
-    });
-  }
-
   // Close modal when clicking outside
   if (modal) {
     modal.addEventListener('click', function (e) {
       if (e.target === modal) closeModal();
+    });
+  }
+
+  // Download PDF Function
+  function downloadReceiptPdf() {
+    const element = document.getElementById('printable-receipt');
+    if (!element) return;
+
+    if (typeof html2pdf !== 'undefined') {
+      const opt = {
+        margin:       [8, 8, 8, 8],
+        filename:     'ICBDTT-2026-Pass-{{ registration.registration_id }}.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollY: 0 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    } else {
+      window.print();
+    }
+  }
+
+  if (downloadBtn) downloadBtn.addEventListener('click', downloadReceiptPdf);
+  if (quickDownloadBtn) quickDownloadBtn.addEventListener('click', downloadReceiptPdf);
+
+  // Browser Print
+  if (printBtn) {
+    printBtn.addEventListener('click', function () {
+      window.print();
     });
   }
 });
@@ -404,27 +436,93 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <style>
 @media print {
-  body * {
-    visibility: hidden;
+  /* Hide page chrome and non-receipt UI */
+  .top-bar,
+  #top-conference-banner,
+  .site-header,
+  .site-footer,
+  .mobile-nav-drawer,
+  .drawer-backdrop,
+  .reg-main-success-view,
+  #btn-close-receipt-modal,
+  #receipt-modal-backdrop > div > div:last-child,
+  .btn,
+  a[href],
+  button {
+    display: none !important;
   }
-  #printable-receipt, #printable-receipt * {
-    visibility: visible;
-  }
-  #printable-receipt {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    padding: 20px;
-    box-shadow: none;
-    border: none;
-  }
-  #receipt-modal-backdrop {
-    background: transparent !important;
-    position: static !important;
-    display: block !important;
+
+  /* Reset document flow and background */
+  html, body {
+    margin: 0 !important;
     padding: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Modal backdrop becomes in-flow container */
+  #receipt-modal-backdrop {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    z-index: 1 !important;
+  }
+
+  #receipt-modal-backdrop > div {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    border: none !important;
+    animation: none !important;
+    background: #ffffff !important;
+  }
+
+  /* Printable pass card */
+  #printable-receipt {
+    display: block !important;
+    position: static !important;
+    visibility: visible !important;
+    width: 100% !important;
+    max-width: 760px !important;
+    margin: 0 auto !important;
+    padding: 24px 28px !important;
+    box-shadow: none !important;
+    border: 1.5px solid #001040 !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #printable-receipt * {
+    visibility: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
   }
 }
 </style>

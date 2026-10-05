@@ -32,20 +32,32 @@
   .banner-layout {
     flex-direction: column;
     text-align: center;
-    gap: 14px;
+    gap: 16px;
   }
   
+  .banner-logo-link {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .banner-title-block {
+    width: 100%;
+    padding: 0;
+    text-align: center;
+  }
+
   .banner-meta-card {
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
     gap: 8px;
+    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
   .banner-university-logo {
-    height: 56px;
+    height: 52px;
   }
   
   .banner-uni-name .uni-main {
@@ -53,11 +65,12 @@
   }
   
   .banner-conf-heading {
-    font-size: 1.22rem;
+    font-size: 1.18rem;
   }
   
   .banner-conf-subline {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
+    line-height: 1.4;
   }
 }
 
@@ -223,9 +236,46 @@
   }
 }
 
+@media (max-width: 640px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  .admin-table-wrap,
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+
+  .hero-conf-main {
+    font-size: 1.55rem !important;
+  }
+
+  .hero-conf-tag {
+    font-size: 0.92rem !important;
+    padding: 6px 18px !important;
+  }
+
+  .banner-meta-card {
+    flex-direction: column !important;
+    width: 100%;
+  }
+
+  .banner-meta-pill {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn {
+    white-space: normal;
   }
   
   .hero-meta-badge {
@@ -234,11 +284,11 @@
   }
   
   .stat-number {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
   
   .voucher-id-val {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     word-break: break-all;
   }
 }
